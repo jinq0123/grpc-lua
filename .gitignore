@@ -27,3 +27,4 @@
 *.exe
 *.out
 *.app
+/build/premake5.exe

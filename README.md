@@ -1,5 +1,5 @@
 # gRPC-Lua
-The Lua [gRPC](http://www.grpc.io/) implementation.
+The Lua [gRPC](http://www.grpc.io/) binding.
 
 ## Dependings
 gRPC-Lua depends on
