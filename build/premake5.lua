@@ -12,7 +12,6 @@ workspace "grpc_lua"
 	language "C++"
 	flags {
 		"C++11",
-		"StaticRuntime",
 	}
 	
 	filter "configurations:Debug"
@@ -46,8 +45,25 @@ project "grpc_lua"
 	files {
 		"../src/lua/**",
 	}
+
+	--[[
+	From: https://github.com/SteveKChiu/lua-intf
+	By default LuaIntf expect the Lua library to build under C++.
+	If you really want to use Lua library compiled under C,
+	you can define LUAINTF_LINK_LUA_COMPILED_IN_CXX to 0:
+	--]]
+	-- defines { "LUAINTF_LINK_LUA_COMPILED_IN_CXX=0" }
+
 	includedirs {
 		"../third_party/include",
 		"../third_party/lua-intf",
 		lua_include_dir,
+	}
+	libdirs {
+		"../third_party/lib",
+		"../third_party/lib/%{cfg.buildcfg}",
+	}
+	links {
+		"grpc_cb",
+		"lua",
 	}
