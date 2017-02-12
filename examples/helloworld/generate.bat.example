@@ -1,0 +1,7 @@
+REM Generate source files from proto files.
+
+set PROTOC=protoc.exe
+
+%PROTOC% -I. --descriptor_set_out=.\descriptors.pb  --include_imports *.proto
+
+pause
