@@ -16,6 +16,8 @@ gRPC-Lua depends on
 1. Copy [grpc_cb](https://github.com/jinq0123/grpc_cb)/include/grpc_cb as include/grpc_cb
 1. Clone [lua-intf](https://github.com/SteveKChiu/lua-intf)
 1. Copy libs to third_party/lib
+	* lua
+	* gprc_cb
 
 By default, it expects the Lua library to build under C++.
 If you really want to use Lua library compiled under C,
