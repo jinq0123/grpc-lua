@@ -27,4 +27,12 @@
 *.exe
 *.out
 *.app
+
 /build/premake5.exe
+/build/.vs
+/build/bin
+/build/obj
+/build/grpc_lua.VC.opendb
+/build/grpc_lua.sdf
+/third_party/include/grpc_cb
+/third_party/lua-intf

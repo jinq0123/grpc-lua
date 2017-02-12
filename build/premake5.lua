@@ -5,7 +5,9 @@ Usage examples:
 	fot linux:   premake5.exe --os=linux gmake
 ]]
 
-workspace "grpc-lua"
+local lua_include_dir = "../third_party/lua-5.3.4/src"
+
+workspace "grpc_lua"
 	configurations { "Debug", "Release" }
 	language "C++"
 	flags {
@@ -40,7 +42,12 @@ project "grpc_lua_plugin"
 	filter {}
 
 project "grpc_lua"
-	kind "DynamicLib"
+	kind "SharedLib"
 	files {
-		"../src/lua/ext/**",
+		"../src/lua/**",
+	}
+	includedirs {
+		"../third_party/include",
+		"../third_party/lua-intf",
+		lua_include_dir,
 	}
