@@ -12,8 +12,9 @@ workspace "grpc_lua"
 	language "C++"
 	flags {
 		"C++11",
+		"StaticRuntime",
 	}
-	
+
 	filter "configurations:Debug"
 		flags { "Symbols" }
 	filter "configurations:Release"
@@ -53,6 +54,7 @@ project "grpc_lua"
 	you can define LUAINTF_LINK_LUA_COMPILED_IN_CXX to 0:
 	--]]
 	-- defines { "LUAINTF_LINK_LUA_COMPILED_IN_CXX=0" }
+	defines { "_WIN32_WINNT=0x600" }
 
 	includedirs {
 		"../third_party/include",
@@ -64,6 +66,11 @@ project "grpc_lua"
 		"../third_party/lib/%{cfg.buildcfg}",
 	}
 	links {
-		"grpc_cb",
 		"lua",
+		"grpc_cb",
+		"grpc",
+		"gpr",
+		"zlib",
+		"ssleay32",
+		"libeay32",
 	}

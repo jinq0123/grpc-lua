@@ -15,14 +15,14 @@ ifeq ($(config),debug)
   TARGETDIR = bin/Debug
   TARGET = $(TARGETDIR)/libgrpc_lua.so
   OBJDIR = obj/Debug/grpc_lua
-  DEFINES +=
+  DEFINES += -D_WIN32_WINNT=0x600
   INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua-5.3.4/src
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS) -std=c++11
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lgrpc_cb -llua
+  LIBS += -llua -lgrpc_cb -lgrpc -lgpr -lzlib -lssleay32 -llibeay32
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L../third_party/lib -L../third_party/lib/Debug -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -42,14 +42,14 @@ ifeq ($(config),release)
   TARGETDIR = bin/Release
   TARGET = $(TARGETDIR)/libgrpc_lua.so
   OBJDIR = obj/Release/grpc_lua
-  DEFINES += -DNDEBUG
+  DEFINES += -DNDEBUG -D_WIN32_WINNT=0x600
   INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua-5.3.4/src
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2 -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS) -std=c++11
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -lgrpc_cb -llua
+  LIBS += -llua -lgrpc_cb -lgrpc -lgpr -lzlib -lssleay32 -llibeay32
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L../third_party/lib -L../third_party/lib/Release -s -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)

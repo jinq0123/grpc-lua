@@ -7,6 +7,8 @@ local grpc = require("grpc_lua")
 function main()
     grpc.test()
     print("main")
+    local ch = grpc.Channel("localhost:50051")
+    print(ch)
 end  -- main()
 
 main()

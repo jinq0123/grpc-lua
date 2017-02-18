@@ -35,9 +35,9 @@
 /build/grpc_lua.VC.opendb
 /build/grpc_lua.sdf
 /third_party/include/grpc_cb
+/third_party/include/grpc
 /third_party/lua-intf
-/examples/helloworld/generate.bat
 /examples/helloworld/descriptors.pb
-/examples/helloworld/generate.bat
 /examples/helloworld/helloworld.pb.h
 /examples/helloworld/helloworld.pb.cc
+/examples/helloworld/*.bat
