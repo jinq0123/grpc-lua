@@ -54,7 +54,6 @@ project "grpc_lua"
 	you can define LUAINTF_LINK_LUA_COMPILED_IN_CXX to 0:
 	--]]
 	-- defines { "LUAINTF_LINK_LUA_COMPILED_IN_CXX=0" }
-	defines { "_WIN32_WINNT=0x600" }
 
 	includedirs {
 		"../third_party/include",
@@ -74,3 +73,12 @@ project "grpc_lua"
 		"ssleay32",
 		"libeay32",
 	}
+
+	if os.is("windows") then
+		defines {
+			"_WIN32_WINNT=0x0600"  -- i.e. Windows 7 target
+		}
+		links {
+			"ws2_32",
+		}
+	end
