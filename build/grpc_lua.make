@@ -22,7 +22,7 @@ ifeq ($(config),debug)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS) -std=c++11
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -llua -lgrpc_cb -lgrpc -lgpr -lzlib -lssleay32 -llibeay32
+  LIBS += -lliblua53 -lgrpc_cb -lgrpc -lgpr -lzlib -lssleay32 -llibeay32
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L../third_party/lib -L../third_party/lib/Debug -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -49,7 +49,7 @@ ifeq ($(config),release)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2 -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS) -std=c++11
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -llua -lgrpc_cb -lgrpc -lgpr -lzlib -lssleay32 -llibeay32
+  LIBS += -lliblua53 -lgrpc_cb -lgrpc -lgpr -lzlib -lssleay32 -llibeay32
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L../third_party/lib -L../third_party/lib/Release -s -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)

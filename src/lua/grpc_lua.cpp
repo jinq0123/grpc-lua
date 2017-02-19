@@ -20,7 +20,7 @@ int luaopen_grpc_lua(lua_State* L)
     LuaBinding(mod)
         .addFunction("test", &test)
 
-        .beginClass<grpc_cb::Channel>("Channle")
+        .beginClass<grpc_cb::Channel>("Channel")
             .addConstructor(LUA_ARGS(std::string))
         .endClass()
         ;
