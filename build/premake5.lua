@@ -70,7 +70,8 @@ project "grpc_lua"
 
 	filter { "system:windows" }
 		defines {
-			"_WIN32_WINNT=0x0600"  -- i.e. Windows 7 target
+			"_WIN32_WINNT=0x0600",  -- i.e. Windows 7 target
+			"GRPC_CB_DLL_IMPORT",
 		}
 		links {
 			"ws2_32",
