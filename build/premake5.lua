@@ -12,7 +12,6 @@ workspace "grpc_lua"
 	language "C++"
 	flags {
 		"C++11",
-		"StaticRuntime",  -- Because grpc_cb uses static rt.
 	}
 
 	filter "configurations:Debug"
@@ -65,13 +64,8 @@ project "grpc_lua"
 		"../third_party/lib/%{cfg.buildcfg}",
 	}
 	links {
-		"liblua53",
+		"lua53",
 		"grpc_cb",
-		"grpc",
-		"gpr",
-		"zlib",
-		"ssleay32",
-		"libeay32",
 	}
 
 	filter { "system:windows" }
