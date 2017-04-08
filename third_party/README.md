@@ -14,7 +14,8 @@
 
 By default, it expects the Lua library to build under C++.
 If you really want to use Lua library compiled under C,
-you can define LUAINTF_LINK_LUA_COMPILED_IN_CXX to 0 in build/premake5.lua.
+you can define `LUAINTF_LINK_LUA_COMPILED_IN_CXX` to 0 in
+ [build/premake5.lua](../build/premake5.lua).
 <br>See: https://github.com/SteveKChiu/lua-intf
 
 ```
