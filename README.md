@@ -16,7 +16,7 @@ gRPC-Lua depends on
 Init include and lib dir. See [third_party/README.md](third_party/README.md)
 
 ### Make
-Use premake5 to generate VS solution and linux Makefile. See premake5.bat.
+Use premake5 to generate VS solution and linux Makefile, see [premake5.bat](build/premake5.bat).
 
 Vs2015 sln and Makefile are provided.
 
