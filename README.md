@@ -1,6 +1,8 @@
 # gRPC-Lua
 The Lua [gRPC](http://www.grpc.io/) binding.
 
+NOT READY!
+
 ## Dependings
 
 gRPC-Lua depends on
