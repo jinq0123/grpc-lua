@@ -11,6 +11,8 @@
 	* zlib
 	* ssleay32
 	* libeay32
+	* grpc_plugin_support
+	* libprotoc
 
 By default, it expects the Lua library to build under C++.
 If you really want to use Lua library compiled under C,

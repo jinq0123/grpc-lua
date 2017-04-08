@@ -13,6 +13,10 @@ workspace "grpc_lua"
 	flags {
 		"C++11",
 	}
+	libdirs {
+		"../third_party/lib",
+		"../third_party/lib/%{cfg.buildcfg}",
+	}
 
 	filter "configurations:Debug"
 		flags { "Symbols" }
@@ -58,10 +62,6 @@ project "grpc_lua"
 		"../third_party/include",
 		"../third_party/lua-intf",
 		lua_include_dir,
-	}
-	libdirs {
-		"../third_party/lib",
-		"../third_party/lib/%{cfg.buildcfg}",
 	}
 	links {
 		"lua53",
