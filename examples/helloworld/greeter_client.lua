@@ -1,6 +1,8 @@
 -- greeter_client.lua
 
-package.cpath = package.cpath .. ";../../build/bin/Debug/?.dll"
+-- Current work dir: grpc-lua/examples/helloworld
+package.path = "../../src/lua/?.lua;" .. package.path
+package.cpath = "../../build/bin/Debug/?.dll;" .. package.cpath
 
 local grpc = require("grpc_lua")
 

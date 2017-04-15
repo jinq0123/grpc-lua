@@ -95,6 +95,9 @@
   <ItemGroup>
     <ClCompile Include="..\src\lua\grpc_lua.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\lua\grpc_lua.lua" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
