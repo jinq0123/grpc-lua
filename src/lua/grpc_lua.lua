@@ -14,4 +14,15 @@ function M.Channel(host_port)
 	return c.Channel(host_port)
 end  -- Channel()
 
+local Stub = {}
+
+function M.Stub(channel)
+	local stub = {
+		channel = channel,
+	}
+	setmetatable(stub, Stub)
+	Stub.__index = Stub
+	return stub
+end  -- Stub()
+
 return M
