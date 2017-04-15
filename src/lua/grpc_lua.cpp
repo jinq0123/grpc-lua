@@ -17,15 +17,16 @@ __declspec(dllexport)
 int luaopen_grpc_lua_c(lua_State* L)
 {
     using namespace LuaIntf;
+    using namespace grpc_cb;
     LuaRef mod = LuaRef::createTable(L);
     LuaBinding(mod)
         .addFunction("test", &test)
 
-        .beginClass<grpc_cb::Channel>("Channel")
+        .beginClass<Channel>("Channel")
             .addConstructor(LUA_ARGS(std::string))
         .endClass()
-        .beginClass<grpc_cb::ServiceStub>("ServiceStub")
-            .addConstructor(LUA_ARGS(grpc_cb::Channel))  // XXX 
+        .beginClass<ServiceStub>("ServiceStub")
+            .addConstructor(LUA_ARGS(const ChannelSptr&))  // XXX 
         .endClass()
         ;
     mod.pushToStack();
