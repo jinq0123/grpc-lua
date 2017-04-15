@@ -14,7 +14,7 @@ function main()
 
 	local ch = grpc.Channel("localhost:50051")
 	print(ch)
-	local stub = grpc.Stub(ch)
+	local stub = grpc.ServiceStub(ch)
 	stub:set_service_name("helloworld.Greeter")
 
 	-- Blocking request.

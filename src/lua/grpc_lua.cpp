@@ -1,4 +1,5 @@
 #include <grpc_cb/channel.h>  // for Channel
+#include <grpc_cb/service_stub.h>  // for ServiceStub
 
 #include <LuaIntf/LuaIntf.h>
 
@@ -22,6 +23,9 @@ int luaopen_grpc_lua_c(lua_State* L)
 
         .beginClass<grpc_cb::Channel>("Channel")
             .addConstructor(LUA_ARGS(std::string))
+        .endClass()
+        .beginClass<grpc_cb::ServiceStub>("ServiceStub")
+            .addConstructor(LUA_ARGS(grpc_cb::Channel))  // XXX 
         .endClass()
         ;
     mod.pushToStack();

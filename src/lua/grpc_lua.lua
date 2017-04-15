@@ -4,7 +4,7 @@ local M = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("protobuf")
-local Stub = require("impl.stub")
+local ServiceStub = require("impl.service_stub")
 
 function M.test()
 	c.test()
@@ -24,8 +24,8 @@ function M.Channel(host_port)
 	return c.Channel(host_port)
 end  -- Channel()
 
-function M.Stub(channel)
-	return Stub:new(channel)
+function M.ServiceStub(channel)
+	return ServiceStub:new(channel)
 end  -- Stub()
 
 return M
