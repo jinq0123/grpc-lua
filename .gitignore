@@ -41,3 +41,4 @@
 /examples/helloworld/helloworld.pb.h
 /examples/helloworld/helloworld.pb.cc
 /examples/helloworld/*.bat
+/src/lua/protobuf.lua

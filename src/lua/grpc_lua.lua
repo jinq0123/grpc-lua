@@ -15,7 +15,7 @@ function M.register(buffer)
 end
 
 function M.register_file(file_name)
-	pb.register(file_name)
+	pb.register_file(file_name)
 end
 
 -- Input "host:port" like: "a.b.com:6666" or "1.2.3.4:6666".
