@@ -2,7 +2,8 @@
 
 local M = {}
 
-local c = require "grpc_lua.c"  -- from grpc_lua.so
+local c = require("grpc_lua.c")  -- from grpc_lua.so
+local Stub = require("impl.stub")
 
 function M.test()
 	c.test()
@@ -14,15 +15,8 @@ function M.Channel(host_port)
 	return c.Channel(host_port)
 end  -- Channel()
 
-local Stub = {}
-
 function M.Stub(channel)
-	local stub = {
-		channel = channel,
-	}
-	setmetatable(stub, Stub)
-	Stub.__index = Stub
-	return stub
+	return Stub:new(channel)
 end  -- Stub()
 
 return M
