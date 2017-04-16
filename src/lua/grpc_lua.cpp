@@ -31,7 +31,7 @@ int luaopen_grpc_lua_c(lua_State* L)
             .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(std::string))
         .endClass()
         .beginClass<ServiceStub>("ServiceStub")
-            .addConstructor(LUA_ARGS(const ChannelSptr&))  // XXX 
+            .addConstructor(LUA_ARGS(const ChannelSptr&))
         .endClass()
         ;
     mod.pushToStack();

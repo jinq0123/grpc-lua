@@ -25,6 +25,7 @@ end  -- set_timeout_sec()
 
 -- Blocking request. Return the response.
 function ServiceStub:request(method_name, request)
+	self.c_stub.request()
 	return {}  -- XXX
 end  -- request()
 
