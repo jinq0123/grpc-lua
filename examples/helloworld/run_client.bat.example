@@ -1,0 +1,12 @@
+REM Copy dlls and run.
+
+REM copy D:\lua53\lua53.dll
+REM copy D:\lua53\lua53.exe
+REM copy D:\Jinq\Git\grpc_cb\build\bin\Debug\grpc_cb.dll
+REM copy D:\pbc\protobuf.dll
+REM copy D:\pbc\protobuf.lua
+copy ..\..\build\bin\Debug\grpc_lua.dll
+
+lua53.exe greeter_client.lua
+
+pause

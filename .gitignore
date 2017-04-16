@@ -37,8 +37,8 @@
 /third_party/include/grpc_cb
 /third_party/include/grpc
 /third_party/lua-intf
-/examples/helloworld/descriptors.pb
 /examples/helloworld/helloworld.pb.h
 /examples/helloworld/helloworld.pb.cc
 /examples/helloworld/*.bat
 /src/lua/protobuf.lua
+/examples/helloworld/protobuf.lua

@@ -5,6 +5,11 @@
 
 #include <iostream>
 
+namespace LuaIntf
+{
+    LUA_USING_SHARED_PTR_TYPE(std::shared_ptr)
+}
+
 void test()
 {
     std::cout << "test...\n";
@@ -23,7 +28,7 @@ int luaopen_grpc_lua_c(lua_State* L)
         .addFunction("test", &test)
 
         .beginClass<Channel>("Channel")
-            .addConstructor(LUA_ARGS(std::string))
+            .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(std::string))
         .endClass()
         .beginClass<ServiceStub>("ServiceStub")
             .addConstructor(LUA_ARGS(const ChannelSptr&))  // XXX 
