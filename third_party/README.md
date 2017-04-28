@@ -1,7 +1,10 @@
 # Init third_party dir
 
 1. Copy [grpc_cb](https://github.com/jinq0123/grpc_cb)/include/grpc_cb/ as include/grpc_cb/
+	* Check include/grpc_cb/grpc_cb.h
 1. Copy [grpc](https://github.com/grpc/grpc)/include/grpc as include/grpc/
+	* Check include/grpc/grpc.h
+	* grpc++ is not needed
 1. Clone [lua-intf](https://github.com/SteveKChiu/lua-intf)
 1. Copy libs to third_party/lib
 	* lua
