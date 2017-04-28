@@ -65,7 +65,7 @@ project "grpc_lua"
 		"../third_party/lua/src",
 	}
 	links {
-		"lua53",
+		"lua",
 		"grpc_cb",
 	}
 
