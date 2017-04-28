@@ -5,7 +5,7 @@
 1. Copy [grpc](https://github.com/grpc/grpc)/include/grpc as include/grpc/
 	* Check include/grpc/grpc.h
 	* grpc++ is not needed
-1. Download lua-5.3.4 and extract as lua/
+1. Download lua-5.3 and extract as lua/
 	* Check lua/src/lua.h
 1. Copy [lua-intf](https://github.com/SteveKChiu/lua-intf) as lua-intf/
 	* Check lua-intf/LuaIntf/LuaIntf.h
