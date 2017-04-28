@@ -13,7 +13,7 @@ endif
 ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/Debug
-  TARGET = $(TARGETDIR)/libgrpc_lua.so
+  TARGET = $(TARGETDIR)/grpc_lua.so
   OBJDIR = obj/Debug/grpc_lua
   DEFINES +=
   INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua/src
@@ -40,7 +40,7 @@ endif
 ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/Release
-  TARGET = $(TARGETDIR)/libgrpc_lua.so
+  TARGET = $(TARGETDIR)/grpc_lua.so
   OBJDIR = obj/Release/grpc_lua
   DEFINES += -DNDEBUG
   INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua/src

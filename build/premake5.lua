@@ -44,6 +44,9 @@ project "grpc_lua_plugin"
 
 project "grpc_lua"
 	kind "SharedLib"
+	targetname "grpc_lua"
+	targetprefix ""  -- linux: grpc_lua.so
+
 	files {
 		"../src/lua/**",
 	}

@@ -9,7 +9,7 @@ function main()
 	print("main")
 	grpc.test()
 
-	grpc.register_file("descriptors.pb")
+	grpc.import_proto_file("helloworld.proto")
 
 	local ch = grpc.Channel("localhost:50051")
 	print(ch)
