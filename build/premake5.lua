@@ -5,8 +5,6 @@ Usage examples:
 	fot linux:   premake5.exe --os=linux gmake
 ]]
 
-local lua_include_dir = "../third_party/lua-5.3.4/src"
-
 workspace "grpc_lua"
 	configurations { "Debug", "Release" }
 	language "C++"
@@ -61,7 +59,7 @@ project "grpc_lua"
 	includedirs {
 		"../third_party/include",
 		"../third_party/lua-intf",
-		lua_include_dir,
+		"../third_party/lua/src",
 	}
 	links {
 		"lua53",

@@ -44,3 +44,4 @@
 /examples/helloworld/protobuf.lua
 /build/grpc_lua.VC.VC.opendb
 /build/grpc_lua.VC.db
+/third_party/lua

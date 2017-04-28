@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="impl">
+      <UniqueIdentifier>{D781987C-C3B8-990D-6CA5-7F1058BB150F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\lua\grpc_lua.lua" />
+    <None Include="..\src\lua\impl\service_stub.lua">
+      <Filter>impl</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\lua\grpc_lua.cpp" />
+  </ItemGroup>
+</Project>

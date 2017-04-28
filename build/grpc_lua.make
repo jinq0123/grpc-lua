@@ -16,7 +16,7 @@ ifeq ($(config),debug)
   TARGET = $(TARGETDIR)/libgrpc_lua.so
   OBJDIR = obj/Debug/grpc_lua
   DEFINES +=
-  INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua-5.3.4/src
+  INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua/src
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -fPIC
@@ -43,7 +43,7 @@ ifeq ($(config),release)
   TARGET = $(TARGETDIR)/libgrpc_lua.so
   OBJDIR = obj/Release/grpc_lua
   DEFINES += -DNDEBUG
-  INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua-5.3.4/src
+  INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua/src
   FORCE_INCLUDE +=
   ALL_CPPFLAGS += $(CPPFLAGS) -MMD -MP $(DEFINES) $(INCLUDES)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2 -fPIC
