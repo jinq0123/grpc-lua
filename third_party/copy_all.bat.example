@@ -8,7 +8,7 @@ set LUA_ROOT=D:\Jinq\lua-5.3.2
 set LUAINTF_ROOT=D:\Jinq\Git\lua-intf
 
 xcopy /S /Y %GRPC_CB_ROOT%\include include\
-xcopy /S /Y %GRPC_ROOT%\include include\
+xcopy /S /Y %GRPC_ROOT%\include\grpc include\grpc\
 
 mkdir lua
 mkdir lua\src
@@ -31,3 +31,5 @@ copy %GRPC_CB_ROOT%\build\bin\Release\grpc_cb.lib lib\Release\
 copy %LUA_ROOT%\build\bin\Debug\lua.lib lib\Debug\
 copy %LUA_ROOT%\build\bin\Debug\lua.pdb lib\Debug\
 copy %LUA_ROOT%\build\bin\Release\lua.lib lib\Release\
+
+pause

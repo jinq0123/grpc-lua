@@ -45,3 +45,4 @@
 /third_party/lua
 /third_party/lua-intf
 /third_party/*.bat
+/third_party/lib/Debug/*.pdb

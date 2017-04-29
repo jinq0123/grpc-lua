@@ -13,11 +13,6 @@ See: [copy_all.bat.example](copy_all.bat.example)
 1. Copy libs to third_party/lib
 	* lua
 	* gprc_cb
-	* grpc
-	* gpr
-	* zlib
-	* ssleay32
-	* libeay32
 	* grpc_plugin_support
 	* libprotoc
 
