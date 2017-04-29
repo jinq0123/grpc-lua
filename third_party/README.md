@@ -1,5 +1,5 @@
 # Init third_party dir
-See: copy_all.bat.example
+See: [copy_all.bat.example](copy_all.bat.example)
 
 1. Copy [grpc_cb](https://github.com/jinq0123/grpc_cb)/include/grpc_cb/ as include/grpc_cb/
 	* Check include/grpc_cb/grpc_cb.h

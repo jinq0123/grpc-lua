@@ -17,8 +17,12 @@ copy /S /Y %LUA_ROOT%\src\lauxlib.h lua\src\
 
 xcopy /S /Y %LUAINTF_ROOT% lua-intf\
 
-copy %PROTOBUF_ROOT%\cmake\solution\Debug\libprotoc.lib lib\
+copy %PROTOBUF_ROOT%\cmake\solution\Debug\libprotocd.lib lib\
 copy %PROTOBUF_ROOT%\cmake\solution\Release\libprotoc.lib lib\
+
+copy %GRPC_ROOT%\vsprojects\Debug\grpc_plugin_support.lib lib\Debug\
+copy %GRPC_ROOT%\vsprojects\Debug\grpc_plugin_support.pdb lib\Debug\
+copy %GRPC_ROOT%\vsprojects\Release\grpc_plugin_support.lib lib\Release\
 
 copy %GRPC_CB_ROOT%\build\bin\Debug\grpc_cb.lib lib\Debug\
 copy %GRPC_CB_ROOT%\build\bin\Debug\grpc_cb.pdb lib\Debug\

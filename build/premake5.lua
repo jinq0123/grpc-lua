@@ -7,6 +7,7 @@ Usage examples:
 
 workspace "grpc_lua"
 	configurations { "Debug", "Release" }
+
 	language "C++"
 	flags {
 		"C++11",
@@ -65,7 +66,6 @@ project "grpc_lua"
 		"../third_party/lua/src",
 	}
 	links {
-		"lua",
 		"grpc_cb",
 	}
 
@@ -76,5 +76,6 @@ project "grpc_lua"
 		}
 		links {
 			"ws2_32",
+			"lua",
 		}
 	filter {}
