@@ -37,9 +37,6 @@
 /build/obj
 /build/premake5.exe
 /examples/helloworld/*.bat
-/examples/helloworld/helloworld.pb.cc
-/examples/helloworld/helloworld.pb.h
-/examples/helloworld/protobuf.lua
 /third_party/include/grpc
 /third_party/include/grpc_cb
 /third_party/lua
