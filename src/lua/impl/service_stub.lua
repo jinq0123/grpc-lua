@@ -1,6 +1,7 @@
 local ServiceStub = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
+local pb = require("luapbintf")
 
 function ServiceStub:new(channel)
     local stub = {
@@ -26,7 +27,8 @@ end  -- set_timeout_sec()
 -- Blocking request. Return the response.
 function ServiceStub:request(method_name, request)
     assert("table" == type(request))
-    self.c_stub.request()
+    local request_str = self:encode_request(method_name, request)
+    self.c_stub.request(self.service_name, method_name, request_str)
     return {}  -- XXX
 end  -- request()
 
@@ -35,6 +37,12 @@ function ServiceStub:async_request(method_name, request, on_response)
     assert("table" == type(request))
     assert(nil == on_response or "function" == type(on_response))
     -- XXX
+end  -- async_request()
+
+-- Encode request table to string.
+function ServiceStub:encode_request(method_name, request)
+    local request_type = pb.get_rpc_input_name(self:service_name, method_name)
+    return pb.encode(request_type, request)
 end  -- async_request()
 
 return ServiceStub
