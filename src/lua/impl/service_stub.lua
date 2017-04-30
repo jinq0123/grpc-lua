@@ -41,7 +41,7 @@ end  -- async_request()
 
 -- Encode request table to string.
 function ServiceStub:encode_request(method_name, request)
-    local request_type = pb.get_rpc_input_name(self:service_name, method_name)
+    local request_type = pb.get_rpc_input_name(self.service_name, method_name)
     return pb.encode(request_type, request)
 end  -- async_request()
 
