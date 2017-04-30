@@ -35,7 +35,7 @@ function ServiceStub:request(method_name, request)
     assert("table" == type(request))
     local request_name = self:get_request_name(method_name)
     local request_str = self:encode_request(method_name, request)
-    self.c_stub.request(request_name, request_str)
+    self.c_stub:request(request_name, request_str)
     return {}  -- XXX
 end  -- request()
 
