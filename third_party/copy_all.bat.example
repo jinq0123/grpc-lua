@@ -7,29 +7,29 @@ set GRPC_CB_ROOT=D:\Jinq\Git\grpc_cb
 set LUA_ROOT=D:\Jinq\lua-5.3.2
 set LUAINTF_ROOT=D:\Jinq\Git\lua-intf
 
-xcopy /S /Y %GRPC_CB_ROOT%\include include\
-xcopy /S /Y %GRPC_ROOT%\include\grpc include\grpc\
+xcopy /S /Y /Q %GRPC_CB_ROOT%\include include\
+xcopy /S /Y /Q %GRPC_ROOT%\include\grpc include\grpc\
 
 mkdir lua
 mkdir lua\src
-copy /S /Y %LUA_ROOT%\src\lua*.h lua\src\
-copy /S /Y %LUA_ROOT%\src\lauxlib.h lua\src\
+copy /Y %LUA_ROOT%\src\lua*.h lua\src\
+copy /Y %LUA_ROOT%\src\lauxlib.h lua\src\
 
-xcopy /S /Y %LUAINTF_ROOT% lua-intf\
+xcopy /S /Y /Q %LUAINTF_ROOT% lua-intf\
 
-copy %PROTOBUF_ROOT%\cmake\solution\Debug\libprotocd.lib lib\
-copy %PROTOBUF_ROOT%\cmake\solution\Release\libprotoc.lib lib\
+copy /Y %PROTOBUF_ROOT%\cmake\build\solution\Debug\libprotocd.lib lib\
+copy /Y %PROTOBUF_ROOT%\cmake\build\solution\Release\libprotoc.lib lib\
 
-copy %GRPC_ROOT%\vsprojects\Debug\grpc_plugin_support.lib lib\Debug\
-copy %GRPC_ROOT%\vsprojects\Debug\grpc_plugin_support.pdb lib\Debug\
-copy %GRPC_ROOT%\vsprojects\Release\grpc_plugin_support.lib lib\Release\
+copy /Y %GRPC_ROOT%\vsprojects\Debug\grpc_plugin_support.lib lib\Debug\
+copy /Y %GRPC_ROOT%\vsprojects\Debug\grpc_plugin_support.pdb lib\Debug\
+copy /Y %GRPC_ROOT%\vsprojects\Release\grpc_plugin_support.lib lib\Release\
 
-copy %GRPC_CB_ROOT%\build\bin\Debug\grpc_cb.lib lib\Debug\
-copy %GRPC_CB_ROOT%\build\bin\Debug\grpc_cb.pdb lib\Debug\
-copy %GRPC_CB_ROOT%\build\bin\Release\grpc_cb.lib lib\Release\
+copy /Y %GRPC_CB_ROOT%\build\bin\Debug\grpc_cb.lib lib\Debug\
+copy /Y %GRPC_CB_ROOT%\build\bin\Debug\grpc_cb.pdb lib\Debug\
+copy /Y %GRPC_CB_ROOT%\build\bin\Release\grpc_cb.lib lib\Release\
 
-copy %LUA_ROOT%\build\bin\Debug\lua.lib lib\Debug\
-copy %LUA_ROOT%\build\bin\Debug\lua.pdb lib\Debug\
-copy %LUA_ROOT%\build\bin\Release\lua.lib lib\Release\
+copy /Y %LUA_ROOT%\build\bin\Debug\lua.lib lib\Debug\
+copy /Y %LUA_ROOT%\build\bin\Debug\lua.pdb lib\Debug\
+copy /Y %LUA_ROOT%\build\bin\Release\lua.lib lib\Release\
 
 pause
