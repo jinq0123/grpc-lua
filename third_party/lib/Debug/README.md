@@ -1,9 +1,6 @@
 Copy windows debug lib here:
 
 * grpc_cb.lib
-	* grpc
-	* gpr
-	* zlib
-	* ssleay32
-	* libeay32
+* grpc_plugin_support
 * lua.lib
+* libprotocd.lib
