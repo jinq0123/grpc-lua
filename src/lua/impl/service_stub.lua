@@ -24,11 +24,18 @@ function ServiceStub:set_timeout_sec(timeout_sec)
     self.timeout_sec = timeout_sec
 end  -- set_timeout_sec()
 
--- Blocking request. Return the response.
+-- Like "/helloworld.Greeter/SayHello"
+function ServiceStub:get_request_name(method_name)
+    return "/" .. self.service_name .. "/" .. method_name
+end  -- get_request_name()
+
+-- e.g. request("SayHello", { name = "Jq" })
+-- Blocking request. Return the response string. XXX or error?
 function ServiceStub:request(method_name, request)
     assert("table" == type(request))
+    local request_name = self:get_request_name(method_name)
     local request_str = self:encode_request(method_name, request)
-    self.c_stub.request(self.service_name, method_name, request_str)
+    self.c_stub.request(request_name, request_str)
     return {}  -- XXX
 end  -- request()
 
