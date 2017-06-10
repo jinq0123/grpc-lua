@@ -6,6 +6,9 @@
 
 #include <iostream>
 
+using namespace LuaIntf;
+using std::string;
+
 namespace LuaIntf
 {
     LUA_USING_SHARED_PTR_TYPE(std::shared_ptr)
@@ -18,15 +21,24 @@ void test()
     std::cout << "test...\n";
 }
 
-std::string Request(grpc_cb::ServiceStub* pServiceStub,
-    const std::string& sMethod, const std::string& sRequest)
+// Blocking request.
+// Return (response_string, nil, nil) or
+//   (nil, error_string, grpc_status_code).
+std::tuple<LuaRef, LuaRef, LuaRef>
+Request(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
+    const string& sMethod, const string& sRequest)
 {
+    assert(L);
     assert(pServiceStub);
-    std::string sResponse;
+    string sResponse;
     grpc_cb::Status status = pServiceStub->BlockingRequest(
         sMethod, sRequest, sResponse);
-    if (status.ok()) return sResponse;
-    return "Error";  // XXX
+    const LuaRef NIL(L, nullptr);
+    if (status.ok())
+        return std::make_tuple(LuaRef::fromValue(L, sResponse), NIL, NIL);
+    return std::make_tuple(NIL,
+        LuaRef::fromValue(L, status.GetDetails()),
+        LuaRef::fromValue(L, status.GetCode()));
 }
 
 }  // namespace
@@ -37,18 +49,22 @@ __declspec(dllexport)
 #endif
 int luaopen_grpc_lua_c(lua_State* L)
 {
-    using namespace LuaIntf;
+    assert(L);
+
     using namespace grpc_cb;
     LuaRef mod = LuaRef::createTable(L);
     LuaBinding(mod)
         .addFunction("test", &test)
 
         .beginClass<Channel>("Channel")
-            .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(const std::string&))
+            .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(const string&))
         .endClass()
         .beginClass<ServiceStub>("ServiceStub")
             .addConstructor(LUA_ARGS(const ChannelSptr&))
-            .addFunction("request", &Request)
+            .addFunction("request", [L](ServiceStub* pServiceStub,
+                    const string& sMethod, const string& sRequest) {
+                Request(L, pServiceStub, sMethod, sRequest);
+            })
         .endClass()
         ;
     mod.pushToStack();
