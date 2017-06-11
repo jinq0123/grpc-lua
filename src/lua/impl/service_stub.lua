@@ -46,6 +46,12 @@ function ServiceStub:async_request(method_name, request, on_response)
     -- XXX
 end  -- async_request()
 
+function ServiceStub:blocking_run()
+    self.c_stub:blocking_run()
+end  -- blocking_run()
+
+-- private --
+
 -- Encode request table to string.
 function ServiceStub:encode_request(method_name, request)
     local request_type = pb.get_rpc_input_name(self.service_name, method_name)

@@ -25,7 +25,7 @@ function main()
 	stub:async_request("SayHello", request, function(response)
 		print("Async greeter received: " .. response.message)
 	end)
-	-- Todo: Wait for response...
+	stub.blocking_run()
 end  -- main()
 
 main()

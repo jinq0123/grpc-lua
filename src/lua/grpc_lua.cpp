@@ -65,6 +65,7 @@ int luaopen_grpc_lua_c(lua_State* L)
                     const string& sMethod, const string& sRequest) {
                 Request(L, pServiceStub, sMethod, sRequest);
             })
+            .addFunction("blocking_run", &grpc_cb::ServiceStub::BlockingRun)
         .endClass()
         ;
     mod.pushToStack();
