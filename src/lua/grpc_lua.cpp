@@ -1,4 +1,5 @@
 #include <grpc_cb/channel.h>  // for Channel
+#include <grpc_cb/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
 #include <grpc_cb/service_stub.h>  // for ServiceStub
 #include <grpc_cb/status.h>  // for Status
 
@@ -60,7 +61,8 @@ int luaopen_grpc_lua_c(lua_State* L)
             .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(const string&))
         .endClass()
         .beginClass<ServiceStub>("ServiceStub")
-            .addConstructor(LUA_ARGS(const ChannelSptr&))
+            .addConstructor(LUA_ARGS(const ChannelSptr&,
+                _opt<CompletionQueueForNextSptr>))
             .addFunction("request", [L](ServiceStub* pServiceStub,
                     const string& sMethod, const string& sRequest) {
                 Request(L, pServiceStub, sMethod, sRequest);
