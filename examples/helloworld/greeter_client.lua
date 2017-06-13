@@ -14,7 +14,7 @@ function main()
 
     -- Blocking request.
     local request = { name = "world" }
-    local response = stub:request("SayHello", request)
+    local response = assert(stub:request("SayHello", request))
     print("Greeter received: " .. response.message)
     
     -- Async request.
