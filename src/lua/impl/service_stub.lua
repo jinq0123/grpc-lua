@@ -58,11 +58,10 @@ function ServiceStub:async_request(method_name, request, on_response)
     assert(nil == on_response or "function" == type(on_response))
     local request_name = self:get_request_name(method_name)
     local request_str = self:encode_request(method_name, request)
-    -- Need to wrap the callback.
+    -- Need to wrap the response callback.
     return self.c_stub:async_request(request_name, request_str,
-        function(response_str)
-            self:on_response_str(method_name, response_str, on_response)
-        end, self.on_error)
+        self.get_response_callback(method_name, on_response),
+        self.on_error)
 end  -- async_request()
 
 function ServiceStub:blocking_run()
@@ -86,8 +85,28 @@ function ServiceStub:decode_response(method_name, response_str)
 end  -- decode_response()
 
 -- Async request callback.
-function ServiceStub:on_response_str(method_name, response_str, on_response)
-    -- XXX
+local function on_response_str(service_name, method_name, response_str,
+                               on_response, on_error)
+    assert(on_response)  -- while on_error may be nil
+    local response_type = pb.get_rpc_output_name(service_name, method_name)
+    local response = pb.decode(response_type, response_str)
+    if response then
+        on_response(response)
+        return
+    end
+    if on_error then
+        -- GRPC_STATUS_INTERNAL = 13
+        on_error("Failed to decode response.", 13)
+    end
 end  -- on_response_str()
+
+-- Wrap a response callback.
+function ServiceStub:get_response_callback(method_name, on_response)
+    if not on_response then return nil end
+    return function(response_str)
+        on_response_str(self.service_name, method_name, response_str,
+            on_response, self.on_error)
+    end
+end  -- get_response_callback()
 
 return ServiceStub
