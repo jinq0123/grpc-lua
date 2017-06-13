@@ -36,7 +36,10 @@ function ServiceStub:request(method_name, request)
     assert("table" == type(request))
     local request_name = self:get_request_name(method_name)
     local request_str = self:encode_request(method_name, request)
-    return self.c_stub:request(request_name, request_str)
+    local response_str, error_str, status_code =
+        self.c_stub:request(request_name, request_str)
+    local response = self:decode_response(method_name, response_str)
+    return response, error_str, status_code
 end  -- request()
 
 -- Async request.
@@ -56,6 +59,13 @@ end  -- blocking_run()
 function ServiceStub:encode_request(method_name, request)
     local request_type = pb.get_rpc_input_name(self.service_name, method_name)
     return pb.encode(request_type, request)
-end  -- async_request()
+end  -- encode_request()
+
+function ServiceStub:decode_response(method_name, response_str)
+    if not response_str then return nil end
+    assert("string" == type(response_str))
+    local response_type = pb.get_rpc_output_name(self.service_name, method_name)
+    return pb.decode(response_type, response_str)
+end  -- decode_response()
 
 return ServiceStub

@@ -43,3 +43,4 @@
 /third_party/lua-intf
 /third_party/*.bat
 /third_party/lib/Debug/*.pdb
+/examples/helloworld/.vs

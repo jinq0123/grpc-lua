@@ -59,16 +59,18 @@ int luaopen_grpc_lua_c(lua_State* L)
 
         .beginClass<Channel>("Channel")
             .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(const string&))
-        .endClass()
+        .endClass()  // Channel
+
         .beginClass<ServiceStub>("ServiceStub")
             .addConstructor(LUA_ARGS(const ChannelSptr&,
                 _opt<CompletionQueueForNextSptr>))
-            .addFunction("request", [L](ServiceStub* pServiceStub,
-                    const string& sMethod, const string& sRequest) {
-                Request(L, pServiceStub, sMethod, sRequest);
-            })
+            .addFunction("request",
+                [L](ServiceStub* pServiceStub, const string& sMethod,
+                        const string& sRequest) {
+                    return Request(L, pServiceStub, sMethod, sRequest);
+                })
             .addFunction("blocking_run", &grpc_cb::ServiceStub::BlockingRun)
-        .endClass()
+        .endClass()  // ServiceStub
         ;
     mod.pushToStack();
     return 1;
