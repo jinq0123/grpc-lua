@@ -26,7 +26,7 @@ void test()
 // Return (response_string, nil, nil) or
 //   (nil, error_string, grpc_status_code).
 std::tuple<LuaRef, LuaRef, LuaRef>
-Request(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
+BlockingRequest(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest)
 {
     assert(L);
@@ -40,6 +40,13 @@ Request(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
     return std::make_tuple(NIL,
         LuaRef::fromValue(L, status.GetDetails()),
         LuaRef::fromValue(L, status.GetCode()));
+}
+
+void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
+    const string& sMethod, const string& sRequest,
+    const LuaRef& on_response_str, const LuaRef& on_error)
+{
+    // XXX
 }
 
 }  // namespace
@@ -64,11 +71,12 @@ int luaopen_grpc_lua_c(lua_State* L)
         .beginClass<ServiceStub>("ServiceStub")
             .addConstructor(LUA_ARGS(const ChannelSptr&,
                 _opt<CompletionQueueForNextSptr>))
-            .addFunction("request",
+            .addFunction("blocking_request",
                 [L](ServiceStub* pServiceStub, const string& sMethod,
                         const string& sRequest) {
-                    return Request(L, pServiceStub, sMethod, sRequest);
+                    return BlockingRequest(L, pServiceStub, sMethod, sRequest);
                 })
+            .addFunction("async_request", &AsyncRequest)
             .addFunction("blocking_run", &grpc_cb::ServiceStub::BlockingRun)
         .endClass()  // ServiceStub
         ;

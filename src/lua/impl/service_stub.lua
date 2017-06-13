@@ -46,7 +46,7 @@ function ServiceStub:blocking_request(method_name, request)
     local request_name = self:get_request_name(method_name)
     local request_str = self:encode_request(method_name, request)
     local response_str, error_str, status_code =
-        self.c_stub:request(request_name, request_str)
+        self.c_stub:blocking_request(request_name, request_str)
     local response = self:decode_response(method_name, response_str)
     return response, error_str, status_code
 end  -- request()
