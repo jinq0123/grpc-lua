@@ -40,14 +40,31 @@ BlockingRequest(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
     return std::make_tuple(NIL,
         LuaRef::fromValue(L, status.GetDetails()),
         LuaRef::fromValue(L, status.GetCode()));
-}
+}  // BlockingRequest()
 
 void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest,
-    const LuaRef& on_response_str, const LuaRef& on_error)
+    const LuaRef& luaOnResponse, const LuaRef& luaOnError)
 {
-    // XXX
-}
+    assert(pServiceStub);
+    grpc_cb::ServiceStub::OnResponse onResponse;  // function<void (const string&)>
+    if (luaOnResponse)
+    {
+        luaOnResponse.checkFunction();  // void (string)
+        onResponse = [luaOnResponse](const string& sResponse) {
+            luaOnResponse.call(sResponse);
+        };
+    }
+    grpc_cb::ErrorCallback onError;  // function<void (const Status& status)>
+    if (luaOnError)
+    {
+        luaOnError.checkFunction();  // void (string, int)
+        onError = [luaOnError](const grpc_cb::Status& status) {
+            luaOnError.call(status.GetDetails(), status.GetCode());
+        };
+    }
+    pServiceStub->AsyncRequest(sMethod, sRequest, onResponse, onError);
+}  // AsyncRequest()
 
 }  // namespace
 
@@ -82,4 +99,4 @@ int luaopen_grpc_lua_c(lua_State* L)
         ;
     mod.pushToStack();
     return 1;
-}
+}  // luaopen_grpc_lua_c()
