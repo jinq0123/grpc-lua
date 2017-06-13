@@ -13,6 +13,7 @@ function ServiceStub:new(channel)
     return stub
 end  -- new()
 
+-- Todo: move to new(service_name, channel), to make it const.
 -- service_name is full name like "helloworld.Greeter".
 function ServiceStub:set_service_name(service_name)
     self.service_name = service_name
@@ -29,10 +30,18 @@ function ServiceStub:get_request_name(method_name)
     return "/" .. self.service_name .. "/" .. method_name
 end  -- get_request_name()
 
+-- Set error callback for async request.
+-- on_error = function(error_str, status_code)
+-- on_error may be nil to ignore all errors.
+function ServiceStub:set_on_error(on_error)
+    assert(nil == on_error or "function" == type(on_error))
+    self.on_error = on_error
+end  -- set_on_error
+
 -- e.g. request("SayHello", { name = "Jq" })
 -- Blocking request. 
 -- Return the response string or (nil, error_string, grpc_status_code).
-function ServiceStub:request(method_name, request)
+function ServiceStub:blocking_request(method_name, request)
     assert("table" == type(request))
     local request_name = self:get_request_name(method_name)
     local request_str = self:encode_request(method_name, request)
@@ -43,10 +52,17 @@ function ServiceStub:request(method_name, request)
 end  -- request()
 
 -- Async request.
+-- on_response is function(response_message_table)
 function ServiceStub:async_request(method_name, request, on_response)
     assert("table" == type(request))
     assert(nil == on_response or "function" == type(on_response))
-    -- XXX
+    local request_name = self:get_request_name(method_name)
+    local request_str = self:encode_request(method_name, request)
+    -- Need to wrap the callback.
+    return self.c_stub:async_request(request_name, request_str,
+        function(response_str)
+            self:on_response_str(method_name, response_str, on_response)
+        end, self.on_error)
 end  -- async_request()
 
 function ServiceStub:blocking_run()
@@ -61,11 +77,17 @@ function ServiceStub:encode_request(method_name, request)
     return pb.encode(request_type, request)
 end  -- encode_request()
 
+-- Decode response string to message table.
 function ServiceStub:decode_response(method_name, response_str)
     if not response_str then return nil end
     assert("string" == type(response_str))
     local response_type = pb.get_rpc_output_name(self.service_name, method_name)
     return pb.decode(response_type, response_str)
 end  -- decode_response()
+
+-- Async request callback.
+function ServiceStub:on_response_str(method_name, response_str, on_response)
+    -- XXX
+end  -- on_response_str()
 
 return ServiceStub
