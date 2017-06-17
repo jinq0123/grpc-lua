@@ -67,6 +67,11 @@ void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
     pServiceStub->AsyncRequest(sMethod, sRequest, onResponse, onError);
 }  // AsyncRequest()
 
+void RegisterService(grpc_cb::Server* pServer, const LuaRef& luaService)
+{
+    // XXX
+}  // RegisterService()
+
 }  // namespace
 
 extern "C"
@@ -100,6 +105,12 @@ int luaopen_grpc_lua_c(lua_State* L)
 
         .beginClass<Server>("Server")
             .addConstructor(LUA_SP(std::shared_ptr<Server>), LUA_ARGS())
+            // Returns bound port number on success, 0 on failure.
+            .addFunction("add_listening_port",
+                static_cast<int(Server::*)(const string&)>(
+                    &Server::AddListeningPort))
+            .addFunction("register_service", &RegisterService)
+            .addFunction("blocking_run", &Server::BlockingRun)
         .endClass()  // Server
 
         ;
