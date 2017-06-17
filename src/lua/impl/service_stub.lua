@@ -59,8 +59,8 @@ function ServiceStub:async_request(method_name, request, on_response)
     local request_name = self:get_request_name(method_name)
     local request_str = self:encode_request(method_name, request)
     -- Need to wrap the response callback.
-    return self.c_stub:async_request(request_name, request_str,
-        self.get_response_callback(method_name, on_response),
+    self.c_stub:async_request(request_name, request_str,
+        self:get_response_callback(method_name, on_response),
         self.on_error)
 end  -- async_request()
 
