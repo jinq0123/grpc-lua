@@ -34,4 +34,8 @@ function M.ServiceStub(channel)
     return ServiceStub:new(channel)
 end  -- Stub()
 
+function M.Server()
+    return c.Server()
+end  -- Server()
+
 return M

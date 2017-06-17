@@ -1,5 +1,6 @@
 #include <grpc_cb/channel.h>  // for Channel
 #include <grpc_cb/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
+#include <grpc_cb/server.h>  // for Server
 #include <grpc_cb/service_stub.h>  // for ServiceStub
 #include <grpc_cb/status.h>  // for Status
 
@@ -96,6 +97,11 @@ int luaopen_grpc_lua_c(lua_State* L)
             .addFunction("async_request", &AsyncRequest)
             .addFunction("blocking_run", &grpc_cb::ServiceStub::BlockingRun)
         .endClass()  // ServiceStub
+
+        .beginClass<Server>("Server")
+            .addConstructor(LUA_SP(std::shared_ptr<Server>), LUA_ARGS())
+        .endClass()  // Server
+
         ;
     mod.pushToStack();
     return 1;
