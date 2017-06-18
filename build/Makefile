@@ -11,25 +11,17 @@ ifndef verbose
 endif
 
 ifeq ($(config),debug)
-  grpc_lua_plugin_config = debug
   grpc_lua_config = debug
 endif
 ifeq ($(config),release)
-  grpc_lua_plugin_config = release
   grpc_lua_config = release
 endif
 
-PROJECTS := grpc_lua_plugin grpc_lua
+PROJECTS := grpc_lua
 
 .PHONY: all clean help $(PROJECTS) 
 
 all: $(PROJECTS)
-
-grpc_lua_plugin:
-ifneq (,$(grpc_lua_plugin_config))
-	@echo "==== Building grpc_lua_plugin ($(grpc_lua_plugin_config)) ===="
-	@${MAKE} --no-print-directory -C . -f grpc_lua_plugin.make config=$(grpc_lua_plugin_config)
-endif
 
 grpc_lua:
 ifneq (,$(grpc_lua_config))
@@ -38,7 +30,6 @@ ifneq (,$(grpc_lua_config))
 endif
 
 clean:
-	@${MAKE} --no-print-directory -C . -f grpc_lua_plugin.make clean
 	@${MAKE} --no-print-directory -C . -f grpc_lua.make clean
 
 help:
@@ -51,7 +42,6 @@ help:
 	@echo "TARGETS:"
 	@echo "   all (default)"
 	@echo "   clean"
-	@echo "   grpc_lua_plugin"
 	@echo "   grpc_lua"
 	@echo ""
 	@echo "For more information, see http://industriousone.com/premake/quick-start"
