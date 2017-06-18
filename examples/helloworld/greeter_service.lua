@@ -2,7 +2,7 @@
 
 local M = {}
 
-local grpc = require("grpc_lua")
+local grpc = require("grpc_lua.grpc_lua")
 grpc.import_proto_file("helloworld.proto")
 
 return M
