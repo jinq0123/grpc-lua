@@ -14,7 +14,7 @@ ifeq ($(config),debug)
   RESCOMP = windres
   TARGETDIR = bin/Debug
   TARGET = $(TARGETDIR)/grpc_lua.so
-  OBJDIR = obj/Debug/grpc_lua
+  OBJDIR = obj/Debug
   DEFINES +=
   INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua/src
   FORCE_INCLUDE +=
@@ -22,7 +22,7 @@ ifeq ($(config),debug)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS) -std=c++11
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -llua -lgrpc_cb
+  LIBS += -lgrpc_cb
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L../third_party/lib -L../third_party/lib/Debug -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -41,7 +41,7 @@ ifeq ($(config),release)
   RESCOMP = windres
   TARGETDIR = bin/Release
   TARGET = $(TARGETDIR)/grpc_lua.so
-  OBJDIR = obj/Release/grpc_lua
+  OBJDIR = obj/Release
   DEFINES += -DNDEBUG
   INCLUDES += -I../third_party/include -I../third_party/lua-intf -I../third_party/lua/src
   FORCE_INCLUDE +=
@@ -49,7 +49,7 @@ ifeq ($(config),release)
   ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2 -fPIC
   ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CFLAGS) -std=c++11
   ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-  LIBS += -llua -lgrpc_cb
+  LIBS += -lgrpc_cb
   LDDEPS +=
   ALL_LDFLAGS += $(LDFLAGS) -L../third_party/lib -L../third_party/lib/Release -s -shared
   LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
@@ -123,7 +123,7 @@ $(GCH): $(PCH)
 	$(SILENT) $(CXX) -x c++-header $(ALL_CXXFLAGS) -o "$@" -MF "$(@:%.gch=%.d)" -c "$<"
 endif
 
-$(OBJDIR)/grpc_lua.o: ../src/lua/grpc_lua.cpp
+$(OBJDIR)/grpc_lua.o: ../src/cpp/grpc_lua.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

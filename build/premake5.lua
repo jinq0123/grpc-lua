@@ -24,32 +24,13 @@ workspace "grpc_lua"
 		optimize "On"
 	filter {}
 
-project "grpc_lua_plugin"
-	kind "ConsoleApp"
-	files {
-		"../src/compiler/**",
-	}
-	links {
-		"grpc_plugin_support",
-	}
-
-	filter "configurations:Debug"
-		links {
-			"libprotocd",
-		}
-	filter "configurations:Release"
-		links {
-			"libprotoc",
-		}
-	filter {}
-
 project "grpc_lua"
 	kind "SharedLib"
 	targetname "grpc_lua"
 	targetprefix ""  -- linux: grpc_lua.so
 
 	files {
-		"../src/lua/**",
+		"../src/cpp/**",
 	}
 
 	--[[

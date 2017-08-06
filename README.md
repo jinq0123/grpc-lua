@@ -24,5 +24,5 @@ Vs2015 sln and Makefile are provided.
 
 ### Run example
 See:
-* [examples\helloworld\README.md](examples\helloworld\README.md)
-* [examples\route_guide\README.md](examples\route_guide\README.md)
+* [examples/helloworld/README.md](examples/helloworld/README.md)
+* [examples/route_guide/README.md](examples/route_guide/README.md)
