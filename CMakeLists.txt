@@ -12,6 +12,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 
+if(MSVC)
+    add_definitions(-D_WIN32_WINNT=0x600) # This is a GRPC requirement!!
+endif()
+include_directories(${CONAN_INCLUDE_DIRS})
+
 file(GLOB_RECURSE SRC_LIST "src/*.cpp")
 add_library(grpc_lua ${SRC_LIST})
 target_link_libraries(grpc_lua ${CONAN_LIBS})

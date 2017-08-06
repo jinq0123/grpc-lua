@@ -11,8 +11,11 @@ class GrpcluaConan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=False"
     generators = "cmake"
-    exports_sources = "src/*", "example/*", "CMakeLists.txt"
+    exports_sources = "src/*", "CMakeLists.txt"
 
+    # conan remote add jinq0123 https://api.bintray.com/conan/jinq0123/test
+    requires = "grpc_cb/0.1@jinq0123/testing"
+    
     def build(self):
         cmake = CMake(self)
         self.run('cmake %s %s' % (self.source_folder, cmake.command_line))
