@@ -11,11 +11,11 @@ class GrpcluaConan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=False"
     generators = "cmake"
-    exports_sources = "src/*"
+    exports_sources = "src/*", "example/*", "CMakeLists.txt"
 
     def build(self):
         cmake = CMake(self)
-        self.run('cmake %s/src %s' % (self.source_folder, cmake.command_line))
+        self.run('cmake %s %s' % (self.source_folder, cmake.command_line))
         self.run("cmake --build . %s" % cmake.build_config)
 
     def package(self):
