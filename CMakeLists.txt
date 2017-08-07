@@ -16,7 +16,5 @@ if(MSVC)
     add_definitions(-D_WIN32_WINNT=0x600) # This is a GRPC requirement!!
 endif()
 
-file(GLOB_RECURSE SRC_LIST "src/*.cpp")
-add_library(grpc_lua ${SRC_LIST})
+add_library(grpc_lua "src/cpp/grpc_lua.cpp")
 target_link_libraries(grpc_lua ${CONAN_LIBS})
-
