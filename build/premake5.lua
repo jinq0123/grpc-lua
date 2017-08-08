@@ -6,7 +6,9 @@ Usage examples:
 ]]
 
 workspace "grpc_lua"
-	configurations { "Debug", "Release" }
+	location (_ACTION)
+	configurations { "Release", "Debug" }
+	platforms { "x64", "x32" }
 
 	language "C++"
 	flags {
