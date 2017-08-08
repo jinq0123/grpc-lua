@@ -3,18 +3,24 @@
 .NOTPARALLEL:
 
 ifndef config
-  config=debug
+  config=release_x64
 endif
 
 ifndef verbose
   SILENT = @
 endif
 
-ifeq ($(config),debug)
-  grpc_lua_config = debug
+ifeq ($(config),release_x64)
+  grpc_lua_config = release_x64
 endif
-ifeq ($(config),release)
-  grpc_lua_config = release
+ifeq ($(config),release_x32)
+  grpc_lua_config = release_x32
+endif
+ifeq ($(config),debug_x64)
+  grpc_lua_config = debug_x64
+endif
+ifeq ($(config),debug_x32)
+  grpc_lua_config = debug_x32
 endif
 
 PROJECTS := grpc_lua
@@ -36,8 +42,10 @@ help:
 	@echo "Usage: make [config=name] [target]"
 	@echo ""
 	@echo "CONFIGURATIONS:"
-	@echo "  debug"
-	@echo "  release"
+	@echo "  release_x64"
+	@echo "  release_x32"
+	@echo "  debug_x64"
+	@echo "  debug_x32"
 	@echo ""
 	@echo "TARGETS:"
 	@echo "   all (default)"

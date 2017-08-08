@@ -28,13 +28,13 @@
 *.out
 *.app
 
-/build/.vs
-/build/bin
-/build/grpc_lua.VC.VC.opendb
-/build/grpc_lua.VC.db
-/build/grpc_lua.VC.opendb
-/build/grpc_lua.sdf
-/build/obj
+/build/*/.vs
+/build/*/bin
+/build/*/grpc_lua.VC.VC.opendb
+/build/*/grpc_lua.VC.db
+/build/*/grpc_lua.VC.opendb
+/build/*/grpc_lua.sdf
+/build/*/obj
 /build/premake5.exe
 /examples/helloworld/*.bat
 /third_party/include/grpc
