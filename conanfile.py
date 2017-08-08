@@ -1,6 +1,5 @@
 from conans import ConanFile, CMake
 
-
 class GrpcluaConan(ConanFile):
     name = "grpc-lua"
     version = "0.1"
@@ -10,7 +9,8 @@ class GrpcluaConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = "shared=True"
-    generators = "cmake"
+    generators = "cmake", "Premake"  # A custom generator: PremakeGen/0.1@memsharded/testing
+    build_requires = "PremakeGen/0.1@memsharded/testing"
     exports_sources = "src/*", "CMakeLists.txt"
 
     # conan remote add jinq0123 https://api.bintray.com/conan/jinq0123/test
