@@ -47,3 +47,7 @@
 
 *.pyc
 test_package/build
+/conaninfo.txt
+/conanpremake.lua
+/conanbuildinfo.cmake
+/conandata
