@@ -44,3 +44,4 @@ test_package/build
 /conaninfo.txt
 /conanpremake.lua
 /conanbuildinfo.cmake
+/premake/premake5.bat
