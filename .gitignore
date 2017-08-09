@@ -28,21 +28,15 @@
 *.out
 *.app
 
-/build/*/.vs
-/build/*/bin
-/build/*/grpc_lua.VC.VC.opendb
-/build/*/grpc_lua.VC.db
-/build/*/grpc_lua.VC.opendb
-/build/*/grpc_lua.sdf
-/build/*/obj
-/build/premake5.exe
+/premake/*/.vs
+/premake/*/bin
+/premake/*/grpc_lua.VC.VC.opendb
+/premake/*/grpc_lua.VC.db
+/premake/*/grpc_lua.VC.opendb
+/premake/*/grpc_lua.sdf
+/premake/*/obj
+/premake/premake5.exe
 /examples/helloworld/*.bat
-/third_party/include/grpc
-/third_party/include/grpc_cb
-/third_party/lua
-/third_party/lua-intf
-/third_party/*.bat
-/third_party/lib/Debug/*.pdb
 /examples/helloworld/.vs
 
 *.pyc
@@ -50,5 +44,3 @@ test_package/build
 /conaninfo.txt
 /conanpremake.lua
 /conanbuildinfo.cmake
-/conandata
-/conan_install.bat

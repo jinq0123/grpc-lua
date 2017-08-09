@@ -13,14 +13,24 @@ gRPC-Lua depends on
 * [lua](https://www.lua.org/)
 
 ## Build
+Need to install [conan](http://docs.conan.io/en/latest/installation.html).
 
-### Init third-party
-Init include and lib dir. See [third_party/README.md](third_party/README.md)
+### Quick Build
+1. `conan remote add remote_bintray_jinq0123 https://api.bintray.com/conan/jinq0123/test`
+1. `conan create user/channel --build missing`
+    * The result grpc-lua.dll/grpc-lua.so is in `~/.conan/data/grpc-lua/0.1/user/channel/package/`
+    * Change build settings using -s (--settings) like:
+        `conan create user/channel --build missing -s arch=x86`
 
-### Make
-Use premake5 to generate VS solution and linux Makefile, see [premake5.bat](build/premake5.bat).
+### Create VS solution
+Use premake5 to generate VS solution.
 
-Vs2015 sln and Makefile are provided.
+1. conan_install.bat
+2. 
+
+See [premake5.bat](build/premake5.bat).
+
+Vs2015 sln example are provided but it is not usable because it contains absolute pathes.
 
 ### Run example
 See:
