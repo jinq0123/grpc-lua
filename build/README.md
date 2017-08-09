@@ -1,1 +1,1 @@
-Copy premake5.exe here to run premake5.bat.
+Need premake5.exe to run premake5.bat.

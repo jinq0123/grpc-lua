@@ -98,7 +98,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;_WIN32_WINNT=0x0600;GRPC_CB_DLL_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\third_party\include;..\..\third_party\lua-intf;..\..\third_party\lua\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\include;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\include;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\.conan\nqjjqt\1\include;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -110,8 +110,8 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>grpc_cb.lib;ws2_32.lib;lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\third_party\lib;..\..\third_party\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>grpc_cb.lib;lua-cpp.lib;grpc.lib;grpc++.lib;grpc_unsecure.lib;grpc++_unsecure.lib;gpr.lib;wsock32.lib;ssleay32.lib;libeay32.lib;crypt32.lib;msi.lib;ws2_32.lib;libprotobuf-lite.lib;libprotoc.lib;libprotobuf.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\lib;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\lib;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\lib;C:\.conan\nqjjqt\1\lib;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib64;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>bin\x64\Release\grpc_lua.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -120,7 +120,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;_WIN32_WINNT=0x0600;GRPC_CB_DLL_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\third_party\include;..\..\third_party\lua-intf;..\..\third_party\lua\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\include;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\include;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\.conan\nqjjqt\1\include;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -132,8 +132,8 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>grpc_cb.lib;ws2_32.lib;lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\third_party\lib;..\..\third_party\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>grpc_cb.lib;lua-cpp.lib;grpc.lib;grpc++.lib;grpc_unsecure.lib;grpc++_unsecure.lib;gpr.lib;wsock32.lib;ssleay32.lib;libeay32.lib;crypt32.lib;msi.lib;ws2_32.lib;libprotobuf-lite.lib;libprotoc.lib;libprotobuf.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\lib;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\lib;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\lib;C:\.conan\nqjjqt\1\lib;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib64;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>bin\x32\Release\grpc_lua.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -142,15 +142,15 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_WIN32_WINNT=0x0600;GRPC_CB_DLL_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\third_party\include;..\..\third_party\lua-intf;..\..\third_party\lua\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\include;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\include;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\.conan\nqjjqt\1\include;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>grpc_cb.lib;ws2_32.lib;lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\third_party\lib;..\..\third_party\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>grpc_cb.lib;lua-cpp.lib;grpc.lib;grpc++.lib;grpc_unsecure.lib;grpc++_unsecure.lib;gpr.lib;wsock32.lib;ssleay32.lib;libeay32.lib;crypt32.lib;msi.lib;ws2_32.lib;libprotobuf-lite.lib;libprotoc.lib;libprotobuf.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\lib;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\lib;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\lib;C:\.conan\nqjjqt\1\lib;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib64;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>bin\x64\Debug\grpc_lua.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -159,15 +159,15 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_WIN32_WINNT=0x0600;GRPC_CB_DLL_IMPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\third_party\include;..\..\third_party\lua-intf;..\..\third_party\lua\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\include;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\include;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\include;C:\.conan\nqjjqt\1\include;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\include;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>grpc_cb.lib;ws2_32.lib;lua.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\third_party\lib;..\..\third_party\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>grpc_cb.lib;lua-cpp.lib;grpc.lib;grpc++.lib;grpc_unsecure.lib;grpc++_unsecure.lib;gpr.lib;wsock32.lib;ssleay32.lib;libeay32.lib;crypt32.lib;msi.lib;ws2_32.lib;libprotobuf-lite.lib;libprotoc.lib;libprotobuf.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\jinqing\.conan\data\grpc_cb\0.1\jinq0123\testing\package\93767357831447b6cc34f8a88b5979a44a265d4d\lib;C:\Users\jinqing\.conan\data\lua-cpp\5.3.4\jinq0123\testing\package\c85f9b402dd4d46acdf074e1c63b768a41181d7a\lib;C:\Users\jinqing\.conan\data\lua-intf\0.1\jinq0123\testing\package\5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9\lib;C:\.conan\nqjjqt\1\lib;C:\Users\jinqing\.conan\data\OpenSSL\1.0.2l\conan\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib;C:\Users\jinqing\.conan\data\Protobuf\3.1.0\jinq0123\stable\package\ee5dab950b6ea94ae953b93c55343e98c2ec39df\lib64;C:\Users\jinqing\.conan\data\zlib\1.2.11\conan\stable\package\63da998e3642b50bee33f4449826b2d623661505\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>bin\x32\Debug\grpc_lua.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>

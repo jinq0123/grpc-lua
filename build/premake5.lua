@@ -15,6 +15,8 @@ workspace "grpc_lua"
 		"C++11",
 	}
 
+	require("conanpremake_multi")  -- for third-party libs
+
 	filter "configurations:Debug"
 		flags { "Symbols" }
 	filter "configurations:Release"
