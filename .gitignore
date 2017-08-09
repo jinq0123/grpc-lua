@@ -51,3 +51,4 @@ test_package/build
 /conanpremake.lua
 /conanbuildinfo.cmake
 /conandata
+/conan_install.bat

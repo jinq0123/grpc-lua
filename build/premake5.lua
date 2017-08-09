@@ -6,17 +6,13 @@ Usage examples:
 ]]
 
 workspace "grpc_lua"
-	location (_ACTION)
+	location (_ACTION)  -- subdir vs2015 (or gmake, ...)
 	configurations { "Release", "Debug" }
 	platforms { "x64", "x32" }
 
 	language "C++"
 	flags {
 		"C++11",
-	}
-	libdirs {
-		"../third_party/lib",
-		"../third_party/lib/%{cfg.buildcfg}",
 	}
 
 	filter "configurations:Debug"
@@ -39,26 +35,13 @@ project "grpc_lua"
 	From: https://github.com/SteveKChiu/lua-intf
 	By default LuaIntf expect the Lua library to build under C++.
 	If you really want to use Lua library compiled under C,
-	you can define LUAINTF_LINK_LUA_COMPILED_IN_CXX to 0:
+	you can use lua.lib instead of lua-cpp.lib and:
+		defines { "LUAINTF_LINK_LUA_COMPILED_IN_CXX=0" }
 	--]]
-	-- defines { "LUAINTF_LINK_LUA_COMPILED_IN_CXX=0" }
-
-	includedirs {
-		"../third_party/include",
-		"../third_party/lua-intf",
-		"../third_party/lua/src",
-	}
-	links {
-		"grpc_cb",
-	}
 
 	filter { "system:windows" }
 		defines {
 			"_WIN32_WINNT=0x0600",  -- i.e. Windows 7 target
 			"GRPC_CB_DLL_IMPORT",
-		}
-		links {
-			"ws2_32",
-			"lua",
 		}
 	filter {}

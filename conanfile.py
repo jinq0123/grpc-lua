@@ -22,6 +22,9 @@ class GrpcluaConan(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
+        self.output.info("os=%s compiler=%s build_type=%s arch=%s" % (
+            self.info.settings.os, self.info.settings.compiler,
+            self.info.settings.build_type, self.info.settings.arch))
 
     def package(self):
         # no *.h
