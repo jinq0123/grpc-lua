@@ -36,14 +36,15 @@
 /premake/*/grpc_lua.sdf
 /premake/*/obj
 /premake/premake5.exe
-/examples/helloworld/*.bat
+/premake/premake5.bat
+/premake/conanbuildinfo.cmake
+/premake/conaninfo.txt
+
 /examples/helloworld/.vs
+/examples/conan_install.bat
 
 *.pyc
 test_package/build
 /conaninfo.txt
 /conanpremake.lua
 /conanbuildinfo.cmake
-/premake/premake5.bat
-/premake/conanbuildinfo.cmake
-/premake/conaninfo.txt
