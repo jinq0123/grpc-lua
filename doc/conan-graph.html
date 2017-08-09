@@ -1,0 +1,114 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.1/vis.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <script type="text/javascript">
+    function showhideclass(id) {
+      var elements = document.getElementsByClassName(id)
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].style.display = (elements[i].style.display != 'none') ? 'none' : 'block';
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .noPrint {
+        display: none;
+      }
+    }
+    .button {
+      background-color: #5555cc;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 18px;
+    }
+  </style>
+  <div style="width: 100%;">
+    <div id="mynetwork" style="float:left; width: 75%;"></div>
+    <div style="float:right;width:25%;">
+      <div id="details"  style="padding:10;" class="noPrint">Package info: no package selected</div>
+      <button onclick="javascript:showhideclass('controls')" class="button noPrint">Show / hide graph controls.</button>
+      <div id="controls" class="controls" style="padding:5; display:none"></div>
+    </div>
+  </div>
+  <div style="clear:both"></div>
+
+
+
+  <script type="text/javascript">
+    var nodes = new vis.DataSet([
+      {id: 0, label: 'grpc-lua/0.1@PROJECT', shape: 'box', fulllabel: 'grpc-lua/0.1@PROJECT'},
+{id: 1, label: 'grpc_cb/0.1', shape: 'box', fulllabel: '<h3>grpc_cb/0.1@jinq0123/testing</h3><ul><li><b>id</b>: 93767357831447b6cc34f8a88b5979a44a265d4d</li><li><b>url</b>: <a href="https://github.com/jinq0123/grpc_cb">https://github.com/jinq0123/grpc_cb</a></li><li><b>license</b>: Apache-2.0</li><ul>'},
+{id: 2, label: 'gRPC/1.4.2', shape: 'box', fulllabel: '<h3>gRPC/1.4.2@jinq0123/stable</h3><ul><li><b>id</b>: 1668c3a0da6907a6862fccd2450b6739fbfca83a</li><li><b>url</b>: <a href="https://github.com/jinq0123/conan-grpc.git">https://github.com/jinq0123/conan-grpc.git</a></li><li><b>license</b>: Apache-2.0</li><ul>'},
+{id: 3, label: 'Protobuf/3.1.0', shape: 'box', fulllabel: '<h3>Protobuf/3.1.0@jinq0123/stable</h3><ul><li><b>id</b>: ee5dab950b6ea94ae953b93c55343e98c2ec39df</li><li><b>url</b>: <a href="https://github.com/a_teammate/conan-protobuf.git">https://github.com/a_teammate/conan-protobuf.git</a></li><li><b>license</b>: https://github.com/google/protobuf/blob/v3.1.0/LICENSE</li><ul>'},
+{id: 4, label: 'OpenSSL/1.0.2l', shape: 'box', fulllabel: '<h3>OpenSSL/1.0.2l@conan/stable</h3><ul><li><b>id</b>: ee5dab950b6ea94ae953b93c55343e98c2ec39df</li><li><b>url</b>: <a href="http://github.com/lasote/conan-openssl">http://github.com/lasote/conan-openssl</a></li><li><b>license</b>: The current OpenSSL licence is an "Apache style" license: https://www.openssl.org/source/license.html</li><ul>'},
+{id: 5, label: 'zlib/1.2.11', shape: 'box', fulllabel: '<h3>zlib/1.2.11@conan/stable</h3><ul><li><b>id</b>: 63da998e3642b50bee33f4449826b2d623661505</li><li><b>url</b>: <a href="http://github.com/lasote/conan-zlib">http://github.com/lasote/conan-zlib</a></li><li><b>license</b>: http://www.zlib.net/zlib_license.html</li><ul>'},
+{id: 6, label: 'lua-intf/0.1', shape: 'box', fulllabel: '<h3>lua-intf/0.1@jinq0123/testing</h3><ul><li><b>id</b>: 5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9</li><li><b>url</b>: <a href="https://github.com/jinq0123/conan-lua-intf">https://github.com/jinq0123/conan-lua-intf</a></li><li><b>license</b>: MIT</li><ul>'},
+{id: 7, label: 'lua-cpp/5.3.4', shape: 'box', fulllabel: '<h3>lua-cpp/5.3.4@jinq0123/testing</h3><ul><li><b>id</b>: c85f9b402dd4d46acdf074e1c63b768a41181d7a</li><li><b>url</b>: <a href="https://github.com/jinq0123/conan-lua-cpp">https://github.com/jinq0123/conan-lua-cpp</a></li><li><b>license</b>: MIT</li><ul>'}
+    ]);
+    var edges = new vis.DataSet([
+     { from: 4, to: 5 },
+{ from: 1, to: 2 },
+{ from: 3, to: 5 },
+{ from: 2, to: 3 },
+{ from: 2, to: 5 },
+{ from: 2, to: 4 },
+{ from: 0, to: 7 },
+{ from: 0, to: 6 },
+{ from: 0, to: 1 }
+    ]);
+    var container = document.getElementById('mynetwork');
+    var controls = document.getElementById('controls');
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+    var options = {
+      autoResize: true,
+      locale: 'en',
+      edges: {
+        arrows: { to: {enabled: true}},
+        smooth: { enabled: false}
+      },
+      nodes: {
+          font: {'face': 'monospace', 'align': 'left'}
+      },
+      layout: {
+        "hierarchical": {
+          "enabled": true,
+          "sortMethod": "directed",
+          "direction": "UD",
+          nodeSpacing: 200
+        }
+      },
+      physics: {
+          enabled: false,
+      },
+      configure: {
+        enabled: true,
+        filter: 'layout physics',
+        showButton: false,
+        container: controls
+      }
+    };
+    var network = new vis.Network(container, data, options);
+    network.on('click', function (properties) {
+                           var ids = properties.nodes;
+                           var clickedNodes = nodes.get(ids);
+                           var control = document.getElementById("details");
+                           if(clickedNodes[0])
+                              control.innerHTML = clickedNodes[0].fulllabel;
+                           else
+                              control.innerHTML = "<b>Package info</b>: No package selected";
+                         });
+  </script>
+</body>
+</html>

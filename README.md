@@ -7,8 +7,10 @@ NOT READY!
 gRPC-Lua depends on
 * [grpc_cb](https://github.com/jinq0123/grpc_cb)
 * [lua-intf](https://github.com/SteveKChiu/lua-intf)
-* [LuaPbIntf](https://github.com/jinq0123/LuaPbIntf)
 * [lua](https://www.lua.org/)
+
+All these libraries will installed by [conan](https://www.conan.io/)
+C/C++ package manager.
 
 ## Build
 
@@ -27,5 +29,6 @@ See [premake/README.md](premake/README.md) to use premake5 to generate VS soluti
 TODO
 
 ### Examples
+Need [LuaPbIntf](https://github.com/jinq0123/LuaPbIntf).
 * [examples/helloworld/README.md](examples/helloworld/README.md)
 * [examples/route_guide/README.md](examples/route_guide/README.md)
