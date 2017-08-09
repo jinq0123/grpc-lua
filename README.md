@@ -8,9 +8,10 @@ gRPC-Lua depends on
 * [grpc_cb](https://github.com/jinq0123/grpc_cb)
 * [lua-intf](https://github.com/SteveKChiu/lua-intf)
 * [lua](https://www.lua.org/)
+
 See [doc/conan-graph.html](http://htmlpreview.github.io/?https://github.com/jinq0123/grpc-lua/master/doc/conan-graph.html)
 
-All these libraries will installed by [conan](https://www.conan.io/)
+All these libraries will be installed by [conan](https://www.conan.io/)
 C/C++ package manager.
 
 ## Build
