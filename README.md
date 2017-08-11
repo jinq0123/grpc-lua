@@ -26,9 +26,14 @@ C/C++ package manager.
 See [premake/README.md](premake/README.md) to use premake5 to generate VS solution.
 
 ## Usage
-TODO
 
-### Examples
+### Example codes
+* [greeter_client.lua](examples/helloworld/greeter_client.lua)
+* [greeter_server.lua](examples/helloworld/greeter_server.lua)
+* [route_guide_client.lua](examples/route_guide/route_guide_client.lua)
+* [route_guide_server.lua](examples/route_guide/route_guide_server.lua)
+
+### How to run examples
 1. Rename [examples/conan_install.bat.example](examples/conan_install.bat.example) to `conan_install.bat`
 1. Change conandata in `conan_install.bat`
 1. Run example bat
@@ -47,7 +52,7 @@ TODO
 	+ Install dependings using `conan`
 		- luapbintf/0.1
 		- grpc-lua/0.1
-	+ Copy exe and dlls
+	+ Copy exe and dlls from `~/.conan/data`
 		- lua_cpp.exe
 		- lua_cpp.dll
 		- luapbintf.dll
