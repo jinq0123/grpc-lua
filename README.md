@@ -21,8 +21,6 @@ C/C++ package manager.
 1. `conan remote add remote_bintray_jinq0123 https://api.bintray.com/conan/jinq0123/test`
 1. `conan create user/channel --build missing`
     * The result `grpc_lua.dll`/`grpc_lua.so` is in `~/.conan/data/grpc-lua/0.1/user/channel/package/`...
-    * Add build settings like:
-        `conan create user/channel --build missing -s arch=x86`
 
 ### VS solution
 See [premake/README.md](premake/README.md) to use premake5 to generate VS solution.
@@ -32,7 +30,8 @@ TODO
 
 ### Examples
 1. Rename [examples/conan_install.bat.example](examples/conan_install.bat.example) to `conan_install.bat`
-2. Run example bat
+1. Change conandata in `conan_install.bat`
+1. Run example bat
 	* helloworld
 		+ [run_client.bat](examples/helloworld/run_client.bat)
 		+ [run_server.bat](examples/helloworld/run_client.bat)
