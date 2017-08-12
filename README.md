@@ -57,3 +57,6 @@ See [premake/README.md](premake/README.md) to use premake5 to generate VS soluti
 		- lua_cpp.dll
 		- luapbintf.dll
 		- grpc_lua.dll
+
+### API doc
+See [doc/ldoc/html/index.html](http://htmlpreview.github.io/?https://github.com/jinq0123/grpc-lua/master/doc/ldoc/html/index.html)

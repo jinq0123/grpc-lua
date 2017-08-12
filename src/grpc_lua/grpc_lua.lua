@@ -53,7 +53,7 @@ function M.Channel(host_port)
 end  -- Channel()
 
 --- Create service stub.
--- @Channel channel
+-- @tparam Channel channel
 -- @treturn ServiceStub service stub object
 function M.ServiceStub(channel)
     return ServiceStub:new(channel)

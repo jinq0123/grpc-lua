@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>grpc-lua documentation</title>
+    <link rel="stylesheet" href="../ldoc_pale.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>grpc-lua</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>grpc_lua.grpc_lua</strong></li>
+  <li><a href="../modules/grpc_lua.impl.service_stub.html">grpc_lua.impl.service_stub</a></li>
+</ul>
+<h2>Examples</h2>
+<ul class="nowrap">
+  <li><a href="../examples/greeter_client.lua.html">greeter_client.lua</a></li>
+  <li><a href="../examples/greeter_server.lua.html">greeter_server.lua</a></li>
+  <li><a href="../examples/greeter_service.lua.html">greeter_service.lua</a></li>
+  <li><a href="../examples/route_guide_client.lua.html">route_guide_client.lua</a></li>
+  <li><a href="../examples/route_guide_server.lua.html">route_guide_server.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>grpc_lua.grpc_lua</code></h1>
+<p>Wraps grpc_lua C module.</p>
+<p> Provides the interface to grpc.
+ Calls luapbintf to encode and decode protobuf messages.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#map_path">map_path (virtual_path, disk_path)</a></td>
+	<td class="summary">Map a path on disk to a location in the SourceTree.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#import_proto_file">import_proto_file (file_name)</a></td>
+	<td class="summary">Import the given file to a FileDescriptor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Channel">Channel (host_port)</a></td>
+	<td class="summary">Create a channel.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ServiceStub">ServiceStub (channel)</a></td>
+	<td class="summary">Create service stub.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Server">Server ()</a></td>
+	<td class="summary">Create a server.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "map_path"></a>
+    <strong>map_path (virtual_path, disk_path)</strong>
+    </dt>
+    <dd>
+    Map a path on disk to a location in the SourceTree.
+ See Protobuf <code>DiskSourceTree::MapPath()</code>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">virtual_path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         virtual path
+        </li>
+        <li><span class="parameter">disk_path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         disk path
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "import_proto_file"></a>
+    <strong>import_proto_file (file_name)</strong>
+    </dt>
+    <dd>
+    Import the given file to a FileDescriptor.
+ Dependencies are imported automatically.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">file_name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         *.proto file name, must be relative to proto path.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">import_proto_file(<span class="string">"foo.proto"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Channel"></a>
+    <strong>Channel (host_port)</strong>
+    </dt>
+    <dd>
+    Create a channel.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">host_port</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         input "host:port" like: "a.b.com:6666" or "1.2.3.4:6666"
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/grpc_lua.grpc_lua.html#Channel">Channel</a></span>
+        channel object
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "ServiceStub"></a>
+    <strong>ServiceStub (channel)</strong>
+    </dt>
+    <dd>
+    Create service stub.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">channel</span>
+            <span class="types"><a class="type" href="../modules/grpc_lua.grpc_lua.html#Channel">Channel</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/grpc_lua.grpc_lua.html#ServiceStub">ServiceStub</a></span>
+        service stub object
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Server"></a>
+    <strong>Server ()</strong>
+    </dt>
+    <dd>
+    Create a server.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../modules/grpc_lua.grpc_lua.html#Server">Server</a></span>
+        server object
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-08-12 12:54:32 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
