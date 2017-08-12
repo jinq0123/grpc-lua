@@ -71,7 +71,7 @@ void RegisterService(grpc_cb::Server* pServer, const LuaRef& luaService)
 {
     assert(pServer);
     luaService.checkTable();
-    pServer->RegisterService();  // XXX
+    // XXX pServer->RegisterService(LuaService(luaService));  // XXX
     // XXX
 }  // RegisterService()
 

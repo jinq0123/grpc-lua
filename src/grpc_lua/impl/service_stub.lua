@@ -1,4 +1,5 @@
 --- Service stub.
+-- Wraps C module's `ServiceStub`.
 -- @module grpc_lua.impl.service_stub
 
 local ServiceStub = {}

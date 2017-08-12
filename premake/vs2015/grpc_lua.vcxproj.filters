@@ -48,6 +48,9 @@
     <None Include="..\..\src\grpc_lua\grpc_lua.lua">
       <Filter>src\grpc_lua</Filter>
     </None>
+    <None Include="..\..\src\grpc_lua\impl\server.lua">
+      <Filter>src\grpc_lua\impl</Filter>
+    </None>
     <None Include="..\..\src\grpc_lua\impl\service_stub.lua">
       <Filter>src\grpc_lua\impl</Filter>
     </None>

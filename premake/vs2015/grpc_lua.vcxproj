@@ -183,6 +183,7 @@
     <None Include="..\..\examples\route_guide\route_guide_client.lua" />
     <None Include="..\..\examples\route_guide\route_guide_server.lua" />
     <None Include="..\..\src\grpc_lua\grpc_lua.lua" />
+    <None Include="..\..\src\grpc_lua\impl\server.lua" />
     <None Include="..\..\src\grpc_lua\impl\service_stub.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

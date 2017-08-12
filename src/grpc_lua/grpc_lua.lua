@@ -8,6 +8,7 @@ local M = {}
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
 local ServiceStub = require("grpc_lua.impl.service_stub")
+local Server = require("grpc_lua.impl.server")
 
 function M.test()
     c.test()
@@ -66,7 +67,7 @@ end  -- Stub()
 --- Create a server.
 -- @treturn Server server object
 function M.Server()
-    return c.Server()
+    return Server:new()
 end  -- Server()
 
 return M
