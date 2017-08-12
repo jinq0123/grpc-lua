@@ -48,3 +48,12 @@ test_package/build
 /conaninfo.txt
 /conanpremake.lua
 /conanbuildinfo.cmake
+/doc/ldoc/lualibs/LDoc-1.4.6
+/doc/ldoc/lualibs/Penlight-1.5.2
+/doc/ldoc/lua-cpp.exe
+/doc/ldoc/lua_tools/lua-cpp.exe
+/doc/ldoc/lua_tools/LDoc-1.4.6
+/doc/ldoc/lua_tools/Penlight-1.5.2
+/doc/ldoc/lua_tools/lua-cpp.exe
+/doc/ldoc/lua_tools/lfs.dll
+/doc/ldoc/lua_tools/lua-cpp.dll
