@@ -33,6 +33,12 @@
     <None Include="..\..\examples\helloworld\greeter_service.lua">
       <Filter>examples\helloworld</Filter>
     </None>
+    <None Include="..\..\examples\helloworld\helloworld.proto">
+      <Filter>examples\helloworld</Filter>
+    </None>
+    <None Include="..\..\examples\route_guide\route_guide.proto">
+      <Filter>examples\route_guide</Filter>
+    </None>
     <None Include="..\..\examples\route_guide\route_guide_client.lua">
       <Filter>examples\route_guide</Filter>
     </None>

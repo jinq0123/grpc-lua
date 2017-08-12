@@ -33,6 +33,7 @@ project "grpc_lua"
 		"../src/cpp/**",
 		"../src/**.lua",
 		"../examples/**.lua",
+		"../examples/**.proto",
 	}
 
 	--[[

@@ -69,6 +69,9 @@ void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
 
 void RegisterService(grpc_cb::Server* pServer, const LuaRef& luaService)
 {
+    assert(pServer);
+    luaService.checkTable();
+    pServer->RegisterService();  // XXX
     // XXX
 }  // RegisterService()
 

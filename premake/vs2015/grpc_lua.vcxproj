@@ -178,6 +178,8 @@
     <None Include="..\..\examples\helloworld\greeter_client.lua" />
     <None Include="..\..\examples\helloworld\greeter_server.lua" />
     <None Include="..\..\examples\helloworld\greeter_service.lua" />
+    <None Include="..\..\examples\helloworld\helloworld.proto" />
+    <None Include="..\..\examples\route_guide\route_guide.proto" />
     <None Include="..\..\examples\route_guide\route_guide_client.lua" />
     <None Include="..\..\examples\route_guide\route_guide_server.lua" />
     <None Include="..\..\src\grpc_lua\grpc_lua.lua" />
