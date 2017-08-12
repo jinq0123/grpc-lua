@@ -34,29 +34,24 @@ See [premake/README.md](premake/README.md) to use premake5 to generate VS soluti
 * [route_guide_server.lua](examples/route_guide/route_guide_server.lua)
 
 ### How to run examples
-1. Rename [examples/conan_install.bat.example](examples/conan_install.bat.example) to `conan_install.bat`
-1. Change conandata in `conan_install.bat`
-1. Run example bat
-	* helloworld
-		+ [run_client.bat](examples/helloworld/run_client.bat)
-		+ [run_server.bat](examples/helloworld/run_client.bat)
-	* route_guide
-		+ [run_client.bat](examples/route_guide/run_client.bat)
-		+ [run_server.bat](examples/route_guide/run_client.bat)
-
-#### Explaination
-* example bat
-	+ Calls `conan_install.bat`
-	+ Start lua script
-* `conan_install.bat`
-	+ Install dependings using `conan`
-		- luapbintf/0.1
-		- grpc-lua/0.1
-	+ Copy exe and dlls from `~/.conan/data`
-		- lua_cpp.exe
-		- lua_cpp.dll
+1. Copy required exe and dll. 
+   Rename [examples/conan_install.bat.example](examples/conan_install.bat.example)
+   to `conan_install.bat`, and change `conandata` variable in it. Then run it.
+   `conan_install.bat` will:
+     + Install dependings using `conan` into `~/.conan/data`
+     + Copy exe and dlls from `~/.conan/data`
+		- lua-cpp.exe
+		- lua-cpp.dll
 		- luapbintf.dll
 		- grpc_lua.dll
+   
+1. Start lua script
+	* helloworld
+		+ `lua-cpp.exe greeter_server.lua`
+		+ `lua-cpp.exe greeter_client.lua`
+	* route_guide
+		+ `lua-cpp.exe route_guide_server.lua`
+		+ `lua-cpp.exe route_guide_client.lua`
 
 ### API doc
 See [doc/ldoc/html/index.html](http://htmlpreview.github.io/?https://github.com/jinq0123/grpc-lua/master/doc/ldoc/html/index.html)
