@@ -13,6 +13,8 @@ function M.test()
     c.test()
 end  -- test()
 
+--- luapbintf functions.
+-- Functions from luapbintf C module.
 -- @section luapbintf
 
 --- Add proto path as `protoc --proto_path=PATH`.
@@ -42,6 +44,8 @@ function M.import_proto_file(file_name)
     pb.import_proto_file(file_name)
 end
 
+--- grpc functions.
+-- Functions from grpc_lua C module.
 -- @section grpc
 
 --- Create a channel.
