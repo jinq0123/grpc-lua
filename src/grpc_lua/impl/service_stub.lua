@@ -42,7 +42,7 @@ function ServiceStub:set_on_error(on_error)
 end  -- set_on_error
 
 -- e.g. request("SayHello", { name = "Jq" })
--- Blocking request. 
+-- Blocking request.
 -- Return the response string or (nil, error_string, grpc_status_code).
 function ServiceStub:blocking_request(method_name, request)
     assert("table" == type(request))

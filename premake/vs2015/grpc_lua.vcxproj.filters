@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="examples">
+      <UniqueIdentifier>{84D830B1-70A5-8BBC-99BE-796485EAC04A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\helloworld">
+      <UniqueIdentifier>{2F13CB6D-9B74-A87B-24E2-EE2D9042DF3A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\route_guide">
+      <UniqueIdentifier>{0F7F53C5-FB0D-DD8E-A42C-F189909AED34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cpp">
+      <UniqueIdentifier>{7FF32FA9-EBD2-AE44-F4EA-391B604915A6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\grpc_lua">
+      <UniqueIdentifier>{A934900E-9597-1FB3-3E1D-58692A5FEB35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\grpc_lua\impl">
+      <UniqueIdentifier>{4A789682-B68E-9418-FF05-203A6B5B65A0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\examples\helloworld\greeter_client.lua">
+      <Filter>examples\helloworld</Filter>
+    </None>
+    <None Include="..\..\examples\helloworld\greeter_server.lua">
+      <Filter>examples\helloworld</Filter>
+    </None>
+    <None Include="..\..\examples\helloworld\greeter_service.lua">
+      <Filter>examples\helloworld</Filter>
+    </None>
+    <None Include="..\..\examples\route_guide\route_guide_client.lua">
+      <Filter>examples\route_guide</Filter>
+    </None>
+    <None Include="..\..\examples\route_guide\route_guide_server.lua">
+      <Filter>examples\route_guide</Filter>
+    </None>
+    <None Include="..\..\src\grpc_lua\grpc_lua.lua">
+      <Filter>src\grpc_lua</Filter>
+    </None>
+    <None Include="..\..\src\grpc_lua\impl\service_stub.lua">
+      <Filter>src\grpc_lua\impl</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\cpp\grpc_lua.cpp">
+      <Filter>src\cpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

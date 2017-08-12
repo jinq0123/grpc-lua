@@ -5,7 +5,7 @@ package.path = "../../src/?.lua;" .. package.path
 
 local grpc = require("grpc_lua.grpc_lua")
 
-function main()
+local function main()
     local svr = grpc.Server()
     svr:add_listening_port("0.0.0.0:50051")
     -- Service implementation is a table.

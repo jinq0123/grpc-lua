@@ -31,6 +31,8 @@ project "grpc_lua"
 
 	files {
 		"../src/cpp/**",
+		"../src/**.lua",
+		"../examples/**.lua",
 	}
 
 	--[[

@@ -5,7 +5,7 @@ package.path = "../../src/?.lua;" .. package.path
 
 local grpc = require("grpc_lua.grpc_lua")
 
-function main()
+local function main()
     grpc.import_proto_file("helloworld.proto")
 
     local ch = grpc.Channel("localhost:50051")
@@ -16,10 +16,10 @@ function main()
     local request = { name = "world" }
     local response = assert(stub:blocking_request("SayHello", request))
     print("Greeter received: " .. response.message)
-    
+
     -- Async request.
-    stub:async_request("SayHello", request, function(response)
-        print("Async greeter received: " .. response.message)
+    stub:async_request("SayHello", request, function(resp)
+        print("Async greeter received: " .. resp.message)
     end)
     stub:blocking_run()
 end  -- main()
