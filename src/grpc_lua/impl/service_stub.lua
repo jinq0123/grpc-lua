@@ -1,3 +1,6 @@
+--- Service stub.
+-- @module grpc_lua.impl.service_stub
+
 local ServiceStub = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
