@@ -28,13 +28,19 @@
 *.out
 *.app
 
-/premake/*/.vs
-/premake/*/bin
-/premake/*/grpc_lua.VC.VC.opendb
-/premake/*/grpc_lua.VC.db
-/premake/*/grpc_lua.VC.opendb
-/premake/*/grpc_lua.sdf
-/premake/*/obj
+# /premake/*/.vs
+# /premake/*/bin
+# /premake/*/grpc_lua.VC.VC.opendb
+# /premake/*/grpc_lua.VC.db
+# /premake/*/grpc_lua.VC.opendb
+# /premake/*/grpc_lua.sdf
+# /premake/*/obj
+# /premake/vs2015
+/premake/vs20*
+/premake/conanpremake_debug_x32.lua
+/premake/conanpremake_debug_x64.lua
+/premake/conanpremake_release_x32.lua
+/premake/conanpremake_release_x64.lua
 /premake/premake5.exe
 /premake/premake5.bat
 /premake/conanbuildinfo.cmake
@@ -57,3 +63,4 @@ test_package/build
 /doc/ldoc/lua_tools/lua-cpp.exe
 /doc/ldoc/lua_tools/lfs.dll
 /doc/ldoc/lua_tools/lua-cpp.dll
+
