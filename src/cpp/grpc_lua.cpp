@@ -1,3 +1,5 @@
+#include "impl/service.h"  // for Service
+
 #include <grpc_cb/channel.h>  // for Channel
 #include <grpc_cb/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
 #include <grpc_cb/server.h>  // for Server
@@ -77,8 +79,7 @@ void RegisterService(grpc_cb::Server* pServer,
         svcDecsPtr.toPtr());
     if (!pDesc) throw LuaException("ServiceDescriptor pointer is nullptr.");
     luaService.checkTable();
-    // pServer->RegisterService(LuaService(luaService));  // XXX
-    // XXX
+    pServer->RegisterService(std::make_shared<Service>(*pDesc, luaService));
 }  // RegisterService()
 
 }  // namespace
