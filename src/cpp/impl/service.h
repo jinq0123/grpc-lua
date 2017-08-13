@@ -3,6 +3,8 @@
 
 #include <grpc_cb/service.h>  // for Service and CallSptr
 
+#include <vector>
+
 namespace LuaIntf {
 class LuaRef;
 }
@@ -18,9 +20,9 @@ public:
     ~Service();
 
 public:
-    const std::string& GetMethodName(size_t method_index) const override;
+    const std::string& GetMethodName(size_t iMthdIdx) const override;
 
-    void CallMethod(size_t method_index, grpc_byte_buffer* request,
+    void CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
         const grpc_cb::CallSptr& call_sptr) override;
 
 private:
@@ -30,8 +32,12 @@ private:
     }
 
 private:
+    void InitMethodNames();
+
+private:
     const ServiceDescriptor& m_desc;
     const LuaRef& m_luaService;
+    std::vector<std::string> m_vMethodNames;
 };  // class Service
 
 #endif  // IMPL_SERVICE_H
