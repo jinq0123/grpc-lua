@@ -47,7 +47,8 @@
 /premake/conaninfo.txt
 
 /examples/helloworld/.vs
-/examples/conan_install.bat
+# /examples/conan_install.bat
+/examples/*.bat
 
 *.pyc
 test_package/build
@@ -64,3 +65,4 @@ test_package/build
 /doc/ldoc/lua_tools/lfs.dll
 /doc/ldoc/lua_tools/lua-cpp.dll
 
+/premake/premake.bat

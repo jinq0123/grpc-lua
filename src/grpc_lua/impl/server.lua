@@ -23,7 +23,7 @@ end  -- new()
 -- @usage svr:add_listening_port("0.0.0.0:50051")
 function Server:add_listening_port(host_port)
     assert("string" == type(host_port))
-    c_svr.add_listening_port(host_port)
+    self.c_svr:add_listening_port(host_port)
 end
 
 --- Register a service.
@@ -36,12 +36,12 @@ function Server:register_service(full_service_name, service)
     assert("table" == type(service))
     local desc = pb.get_service_descriptor(full_service_name)
     assert(desc)
-    c_svr:register_service(desc, service)
+    self.c_svr:register_service(desc, service)
 end  -- register_service()
 
 --- Blocking run the server.
 function Server:blocking_run()
-    c_svr:blocking_run()
+    self.c_svr:blocking_run()
 end
 
 return Server
