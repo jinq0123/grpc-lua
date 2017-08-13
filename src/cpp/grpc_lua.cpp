@@ -4,6 +4,7 @@
 #include <grpc_cb/service_stub.h>  // for ServiceStub
 #include <grpc_cb/status.h>  // for Status
 
+#include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <LuaIntf/LuaIntf.h>
 
 #include <iostream>
@@ -67,9 +68,12 @@ void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
     pServiceStub->AsyncRequest(sMethod, sRequest, onResponse, onError);
 }  // AsyncRequest()
 
-void RegisterService(grpc_cb::Server* pServer, const LuaRef& luaService)
+void RegisterService(grpc_cb::Server* pServer,
+    const google::protobuf::ServiceDescriptor* pDesc,
+    const LuaRef& luaService)
 {
     assert(pServer);
+    if (!pDesc) return;
     luaService.checkTable();
     // XXX pServer->RegisterService(LuaService(luaService));  // XXX
     // XXX
