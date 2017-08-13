@@ -22,7 +22,7 @@ end  -- test()
 -- Specify the directory in which to search for imports.
 -- May add multiple times to set multiple proto paths,
 -- and the directories will be searched in order.
--- If not given, the current working directory is used.
+-- The current working directory is always added first automatically.
 -- Directly calls `luaphintf.add_proto_path()`
 -- @string proto_path the directory name
 function M.add_proto_path(proto_path)
