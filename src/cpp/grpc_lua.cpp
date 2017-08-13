@@ -69,13 +69,15 @@ void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
 }  // AsyncRequest()
 
 void RegisterService(grpc_cb::Server* pServer,
-    const google::protobuf::ServiceDescriptor* pDesc,
-    const LuaRef& luaService)
+    const LuaRef& svcDecsPtr, const LuaRef& luaService)
 {
     assert(pServer);
-    if (!pDesc) return;
+    svcDecsPtr.checkType(LuaIntf::LuaTypeID::LIGHTUSERDATA);
+    const auto* pDesc = static_cast<const google::protobuf::ServiceDescriptor*>(
+        svcDecsPtr.toPtr());
+    if (!pDesc) throw LuaException("ServiceDescriptor pointer is nullptr.");
     luaService.checkTable();
-    // XXX pServer->RegisterService(LuaService(luaService));  // XXX
+    // pServer->RegisterService(LuaService(luaService));  // XXX
     // XXX
 }  // RegisterService()
 

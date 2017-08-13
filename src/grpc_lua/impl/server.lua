@@ -35,7 +35,7 @@ function Server:register_service(full_service_name, service)
     assert("string" == type(full_service_name))
     assert("table" == type(service))
     local desc = pb.get_service_descriptor(full_service_name)
-    assert(desc)
+    assert("userdata" == type(desc))  -- a pointer to service descriptor
     self.c_svr:register_service(desc, service)
 end  -- register_service()
 
