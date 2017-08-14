@@ -1,6 +1,7 @@
 #include "service.h"
 
 #include <google/protobuf/descriptor.h>  // for ServiceDescriptor
+#include <LuaIntf/LuaIntf.h>
 
 #include <cassert>
 #include <sstream>  // for ostringstream
@@ -10,6 +11,8 @@ Service::Service(const ServiceDescriptor& desc,
     : m_desc(desc),
     m_luaService(luaService)
 {
+    luaService.checkTable();
+
     InitMethodNames();
 }
 
@@ -31,7 +34,8 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
 {
     assert(iMthdIdx < GetMethodCount());
     if (!request) return;
-    const std::string& sMethodName = GetMethodName(iMthdIdx);
+    // Like "SayHello", NOT Service::GetMethodName().
+    const std::string& sMethodName = m_desc.method(iMthdIdx)->name();
     printf("Call Method: %s\n", sMethodName.c_str());
     
       //SayHello(*request_buffer,
