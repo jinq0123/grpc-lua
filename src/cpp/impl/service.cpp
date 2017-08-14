@@ -11,7 +11,9 @@
 Service::Service(const ServiceDescriptor& desc,
     const LuaRef& luaService)
     : m_desc(desc),
-    m_luaService(luaService)
+    m_luaService(luaService),
+    m_luapbintf(LuaIntf::Lua::eval(
+        luaService.state(), "require('luapbintf')"))
 {
     luaService.checkTable();
 
@@ -31,6 +33,15 @@ const std::string& Service::GetMethodName(size_t iMthdIdx) const
     return m_vMethodNames[iMthdIdx];
 }
 
+static LuaIntf::LuaString BufToStr(grpc_byte_buffer* request)
+{
+    grpc_byte_buffer_reader bbr;
+    grpc_byte_buffer_reader_init(&bbr, request);
+    grpc_slice req_slice = grpc_byte_buffer_reader_readall(&bbr);
+    grpc_byte_buffer_reader_destroy(&bbr);
+    return LuaIntf::LuaString(XXX);
+}
+
 void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
     const grpc_cb::CallSptr& call_sptr)
 {
@@ -39,19 +50,12 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
 
     const std::string& sReqType = GetMthdDesc(iMthdIdx)
         .input_type()->full_name();
-
-    grpc_byte_buffer_reader bbr;
-    grpc_byte_buffer_reader_init(&bbr, request);
-    grpc_slice req_slice = grpc_byte_buffer_reader_readall(&bbr);
-    grpc_byte_buffer_reader_destroy(&bbr);
-
-    /*
-        pb = require("luapbintf")
-        local req = assert(pb.decode(sReqType, LuaString(req_slice...)))
-        m_luaService.dispatchStatic(sMethodName.c_str(), req, Replier(call_sptr));
-    */
+    LuaIntf::LuaString strReq = BufToStr(request);
+    LuaRef req = m_luapbintf.dispatchStatic("decode", sReqType, strReq);
+    req.checkTable();
     // Like "SayHello", NOT Service::GetMethodName().
     const std::string& sMethodName = GetMthdDesc(iMthdIdx).name();
+    m_luaService.dispatchStatic(sMethodName.c_str(), req, Replier(call_sptr));
     // XXX m_luaService.dispatchStatic(sMethodName.c_str(), request, replier);
     printf("Call Method: %s\n", sMethodName.c_str());
     

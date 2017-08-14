@@ -39,6 +39,7 @@ private:
 private:
     const ServiceDescriptor& m_desc;
     const LuaRef& m_luaService;
+    const LuaRef& m_luapbintf;  // = require("luapbintf")
     std::vector<std::string> m_vMethodNames;
 };  // class Service
 
