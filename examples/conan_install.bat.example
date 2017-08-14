@@ -25,7 +25,7 @@ copy "%lua_cpp_dll%" helloworld\
 copy "%lua_cpp_dll%" route_guide\
 set luapbintf_dll=%conandata%\luapbintf\0.1\jinq0123\testing\package\33364f43a1ad585f1513b55ab7b5a8ab2b38e187\bin\luapbintf.dll
 set grpc_lua_dll=%conandata%\grpc-lua\0.1\jinq0123\testing\package\9081c368755c2f201c52a7a4fca3379da109d70f\bin\grpc_lua.dll
-REM or set grpc_lua_dll=..\..\premake\vs2015\bin\x64\Debug\grpc_lua.dll
+REM or set grpc_lua_dll=..\premake\vs2015\bin\x64\Debug\grpc_lua.dll
 copy "%luapbintf_dll%" helloworld\
 copy "%luapbintf_dll%" route_guide\
 copy "%grpc_lua_dll%" helloworld\

@@ -33,6 +33,8 @@ private:
 
 private:
     void InitMethodNames();
+    const google::protobuf::MethodDescriptor& GetMthdDesc(
+        size_t iMthdIdx) const;
 
 private:
     const ServiceDescriptor& m_desc;
