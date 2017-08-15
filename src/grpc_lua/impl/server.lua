@@ -5,7 +5,7 @@ local Server = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
-local Service = require("impl.service")
+local Service = require("grpc_lua.impl.service")
 
 --- New server.
 -- @treturn table server object

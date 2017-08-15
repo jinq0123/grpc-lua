@@ -2,12 +2,10 @@
 #define IMPL_SERVICE_H
 
 #include <grpc_cb/service.h>  // for Service and CallSptr
+#include <LuaIntf/LuaIntf.h>  // for LuaRef
 
 #include <vector>
 
-namespace LuaIntf {
-class LuaRef;
-}
 
 // Adapt lua service table to grpc_cb::Service.
 class Service : public grpc_cb::Service
@@ -38,7 +36,7 @@ private:
 
 private:
     const ServiceDescriptor& m_desc;
-    const LuaRef& m_luaService;
+    const LuaRef m_luaService;
     std::vector<std::string> m_vMethodNames;
 };  // class Service
 
