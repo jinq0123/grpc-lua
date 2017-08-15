@@ -11,9 +11,7 @@
 Service::Service(const ServiceDescriptor& desc,
     const LuaRef& luaService)
     : m_desc(desc),
-    m_luaService(luaService),
-    m_luapbintf(LuaIntf::Lua::eval(
-        luaService.state(), "require('luapbintf')"))
+    m_luaService(luaService)
 {
     luaService.checkTable();
 
@@ -33,13 +31,13 @@ const std::string& Service::GetMethodName(size_t iMthdIdx) const
     return m_vMethodNames[iMthdIdx];
 }
 
-static LuaIntf::LuaString BufToStr(grpc_byte_buffer* request)
+static grpc_slice BufToSlice(grpc_byte_buffer* buf)
 {
     grpc_byte_buffer_reader bbr;
-    grpc_byte_buffer_reader_init(&bbr, request);
-    grpc_slice req_slice = grpc_byte_buffer_reader_readall(&bbr);
+    grpc_byte_buffer_reader_init(&bbr, buf);
+    grpc_slice slice = grpc_byte_buffer_reader_readall(&bbr);
     grpc_byte_buffer_reader_destroy(&bbr);
-    return LuaIntf::LuaString(XXX);
+    return slice;
 }
 
 void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
@@ -50,18 +48,17 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
 
     const std::string& sReqType = GetMthdDesc(iMthdIdx)
         .input_type()->full_name();
-    LuaIntf::LuaString strReq = BufToStr(request);
-    LuaRef req = m_luapbintf.dispatchStatic("decode", sReqType, strReq);
-    req.checkTable();
     // Like "SayHello", NOT Service::GetMethodName().
     const std::string& sMethodName = GetMthdDesc(iMthdIdx).name();
-    m_luaService.dispatchStatic(sMethodName.c_str(), req, Replier(call_sptr));
-    // XXX m_luaService.dispatchStatic(sMethodName.c_str(), request, replier);
-    printf("Call Method: %s\n", sMethodName.c_str());
-    
-      //SayHello(*request_buffer,
-      //    SayHello_Replier(call_sptr));
-    // XXX
+    grpc_slice req_slice = BufToSlice(request);
+    {
+        LuaIntf::LuaString strReq(reinterpret_cast<const char*>(
+            GRPC_SLICE_START_PTR(req_slice)),
+            GRPC_SLICE_LENGTH(req_slice));
+        m_luaService.dispatch(sMethodName.c_str(), sReqType, strReq,
+            Replier(call_sptr));
+    }
+    grpc_slice_unref(req_slice);
 }
 
 void Service::InitMethodNames()

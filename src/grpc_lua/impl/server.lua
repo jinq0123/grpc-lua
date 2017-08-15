@@ -5,6 +5,7 @@ local Server = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
+local Service = require("impl.service")
 
 --- New server.
 -- @treturn table server object
@@ -36,7 +37,7 @@ function Server:register_service(full_service_name, service)
     assert("table" == type(service))
     local desc = pb.get_service_descriptor(full_service_name)
     assert("userdata" == type(desc))  -- a pointer to service descriptor
-    self.c_svr:register_service(desc, service)
+    self.c_svr:register_service(desc, Service(service))
 end  -- register_service()
 
 --- Blocking run the server.
