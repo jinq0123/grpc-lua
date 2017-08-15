@@ -1,3 +1,4 @@
+#include "impl/replier.h"  // for Replier
 #include "impl/service.h"  // for Service
 
 #include <grpc_cb/channel.h>  // for Channel
@@ -121,6 +122,11 @@ int luaopen_grpc_lua_c(lua_State* L)
                     &Server::AddListeningPort))
             .addFunction("register_service", &RegisterService)
             .addFunction("blocking_run", &Server::BlockingRun)
+        .endClass()  // Server
+
+        .beginClass<Replier>("Replier")
+            .addConstructor(LUA_SP(std::shared_ptr<Replier>),
+                LUA_ARGS(const grpc_cb::CallSptr&))
         .endClass()  // Server
 
         ;
