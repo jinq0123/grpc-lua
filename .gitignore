@@ -66,3 +66,4 @@ test_package/build
 /doc/ldoc/lua_tools/lua-cpp.dll
 
 /premake/premake.bat
+/examples/helloworld/run_server_trace.bat
