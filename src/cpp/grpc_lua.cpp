@@ -127,6 +127,7 @@ int luaopen_grpc_lua_c(lua_State* L)
         .beginClass<Replier>("Replier")
             .addConstructor(LUA_SP(std::shared_ptr<Replier>),
                 LUA_ARGS(const grpc_cb::CallSptr&))
+            .addFunction("reply", &Replier::Reply)
         .endClass()  // Server
 
         ;

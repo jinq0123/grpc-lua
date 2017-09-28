@@ -10,7 +10,7 @@ function M.SayHello(request, replier)
     assert("userdata" == type(replier))
     print("Got hello from "..request.name)
     -- replier can be copied and reply() later after return.
-    response = { message = "Hello "..request.name }
+    local response = { message = "Hello "..request.name }
     replier.reply(response);
 end  -- SayHello()
 
