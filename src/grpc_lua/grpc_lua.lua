@@ -1,4 +1,4 @@
---- Wraps grpc_lua C module.
+--- Wraps `grpc_lua` C module.
 -- Provides the interface to grpc.
 -- Calls luapbintf to encode and decode protobuf messages.
 -- @module grpc_lua.grpc_lua
@@ -7,8 +7,8 @@ local M = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
-local ServiceStub = require("grpc_lua.impl.service_stub")
-local Server = require("grpc_lua.impl.server")
+local ServiceStub = require("grpc_lua.impl.ServiceStub")
+local Server = require("grpc_lua.impl.Server")
 
 function M.test()
     c.test()

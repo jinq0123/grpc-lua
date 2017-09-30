@@ -1,11 +1,15 @@
 --- Service stub.
--- Wraps C module's `ServiceStub`.
--- @module grpc_lua.impl.service_stub
+-- Wraps C module `ServiceStub`.
+-- @classmod grpc_lua.impl.ServiceStub
 
 local ServiceStub = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
+
+-------------------------------------------------------------------------------
+--- Public functions.
+-- @section public
 
 function ServiceStub:new(channel)
     local stub = {

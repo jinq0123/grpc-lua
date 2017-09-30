@@ -1,10 +1,14 @@
 --- Service.
 -- Wraps service implementation module.
--- @module grpc_lua.impl.service
+-- @classmod grpc_lua.impl.Service
 
 local Service = {}
 
 local pb = require("luapbintf")
+
+-------------------------------------------------------------------------------
+--- Public functions.
+-- @section public
 
 --- Service constructor.
 -- @tab svc_impl service implementation

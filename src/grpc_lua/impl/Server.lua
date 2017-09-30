@@ -1,11 +1,15 @@
---- Wraps C module's `Server`.
--- @module grpc_lua.impl.server
+--- Wraps C module `Server`.
+-- @classmod grpc_lua.impl.Server
 
 local Server = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
-local Service = require("grpc_lua.impl.service")
+local Service = require("grpc_lua.impl.Service")
+
+-------------------------------------------------------------------------------
+--- Public functions.
+-- @section public
 
 --- New server.
 -- @treturn table server object
