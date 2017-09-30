@@ -7,7 +7,7 @@ grpc.import_proto_file("helloworld.proto")
 
 function M.SayHello(request, replier)
     assert("table" == type(request))
-    assert("userdata" == type(replier))
+    assert("table" == type(replier))
     print("Got hello from "..request.name)
     -- replier can be copied and reply() later after return.
     local response = { message = "Hello "..request.name }

@@ -47,10 +47,11 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
     assert(iMthdIdx < GetMethodCount());
     if (!request) return;
 
-    const std::string& sReqType = GetMthdDesc(iMthdIdx)
-        .input_type()->full_name();
+    const google::protobuf::MethodDescriptor& mthd = GetMthdDesc(iMthdIdx);
+    const std::string& sReqType = mthd.input_type()->full_name();
+    const std::string& sRespType = mthd.output_type()->full_name();
     // Like "SayHello", NOT Service::GetMethodName().
-    const std::string& sMethodName = GetMthdDesc(iMthdIdx).name();
+    const std::string& sMethodName = mthd.name();
     grpc_slice req_slice = BufToSlice(request);
     {
         LuaIntf::LuaString strReq(reinterpret_cast<const char*>(
@@ -59,7 +60,7 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
         assert(m_luaService.isTable());
         using Replier = grpc_cb::ServerReplier<std::string>;
         m_luaService.dispatch("call_method", sMethodName,
-            sReqType, strReq, Replier(call_sptr));
+            sReqType, strReq, Replier(call_sptr), sRespType);
     }
     grpc_slice_unref(req_slice);
 }

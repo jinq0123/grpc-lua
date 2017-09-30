@@ -27,10 +27,19 @@ end  -- new()
 -- @string method_name method name, like: "SayHello"
 -- @string request_type request type, like: "helloworld.HelloRequest"
 -- @string request_str request message string
--- @tparam userdata replier replier object
-function Service:call_method(method_name, request_type, request_str, replier)
+-- @tparam userdata c_replier C replier object
+-- @string response_type response type, like: "helloworld.HelloResponse"
+function Service:call_method(method_name, request_type, request_str,
+                                c_replier, response_type)
+    assert("string" == type(method_name))
+    assert("string" == type(request_type))
+    assert("string" == type(request_str))
+    assert("userdata" == type(c_replier))
+    assert("string" == type(response_type))
+
     local method = assert(self.impl[method_name], "No such method: "..method_name)
     local request = assert(pb.decode(request_type, request_str))
+    local replier = Replier:new(c_replier, response_type)
     method(request, replier)
 end
 
