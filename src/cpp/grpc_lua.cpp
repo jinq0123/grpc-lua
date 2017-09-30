@@ -1,9 +1,9 @@
-#include "impl/replier.h"  // for Replier
 #include "impl/service.h"  // for Service
 
 #include <grpc_cb/channel.h>  // for Channel
 #include <grpc_cb/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
 #include <grpc_cb/server.h>  // for Server
+#include <grpc_cb/server_replier.h>  // for ServerReplier
 #include <grpc_cb/service_stub.h>  // for ServiceStub
 #include <grpc_cb/status.h>  // for Status
 
@@ -21,6 +21,8 @@ namespace LuaIntf
 }
 
 namespace {
+
+using Replier = grpc_cb::ServerReplier<std::string>;
 
 void test()
 {
