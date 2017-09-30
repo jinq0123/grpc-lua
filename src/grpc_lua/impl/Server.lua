@@ -1,4 +1,4 @@
---- Wraps C module `Server`.
+--- Wraps C `Server` class.
 -- @classmod grpc_lua.impl.Server
 
 local Server = {}
@@ -12,7 +12,7 @@ local Service = require("grpc_lua.impl.Service")
 -- @section public
 
 --- New server.
--- @treturn table server object
+-- @treturn table `Server` object
 function Server:new()
     local svr = {
         c_svr = c.Server(),

@@ -1,9 +1,8 @@
---- Wraps C module `Replier`.
+--- Wraps C `Replier` class.
 -- @classmod grpc_lua.impl.Replier
 
 local Replier = {}
 
-local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
 
 -------------------------------------------------------------------------------
@@ -22,6 +21,7 @@ function Replier:new(c_replier, response_type)
         _c_replier = c_replier,
         _response_type = response_type,
     }
+
     setmetatable(replier, self)
     self.__index = self
     return replier
