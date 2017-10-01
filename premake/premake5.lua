@@ -34,6 +34,7 @@ project "grpc_lua"
 		"../src/**.lua",
 		"../examples/**.lua",
 		"../examples/**.proto",
+		"../examples/**.json",
 	}
 
 	--[[
