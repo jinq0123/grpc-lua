@@ -95,6 +95,12 @@ function ServiceStub:blocking_run()
     self._c_stub:blocking_run()
 end  -- blocking_run()
 
+--- Shutdown the stub.
+-- To end blocking_run().
+function ServiceStub:shutdown()
+    self._c_stub:shutdown()
+end  -- shutdown()
+
 -------------------------------------------------------------------------------
 --- Private functions.
 -- @section private

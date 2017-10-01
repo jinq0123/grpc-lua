@@ -114,6 +114,7 @@ int luaopen_grpc_lua_c(lua_State* L)
                 })
             .addFunction("async_request", &AsyncRequest)
             .addFunction("blocking_run", &grpc_cb::ServiceStub::BlockingRun)
+            .addFunction("shutdown", &grpc_cb::ServiceStub::Shutdown)
         .endClass()  // ServiceStub
 
         .beginClass<Server>("Server")
@@ -136,3 +137,72 @@ int luaopen_grpc_lua_c(lua_State* L)
     mod.pushToStack();
     return 1;
 }  // luaopen_grpc_lua_c()
+
+// lua doc
+
+/// @type Channel
+;
+/// Constructor.
+// @function Channel
+// @string target host and port, like "a.b.com:6666" or "1.2.3.4:6666".
+// @usage grpc_lua_c.Channel("localhost:6666")
+;
+
+/// @type ServiceStub
+;
+/// Constructor.
+// @function ServiceStub
+// @tparam Channel
+// @usage grcp_lua_c.ServiceStub(c_channel)
+;
+/// Blocking request.
+// @function blocking_request
+// @string method_name
+// @string request serialized message
+// @usage stub:blocking_request("SayHello", s)
+;
+/// Async request.
+// @function async_request
+// @string method_name
+// @string request serialized message
+// @func[opt] on_response response callback, `function(response_str)`
+// @func[opt] on_error error handler, `function(error_str, status_code)`
+;
+/// Blocking run.
+// Run async requests until shutdown.
+// @function blocking_run
+;
+/// Shutdown.
+// To end the blocking run.
+// @function shutdown
+;
+
+/// @type Server
+;
+/// Constructor.
+// @function Server
+;
+/// Add listening port.
+// @function add_listening_port
+// @treturn int returns bound port number on success, 0 on failure.
+;
+/// Register service.
+// @function register_service
+// @param service_descriptor
+// @param service
+;
+/// Blocking run.
+// Run the server.
+// @function blocking_run
+;
+
+/// @type Replier
+;
+/// Constructor.
+// @function Replier
+// @param call
+;
+/// Reply.
+// @function reply
+// @string response_str serialized message
+;
