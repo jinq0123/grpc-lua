@@ -68,4 +68,3 @@ test_package/build
 /premake/premake.bat
 /examples/helloworld/run_server_trace.bat
 /premake/gmake
-/examples/route_guide/inspect.lua

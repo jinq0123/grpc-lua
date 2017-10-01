@@ -8,11 +8,7 @@ local grpc = require("grpc_lua.grpc_lua")
 
 local function main()
     grpc.import_proto_file("helloworld.proto")
-
-    local ch = grpc.channel("localhost:50051")
-    local stub = grpc.service_stub(ch)
-    stub:set_service_name("helloworld.Greeter")
-    -- or local stub = grpc.service_stub("localhost:50051", "helloworld.Greeter")
+    local stub = grpc.service_stub("localhost:50051", "helloworld.Greeter")
 
     -- Blocking request.
     local request = { name = "world" }
