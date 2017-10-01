@@ -9,9 +9,9 @@ function M.SayHello(request, replier)
     assert("table" == type(request))
     assert("table" == type(replier))
     print("Got hello from "..request.name)
-    -- replier can be copied and reply() later after return.
+    -- replier:reply() can be called later after return.
     local response = { message = "Hello "..request.name }
-    replier.reply(response);
+    replier:reply(response);
 end  -- SayHello()
 
 return M

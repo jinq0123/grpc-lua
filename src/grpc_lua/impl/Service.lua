@@ -5,6 +5,7 @@
 local Service = {}
 
 local pb = require("luapbintf")
+local Replier = require("grpc_lua.impl.Replier")
 
 -------------------------------------------------------------------------------
 --- Public functions.

@@ -31,7 +31,7 @@ end  -- new()
 -- @tab response response
 function Replier:reply(response)
     assert("table" == type(response))
-    local resp_str = pb.encode(self._response_type, response))
+    local resp_str = pb.encode(self._response_type, response)
     self._c_replier:reply(resp_str)
 end  -- reply()
 
