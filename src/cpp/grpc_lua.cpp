@@ -1,3 +1,7 @@
+/// grpc C module.
+// Wraps grpc_cb library.
+// @module grpc_lua.c
+
 #include "impl/service.h"  // for Service
 
 #include <grpc_cb/channel.h>  // for Channel
@@ -152,7 +156,7 @@ int luaopen_grpc_lua_c(lua_State* L)
 ;
 /// Constructor.
 // @function ServiceStub
-// @tparam Channel
+// @tparam Channel c_channel
 // @usage grcp_lua_c.ServiceStub(c_channel)
 ;
 /// Blocking request.

@@ -4,7 +4,7 @@ description='The Lua gRPC binding'
 format='discount'
 backtick_references=false
 file={
-    '../../src/grpc_lua',
+    '../../src',
     exclude = {
     }
 }
