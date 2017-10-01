@@ -12,7 +12,7 @@ local pb = require("luapbintf")
 -- @section public
 
 --- New `ServiceStub` object.
--- @c_channel C `Channel` object
+-- @tparam userdata c_channel C `Channel` object
 -- @treturn table `ServiceStub` object
 function ServiceStub:new(c_channel)
     local stub = {
@@ -72,7 +72,7 @@ end  -- request()
 --- Async request.
 -- @string method_name method name
 -- @tab request request message
--- @fun on_response response callback, `function(response_message_table)`
+-- @func on_response response callback, `function(response_message_table)`
 function ServiceStub:async_request(method_name, request, on_response)
     assert("table" == type(request))
     assert(nil == on_response or "function" == type(on_response))

@@ -10,7 +10,8 @@ local pb = require("luapbintf")
 -- @section public
 
 --- New Replier.
--- @c_replier C Replier object
+-- @tparam userdata c_replier C Replier object
+-- @string response_type response type, like "helloworld.HelloResponse"
 -- @treturn table Replier object
 function Replier:new(c_replier, response_type)
     assert("userdata" == type(c_replier))

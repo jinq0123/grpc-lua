@@ -33,7 +33,7 @@ end
 
 --- Register a service.
 -- Service implementation is a table.
--- @string full_svc_name full service name
+-- @string full_service_name full service name
 -- @tab service service that has methods
 -- @usage svr:register_service("helloworld.Greeting", service)
 function Server:register_service(full_service_name, service)

@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>grpc-lua documentation</title>
+    <link rel="stylesheet" href="../ldoc_pale.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>grpc-lua</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Public_functions">Public functions </a></li>
+<li><a href="#Private_functions">Private functions </a></li>
+</ul>
+
+
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/grpc_lua.impl.Replier.html">grpc_lua.impl.Replier</a></li>
+  <li><a href="../classes/grpc_lua.impl.Server.html">grpc_lua.impl.Server</a></li>
+  <li><a href="../classes/grpc_lua.impl.Service.html">grpc_lua.impl.Service</a></li>
+  <li><strong>grpc_lua.impl.ServiceStub</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/grpc_lua.grpc_lua.html">grpc_lua.grpc_lua</a></li>
+</ul>
+<h2>Examples</h2>
+<ul class="nowrap">
+  <li><a href="../examples/greeter_client.lua.html">greeter_client.lua</a></li>
+  <li><a href="../examples/greeter_server.lua.html">greeter_server.lua</a></li>
+  <li><a href="../examples/greeter_service.lua.html">greeter_service.lua</a></li>
+  <li><a href="../examples/route_guide_client.lua.html">route_guide_client.lua</a></li>
+  <li><a href="../examples/route_guide_server.lua.html">route_guide_server.lua</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Class <code>grpc_lua.impl.ServiceStub</code></h1>
+<p>Service stub.</p>
+<p> Wraps C <code>ServiceStub</code> class.</p>
+
+
+<h2><a href="#Public_functions">Public functions </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:new">grpc_lua.impl.ServiceStub:new (c_channel)</a></td>
+	<td class="summary">New <code>ServiceStub</code> object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:set_service_name">grpc_lua.impl.ServiceStub:set_service_name (service_name)</a></td>
+	<td class="summary">Set service name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:set_timeout_sec">grpc_lua.impl.ServiceStub:set_timeout_sec (timeout_sec)</a></td>
+	<td class="summary">Set timeout seconds like 0.5s.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:get_request_name">grpc_lua.impl.ServiceStub:get_request_name (method_name)</a></td>
+	<td class="summary">Get request name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:set_on_error">grpc_lua.impl.ServiceStub:set_on_error (on_error)</a></td>
+	<td class="summary">Set error callback for async request.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:blocking_request">grpc_lua.impl.ServiceStub:blocking_request (method_name, request)</a></td>
+	<td class="summary">Blocking request.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:async_request">grpc_lua.impl.ServiceStub:async_request (method_name, request, on_response)</a></td>
+	<td class="summary">Async request.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:blocking_run">grpc_lua.impl.ServiceStub:blocking_run ()</a></td>
+	<td class="summary">Blocking run.</td>
+	</tr>
+</table>
+<h2><a href="#Private_functions">Private functions </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:_encode_request">grpc_lua.impl.ServiceStub:_encode_request (method_name, request)</a></td>
+	<td class="summary">Encode request table to string.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:_decode_response">grpc_lua.impl.ServiceStub:_decode_response (method_name, response_str)</a></td>
+	<td class="summary">Decode response string to message table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#grpc_lua.impl.ServiceStub:_get_response_callback">grpc_lua.impl.ServiceStub:_get_response_callback (method_name, on_response)</a></td>
+	<td class="summary">Wrap a response callback.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Public_functions"></a>Public functions </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:new"></a>
+    <strong>grpc_lua.impl.ServiceStub:new (c_channel)</strong>
+    </dt>
+    <dd>
+    New <code>ServiceStub</code> object.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">c_channel</span>
+            <span class="types"><span class="type">userdata</span></span>
+         C <code>Channel</code> object
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.6">table</a></span>
+        <code>ServiceStub</code> object
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:set_service_name"></a>
+    <strong>grpc_lua.impl.ServiceStub:set_service_name (service_name)</strong>
+    </dt>
+    <dd>
+    Set service name.
+ Todo: move to new(service_name, channel), to make it const.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">service_name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         full name like "helloworld.Greeter".
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:set_timeout_sec"></a>
+    <strong>grpc_lua.impl.ServiceStub:set_timeout_sec (timeout_sec)</strong>
+    </dt>
+    <dd>
+    Set timeout seconds like 0.5s.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">timeout_sec</span>
+            <span class="types"><span class="type">number</span> or <span class="type">nil</span></span>
+         timeout seconds, nil means no timeout.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:get_request_name"></a>
+    <strong>grpc_lua.impl.ServiceStub:get_request_name (method_name)</strong>
+    </dt>
+    <dd>
+    Get request name.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">method_name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         method name, like "/helloworld.Greeter/SayHello"
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:set_on_error"></a>
+    <strong>grpc_lua.impl.ServiceStub:set_on_error (on_error)</strong>
+    </dt>
+    <dd>
+    Set error callback for async request.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">on_error</span>
+            <span class="types"><span class="type">function</span> or <span class="type">nil</span></span>
+         error callback
+ <code>on_error</code> is <code>function(error_str, status_code)</code>
+ <code>on_error</code> may be nil to ignore all errors.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:blocking_request"></a>
+    <strong>grpc_lua.impl.ServiceStub:blocking_request (method_name, request)</strong>
+    </dt>
+    <dd>
+    Blocking request.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">method_name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">request</span>
+            <span class="types"><span class="type">tab</span></span>
+         request message
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a> or <span class="type">(nil,</span></span>
+        string, int) response string or
+ <code>(nil, error_string, grpc_status_code)</code>.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">request(<span class="string">"SayHello"</span>, { name = <span class="string">"Jq"</span> })</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:async_request"></a>
+    <strong>grpc_lua.impl.ServiceStub:async_request (method_name, request, on_response)</strong>
+    </dt>
+    <dd>
+    Async request.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">method_name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         method name
+        </li>
+        <li><span class="parameter">request</span>
+            <span class="types"><span class="type">tab</span></span>
+         request message
+        </li>
+        <li><span class="parameter">on_response</span>
+            <span class="types"><span class="type">func</span></span>
+         response callback, <code>function(response_message_table)</code>
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:blocking_run"></a>
+    <strong>grpc_lua.impl.ServiceStub:blocking_run ()</strong>
+    </dt>
+    <dd>
+    Blocking run.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Private_functions"></a>Private functions </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:_encode_request"></a>
+    <strong>grpc_lua.impl.ServiceStub:_encode_request (method_name, request)</strong>
+    </dt>
+    <dd>
+    Encode request table to string.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">method_name</span>
+
+
+
+        </li>
+        <li><span class="parameter">request</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:_decode_response"></a>
+    <strong>grpc_lua.impl.ServiceStub:_decode_response (method_name, response_str)</strong>
+    </dt>
+    <dd>
+    Decode response string to message table.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">method_name</span>
+
+
+
+        </li>
+        <li><span class="parameter">response_str</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "grpc_lua.impl.ServiceStub:_get_response_callback"></a>
+    <strong>grpc_lua.impl.ServiceStub:_get_response_callback (method_name, on_response)</strong>
+    </dt>
+    <dd>
+    Wrap a response callback.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">method_name</span>
+
+
+
+        </li>
+        <li><span class="parameter">on_response</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-10-01 11:28:05 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
