@@ -17,6 +17,12 @@ local function point(latitude, longitude)
     return { latitude = latitude, longitude = longitude }
 end  -- point()
 
+local function rectangle(lo_latitude, lo_longitude,
+                         hi_latitude, hi_longitude)
+    return { lo = point(lo_latitude, lo_longitude),
+             hi = point(hi_latitude, hi_longitude) }
+end  -- rectangle()
+
 local function blocking_get_feature()
     print("Blocking get feature...")
     local stub = new_stub()
@@ -30,6 +36,18 @@ end  -- blocking_get_feature()
 local function blocking_list_features()
     print("Blocking list features...")
     local stub = new_stub()
+    local rect = rectangle(400000000, -750000000, 420000000, -730000000);
+    print("Looking for features between 40, -75 and 42, -73")
+    local sync_reader = stub:sync_request_read("ListFeatures", rect);
+    -- request_read, request_write, request_rw ? XXX
+    while true do
+        local ok, feature = sync_reader.read_one()  -- XXX
+        if not ok then break end
+        print("Found feature: "..inspect(feature))
+    end  -- while
+    -- sync_reader.recv_status()
+    print("ListFeatures rpc succeeded.")
+    -- print("ListFeatures rpc failed.")
 end  -- blocking_list_features()
 
 local function blocking_record_route()
