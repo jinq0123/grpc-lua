@@ -34,13 +34,13 @@ end
 
 --- Register a service.
 -- Service implementation is a table.
--- @string full_service_name full service name
+-- @string service_name full service name like "helloworld.Greeting"
 -- @tab service service that has methods
 -- @usage svr:register_service("helloworld.Greeting", service)
-function Server:register_service(full_service_name, service)
-    assert("string" == type(full_service_name))
+function Server:register_service(service_name, service)
+    assert("string" == type(service_name))
     assert("table" == type(service))
-    local desc = pb.get_service_descriptor(full_service_name)
+    local desc = pb.get_service_descriptor(service_name)
     assert("userdata" == type(desc))  -- a pointer to service descriptor
     self.c_svr:register_service(desc, Service:new(service))
 end  -- register_service()
