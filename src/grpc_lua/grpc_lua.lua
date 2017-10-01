@@ -60,10 +60,11 @@ end  -- channel()
 
 --- Create service stub.
 -- @tparam userdata|string channel C `Channel` object, from `grpc_lua.channel()`,
---         or a string of "host:port"
--- @string service_name service name, like "helloworld.Greeter"
+-- or a string of "host:port"
+-- @string[opt] service_name service name, like "helloworld.Greeter"
 -- @treturn ServiceStub service stub object
 -- @usage stub = grpc_lua.ServiceStub(grpc_lua.channel("localhost:50051"))
+-- @usage stub = grpc_lua.ServiceStub("localhost:50051", "helloworld.Greeter")
 function M.service_stub(channel, service_name)
     if "string" == type(channel) then
         channel = M.channel(channel)

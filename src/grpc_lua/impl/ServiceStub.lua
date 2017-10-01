@@ -14,6 +14,7 @@ local pb = require("luapbintf")
 --- New `ServiceStub` object.
 -- Do not call it directly, use `grpc_lua.ServiceStub(ch)` instead.
 -- @tparam userdata c_channel C `Channel` object
+-- @string[opt] service_name service name like "helloworld.Greeter"
 -- @treturn table `ServiceStub` object
 function ServiceStub:new(c_channel, service_name)
     assert("userdata" == type(c_channel))
@@ -30,7 +31,6 @@ function ServiceStub:new(c_channel, service_name)
 end  -- new()
 
 --- Set service name.
--- Todo: move to new(service_name, channel), to make it const.
 -- @string service_name full name like "helloworld.Greeter".
 function ServiceStub:set_service_name(service_name)
     self.service_name = service_name
