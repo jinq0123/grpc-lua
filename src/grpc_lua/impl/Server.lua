@@ -12,6 +12,7 @@ local Service = require("grpc_lua.impl.Service")
 -- @section public
 
 --- New server.
+-- Do not call it directly, use `grpc_lua:Server()` instead.
 -- @treturn table `Server` object
 function Server:new()
     local svr = {

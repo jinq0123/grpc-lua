@@ -12,6 +12,7 @@ local pb = require("luapbintf")
 -- @section public
 
 --- New `ServiceStub` object.
+-- Do not call it directly, use `grpc_lua.ServiceStub(ch)` instead.
 -- @tparam userdata c_channel C `Channel` object
 -- @treturn table `ServiceStub` object
 function ServiceStub:new(c_channel)

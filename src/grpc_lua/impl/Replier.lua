@@ -10,6 +10,7 @@ local pb = require("luapbintf")
 -- @section public
 
 --- New Replier.
+-- Used by `Service`. No not call it directly.
 -- @tparam userdata c_replier C Replier object
 -- @string response_type response type, like "helloworld.HelloResponse"
 -- @treturn table Replier object

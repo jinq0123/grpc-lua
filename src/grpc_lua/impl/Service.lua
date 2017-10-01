@@ -12,6 +12,7 @@ local Replier = require("grpc_lua.impl.Replier")
 -- @section public
 
 --- Service constructor.
+-- Used by `Server`. Do not call it directly.
 -- @tab svc_impl service implementation
 -- @treturn Service
 function Service:new(svc_impl)
