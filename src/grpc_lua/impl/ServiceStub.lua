@@ -15,8 +15,11 @@ local pb = require("luapbintf")
 -- Do not call it directly, use `grpc_lua.ServiceStub(ch)` instead.
 -- @tparam userdata c_channel C `Channel` object
 -- @treturn table `ServiceStub` object
-function ServiceStub:new(c_channel)
+function ServiceStub:new(c_channel, service_name)
+    assert("userdata" == type(c_channel))
     local stub = {
+        service_name = service_name,
+
         -- private:
         _c_stub = c.ServiceStub(c_channel),
         -- channel = c_channel,  -- to new other ServiceStubs

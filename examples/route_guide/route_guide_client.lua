@@ -10,6 +10,14 @@ local db = require("db")
 
 local function main()
     db.load()
+    grpc.import_proto_file("route_guide.proto")
+
+    local ch = grpc.channel("localhost:50051")
+    local stub = grpc.service_stub(ch)
+    stub:set_service_name("routeguide.RouteGuide")
+    -- or local stub = grpc.service_stub("localhost:50051", "routeguide.RouteGuide")
+
+    -- XXX
 end  -- main()
 
 main()

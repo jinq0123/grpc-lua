@@ -51,25 +51,31 @@ end
 
 --- Create a channel.
 -- @string host_port input "host:port" like: "a.b.com:6666" or "1.2.3.4:6666"
--- @treturn Channel channel object
--- @usage ch = grpc.Channel("localhost:50051")
-function M.Channel(host_port)
+-- @return C `Channel` object
+-- @usage ch = grpc.channel("localhost:50051")
+function M.channel(host_port)
     assert("string" == type(host_port))
     return c.Channel(host_port)
-end  -- Channel()
+end  -- channel()
 
 --- Create service stub.
--- @tparam Channel channel
+-- @tparam userdata|string channel C `Channel` object, from `grpc_lua.channel()`,
+--         or a string of "host:port"
+-- @string service_name service name, like "helloworld.Greeter"
 -- @treturn ServiceStub service stub object
--- @usage stub = grpc.ServiceStub(Channel("localhost:50051"))
-function M.ServiceStub(channel)
-    return ServiceStub:new(channel)
-end  -- Stub()
+-- @usage stub = grpc_lua.ServiceStub(grpc_lua.channel("localhost:50051"))
+function M.service_stub(channel, service_name)
+    if "string" == type(channel) then
+        channel = M.channel(channel)
+    end
+    assert("userdata" == type(channel))
+    return ServiceStub:new(channel, service_name)
+end  -- service_stub()
 
 --- Create a server.
 -- @treturn Server server object
-function M.Server()
+function M.server()
     return Server:new()
-end  -- Server()
+end  -- server()
 
 return M
