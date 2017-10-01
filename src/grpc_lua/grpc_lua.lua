@@ -1,6 +1,6 @@
 --- Wraps `grpc_lua` C module.
 -- Provides the interface to grpc.
--- Calls luapbintf to encode and decode protobuf messages.
+-- Calls `luapbintf` to encode and decode protobuf messages.
 -- @module grpc_lua.grpc_lua
 
 local M = {}
@@ -14,8 +14,8 @@ function M.test()
     c.test()
 end  -- test()
 
---- luapbintf functions.
--- Functions from luapbintf C module.
+--- `luapbintf` functions.
+-- Functions from `luapbintf` C module.
 -- @section luapbintf
 
 --- Add proto path as `protoc --proto_path=PATH`.
@@ -52,6 +52,7 @@ end
 --- Create a channel.
 -- @string host_port input "host:port" like: "a.b.com:6666" or "1.2.3.4:6666"
 -- @treturn Channel channel object
+-- @usage ch = grpc.Channel("localhost:50051")
 function M.Channel(host_port)
     assert("string" == type(host_port))
     return c.Channel(host_port)
@@ -60,6 +61,7 @@ end  -- Channel()
 --- Create service stub.
 -- @tparam Channel channel
 -- @treturn ServiceStub service stub object
+-- @usage stub = grpc.ServiceStub(Channel("localhost:50051"))
 function M.ServiceStub(channel)
     return ServiceStub:new(channel)
 end  -- Stub()
