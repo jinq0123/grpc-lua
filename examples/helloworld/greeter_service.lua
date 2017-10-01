@@ -1,3 +1,4 @@
+--- Hello world greeter example server side service.
 -- greeter_service.lua
 
 local M = {}

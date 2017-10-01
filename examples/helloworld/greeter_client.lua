@@ -1,3 +1,4 @@
+--- Hello world greeter example client.
 -- greeter_client.lua
 
 -- Current work dir: grpc-lua/examples/helloworld

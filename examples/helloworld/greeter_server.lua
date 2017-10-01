@@ -1,3 +1,4 @@
+--- Hello world greeter example server.
 -- greeter_server.lua
 
 -- Current work dir: grpc-lua/examples/helloworld
