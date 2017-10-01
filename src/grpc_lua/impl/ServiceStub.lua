@@ -59,18 +59,18 @@ function ServiceStub:set_on_error(on_error)
     self.on_error = on_error
 end  -- set_on_error()
 
---- Blocking request.
+--- Sync request.
 -- @string method_name
 -- @tab request request message
 -- @treturn string|(nil, string, int) response string or
 -- `(nil, error_string, grpc_status_code)`.
 -- @usage request("SayHello", { name = "Jq" })
-function ServiceStub:blocking_request(method_name, request)
+function ServiceStub:sync_request(method_name, request)
     assert("table" == type(request))
     local request_name = self:get_request_name(method_name)
     local request_str = self:_encode_request(method_name, request)
     local response_str, error_str, status_code =
-        self._c_stub:blocking_request(request_name, request_str)
+        self._c_stub:sync_request(request_name, request_str)
     local response = self:_decode_response(method_name, response_str)
     return response, error_str, status_code
 end  -- request()
@@ -91,12 +91,12 @@ function ServiceStub:async_request(method_name, request, on_response)
 end  -- async_request()
 
 --- Blocking run.
-function ServiceStub:blocking_run()
-    self._c_stub:blocking_run()
-end  -- blocking_run()
+function ServiceStub:run()
+    self._c_stub:run()
+end  -- run()
 
 --- Shutdown the stub.
--- To end blocking_run().
+-- To end run().
 function ServiceStub:shutdown()
     self._c_stub:shutdown()
 end  -- shutdown()

@@ -10,16 +10,16 @@ local function main()
     grpc.import_proto_file("helloworld.proto")
     local stub = grpc.service_stub("localhost:50051", "helloworld.Greeter")
 
-    -- Blocking request.
+    -- Sync request.
     local request = { name = "world" }
-    local response = assert(stub:blocking_request("SayHello", request))
+    local response = assert(stub:sync_request("SayHello", request))
     print("Greeter received: " .. response.message)
 
     -- Async request.
     stub:async_request("SayHello", request, function(resp)
         print("Async greeter received: " .. resp.message)
     end)
-    stub:blocking_run()
+    stub:run()
 end  -- main()
 
 main()

@@ -12,7 +12,7 @@ local function main()
     -- Service implementation is a table.
     local service = require("greeter_service")
     svr:register_service("helloworld.Greeter", service)
-    svr:blocking_run()
+    svr:run()
 end  -- main()
 
 main()

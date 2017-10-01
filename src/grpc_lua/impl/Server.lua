@@ -46,8 +46,8 @@ function Server:register_service(full_service_name, service)
 end  -- register_service()
 
 --- Blocking run the server.
-function Server:blocking_run()
-    self.c_svr:blocking_run()
+function Server:run()
+    self.c_svr:run()
 end
 
 return Server

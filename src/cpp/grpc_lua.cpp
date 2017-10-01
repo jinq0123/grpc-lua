@@ -33,17 +33,17 @@ void test()
     std::cout << "test...\n";
 }
 
-// Blocking request.
+// Sync request.
 // Return (response_string, nil, nil) or
 //   (nil, error_string, grpc_status_code).
 std::tuple<LuaRef, LuaRef, LuaRef>
-BlockingRequest(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
+SyncRequest(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest)
 {
     assert(L);
     assert(pServiceStub);
     string sResponse;
-    grpc_cb::Status status = pServiceStub->BlockingRequest(
+    grpc_cb::Status status = pServiceStub->SyncRequest(
         sMethod, sRequest, sResponse);
     const LuaRef NIL(L, nullptr);
     if (status.ok())
@@ -51,7 +51,7 @@ BlockingRequest(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
     return std::make_tuple(NIL,
         LuaRef::fromValue(L, status.GetDetails()),
         LuaRef::fromValue(L, status.GetCode()));
-}  // BlockingRequest()
+}  // SyncRequest()
 
 void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest,
@@ -111,13 +111,13 @@ int luaopen_grpc_lua_c(lua_State* L)
         .beginClass<ServiceStub>("ServiceStub")
             .addConstructor(LUA_ARGS(const ChannelSptr&,
                 _opt<CompletionQueueForNextSptr>))
-            .addFunction("blocking_request",
+            .addFunction("sync_request",
                 [L](ServiceStub* pServiceStub, const string& sMethod,
                         const string& sRequest) {
-                    return BlockingRequest(L, pServiceStub, sMethod, sRequest);
+                    return SyncRequest(L, pServiceStub, sMethod, sRequest);
                 })
             .addFunction("async_request", &AsyncRequest)
-            .addFunction("blocking_run", &grpc_cb::ServiceStub::BlockingRun)
+            .addFunction("run", &grpc_cb::ServiceStub::Run)
             .addFunction("shutdown", &grpc_cb::ServiceStub::Shutdown)
         .endClass()  // ServiceStub
 
@@ -128,7 +128,7 @@ int luaopen_grpc_lua_c(lua_State* L)
                 static_cast<int(Server::*)(const string&)>(
                     &Server::AddListeningPort))
             .addFunction("register_service", &RegisterService)
-            .addFunction("blocking_run", &Server::BlockingRun)
+            .addFunction("run", &Server::Run)
         .endClass()  // Server
 
         .beginClass<Replier>("Replier")
@@ -159,11 +159,11 @@ int luaopen_grpc_lua_c(lua_State* L)
 // @tparam Channel c_channel
 // @usage grcp_lua_c.ServiceStub(c_channel)
 ;
-/// Blocking request.
-// @function blocking_request
+/// Sync request.
+// @function sync_request
 // @string method_name
 // @string request serialized message
-// @usage stub:blocking_request("SayHello", s)
+// @usage stub:sync_request("SayHello", s)
 ;
 /// Async request.
 // @function async_request
@@ -174,7 +174,7 @@ int luaopen_grpc_lua_c(lua_State* L)
 ;
 /// Blocking run.
 // Run async requests until shutdown.
-// @function blocking_run
+// @function run
 ;
 /// Shutdown.
 // To end the blocking run.
@@ -197,7 +197,7 @@ int luaopen_grpc_lua_c(lua_State* L)
 ;
 /// Blocking run.
 // Run the server.
-// @function blocking_run
+// @function run
 ;
 
 /// @type Replier
