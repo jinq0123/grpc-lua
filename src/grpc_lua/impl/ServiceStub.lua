@@ -30,6 +30,8 @@ function ServiceStub:new(c_channel, service_name)
     return stub
 end  -- new()
 
+-- Todo: get_channel() to new other stub.
+
 --- Set service name.
 -- @string service_name full name like "helloworld.Greeter".
 function ServiceStub:set_service_name(service_name)
@@ -76,7 +78,7 @@ end  -- request()
 --- Async request.
 -- @string method_name method name
 -- @tab request request message
--- @func on_response response callback, `function(response_message_table)`
+-- @func[opt] on_response response callback, `function(response_message_table)`
 function ServiceStub:async_request(method_name, request, on_response)
     assert("table" == type(request))
     assert(nil == on_response or "function" == type(on_response))

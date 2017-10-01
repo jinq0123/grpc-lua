@@ -5,44 +5,74 @@ require("init_package_path")
 local grpc = require("grpc_lua.grpc_lua")
 local db = require("db")
 
-local stub  -- ServiceStub
+local SVC = "routeguide.RouteGuide"
+local c_channel  -- C `Channel` object
+
+-- New stub on the same channel.
+local function new_stub()
+    return grcp.service_stub(c_channel, SVC)
+end
+
+local function point(latitude, longitude)
+    return { latitude = latitude, longitude = longitude }
+end  -- point()
 
 local function blocking_get_feature()
     print("Blocking get feature...")
+    local stub = new_stub()
+    local feature
+    feature = stub.blocking_request("GetFeature", point(409146138, -746188906))
+    print("Get feature: "..inspect(feature))
+    feature = stub.blocking_request("GetFeature", point(0, 0)
+    print("Get feature: "..inspect(feature))
 end  -- blocking_get_feature()
 
 local function blocking_list_features()
     print("Blocking list features...")
+    local stub = new_stub()
 end  -- blocking_list_features()
 
 local function blocking_record_route()
     print("Blocking record route...")
+    local stub = new_stub()
 end  -- blocking_record_route()
 
 local function blocking_route_chat()
     print("Blocking route chat...")
+    local stub = new_stub()
 end  -- blocking_route_chat()
 
 local function get_feature_async()
     print("Get feature async...")
+    local stub = new_stub()
+    stub.async_request("GetFeature", point())  -- ignore response
+    stub.async_request("GetFeature", point(409146138, -746188906),
+        function(resp)
+            print("Get feature: "..inspect(resp))
+            stub.shutdown()  -- to return
+        end)
+    stub.blocking_run()  -- run async requests until stub.shutdown()
 end  -- get_feature_async()
 
 local function list_features_async()
     print("List features async...")
+    local stub = new_stub()
 end  -- list_features_async()
 
 local function record_route_async()
     print("Record_route_async...")
+    local stub = new_stub()
 end  -- record_route_async()
 
 local function route_chat_async()
     print("Route chat async...")
+    local stub = new_stub()
 end  -- route_chat_async()
 
 local function main()
     db.load()
     grpc.import_proto_file("route_guide.proto")
-    stub = grpc.service_stub("localhost:50051", "routeguide.RouteGuide")
+    c_channel = grpc.channel("localhost:50051")
 
     blocking_get_feature()
     blocking_list_features()
