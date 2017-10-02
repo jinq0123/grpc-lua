@@ -115,10 +115,13 @@ function ServiceStub:_decode_response(method_name, response_str)
 end  -- _decode_response()
 
 --- Async request callback.
-local function on_response_str(service_name, method_name, response_str,
-                               on_response, on_error)
+-- @string response_type
+-- @string response_str
+-- @func[opt] on_response
+-- @func[opt] on_error
+local function on_response_str(
+        response_type, response_str, on_response, on_error)
     assert(on_response)  -- while on_error may be nil
-    local response_type = self:_get_response_type(method_name)
     local response = pb.decode(response_type, response_str)
     if response then
         on_response(response)
@@ -133,8 +136,9 @@ end  -- on_response_str()
 --- Wrap a response callback.
 function ServiceStub:_get_response_callback(method_name, on_response)
     if not on_response then return nil end
+    local response_type = self:_get_response_type(method_name)
     return function(response_str)
-        on_response_str(self._service_name, method_name, response_str,
+        on_response_str(response_type, response_str,
             on_response, self.on_error)
     end
 end  -- _get_response_callback()
