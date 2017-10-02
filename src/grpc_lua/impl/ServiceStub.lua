@@ -14,16 +14,15 @@ local pb = require("luapbintf")
 --- New `ServiceStub` object.
 -- Do not call it directly, use `grpc_lua.ServiceStub(ch)` instead.
 -- @tparam userdata c_channel C `Channel` object
--- @string[opt] service_name service name like "helloworld.Greeter"
+-- @string service_name full service name like "helloworld.Greeter"
 -- @treturn table `ServiceStub` object
 function ServiceStub:new(c_channel, service_name)
     assert("userdata" == type(c_channel))
     local stub = {
-        service_name = service_name,
-
         -- private:
         _c_stub = c.ServiceStub(c_channel),
         -- channel = c_channel,  -- to new other ServiceStubs
+        _service_name = service_name,
     }
     setmetatable(stub, self)
     self.__index = self
@@ -31,12 +30,6 @@ function ServiceStub:new(c_channel, service_name)
 end  -- new()
 
 -- Todo: get_channel() to new other stub.
-
---- Set service name.
--- @string service_name full name like "helloworld.Greeter".
-function ServiceStub:set_service_name(service_name)
-    self.service_name = service_name
-end  -- set_service_name()
 
 --- Set timeout seconds like 0.5s.
 -- @tparam number|nil timeout_sec timeout seconds, nil means no timeout.
@@ -47,7 +40,7 @@ end  -- set_timeout_sec()
 --- Get request name.
 -- @string method_name method name, like "/helloworld.Greeter/SayHello"
 function ServiceStub:get_request_name(method_name)
-    return "/" .. self.service_name .. "/" .. method_name
+    return "/" .. self._service_name .. "/" .. method_name
 end  -- get_request_name()
 
 --- Set error callback for async request.
@@ -107,7 +100,7 @@ end  -- shutdown()
 
 --- Encode request table to string.
 function ServiceStub:_encode_request(method_name, request)
-    local request_type = pb.get_rpc_input_name(self.service_name, method_name)
+    local request_type = pb.get_rpc_input_name(self._service_name, method_name)
     return pb.encode(request_type, request)
 end  -- _encode_request()
 
@@ -115,7 +108,7 @@ end  -- _encode_request()
 function ServiceStub:_decode_response(method_name, response_str)
     if not response_str then return nil end
     assert("string" == type(response_str))
-    local response_type = pb.get_rpc_output_name(self.service_name, method_name)
+    local response_type = pb.get_rpc_output_name(self._service_name, method_name)
     return pb.decode(response_type, response_str)
 end  -- _decode_response()
 
@@ -139,7 +132,7 @@ end  -- on_response_str()
 function ServiceStub:_get_response_callback(method_name, on_response)
     if not on_response then return nil end
     return function(response_str)
-        on_response_str(self.service_name, method_name, response_str,
+        on_response_str(self._service_name, method_name, response_str,
             on_response, self.on_error)
     end
 end  -- _get_response_callback()
