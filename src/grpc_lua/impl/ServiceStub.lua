@@ -23,6 +23,8 @@ function ServiceStub:new(c_channel, service_name)
         _c_stub = c.ServiceStub(c_channel),
         -- channel = c_channel,  -- to new other ServiceStubs
         _service_name = service_name,
+        -- XXX
+        _methods = {}  -- map { [method_name] = {} }
     }
     setmetatable(stub, self)
     self.__index = self
