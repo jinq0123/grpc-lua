@@ -1,5 +1,5 @@
 --- Wraps C `Replier` class.
--- @classmod grpc_lua.impl.Replier
+-- @classmod grpc_lua.server.Replier
 
 local Replier = {}
 

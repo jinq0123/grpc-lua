@@ -1,11 +1,11 @@
 --- Service.
 -- Wraps service implementation module.
--- @classmod grpc_lua.impl.Service
+-- @classmod grpc_lua.server.Service
 
 local Service = {}
 
 local pb = require("luapbintf")
-local Replier = require("grpc_lua.impl.Replier")
+local Replier = require("grpc_lua.server.Replier")
 
 -------------------------------------------------------------------------------
 --- Public functions.

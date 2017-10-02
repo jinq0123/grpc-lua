@@ -1,6 +1,6 @@
 --- Service stub.
 -- Wraps C `ServiceStub` class.
--- @classmod grpc_lua.impl.service_stub.ServiceStub
+-- @classmod grpc_lua.client.service_stub.ServiceStub
 
 local ServiceStub = {}
 

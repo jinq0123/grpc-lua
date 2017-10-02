@@ -7,8 +7,8 @@ local M = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
-local ServiceStub = require("grpc_lua.impl.service_stub.ServiceStub")
-local Server = require("grpc_lua.impl.Server")
+local ServiceStub = require("grpc_lua.client.service_stub.ServiceStub")
+local Server = require("grpc_lua.server.Server")
 
 function M.test()
     c.test()

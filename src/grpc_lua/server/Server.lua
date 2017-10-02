@@ -1,11 +1,11 @@
 --- Wraps C `Server` class.
--- @classmod grpc_lua.impl.Server
+-- @classmod grpc_lua.server.Server
 
 local Server = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
-local Service = require("grpc_lua.impl.Service")
+local Service = require("grpc_lua.server.Service")
 
 -------------------------------------------------------------------------------
 --- Public functions.
