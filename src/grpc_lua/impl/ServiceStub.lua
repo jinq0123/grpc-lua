@@ -6,6 +6,7 @@ local ServiceStub = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
+local MethodInfo = require("grpc_lua.impl.MethodInfo")
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -23,7 +24,7 @@ function ServiceStub:new(c_channel, service_name)
         _c_stub = c.ServiceStub(c_channel),
         -- channel = c_channel,  -- to new other ServiceStubs
         _service_name = service_name,
-        _method_info_map = {}  -- map { [method_name] = {} }
+        _method_info_map = {}  -- map { [method_name] = MethodInfo }
     }
     setmetatable(stub, self)
     self.__index = self
@@ -149,34 +150,15 @@ function ServiceStub:_get_response_type(method_name)
     return self:_get_method_info(method_name).response_type
 end  -- _get_response_type()
 
---- Load method information from `pb`.
--- @string service_name full service name
--- @string method_name
--- @treturn table
-local function _load_method_info(service_name, method_name)
-    local info = {
-        request_type = pb.get_rpc_input_name(service_name, method_name),
-        response_type = pb.get_rpc_output_name(service_name, method_name),
-        is_client_streaming = pb.is_rpc_client_streaming(service_name, method_name),
-        is_server_streaming = pb.is_rpc_server_streaming(service_name, method_name),
-    }
-    assert("string" == type(info.request_type))
-    assert("string" == type(info.response_type))
-    assert("boolean" == type(info.is_client_streaming))
-    assert("boolean" == type(info.is_server_streaming))
-    return info
-end  -- _get_method_info()
-
 --- Get method information.
 -- Load it if not.
 -- @string method_name
--- @treturn table
+-- @treturn MethodInfo
 function ServiceStub:_get_method_info(method_name)
     local method = self._method_info_map[method_name]
     if method then return method end
 
-    method = _load_method_info(self._service_name, method_name)
-    assert("table" == type(method))
+    method = MethodInfo:new(self._service_name, method_name)
     self._method_info_map[method_name] = method
     return method
 end  -- _get_method_info()
