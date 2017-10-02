@@ -62,6 +62,7 @@ end  -- set_on_error()
 -- @usage request("SayHello", { name = "Jq" })
 function ServiceStub:sync_request(method_name, request)
     assert("table" == type(request))
+    self:_assert_simple_rpc(method_name)
     local request_name = self:get_request_name(method_name)
     local request_str = self:_encode_request(method_name, request)
     local response_str, error_str, status_code =
@@ -77,6 +78,7 @@ end  -- request()
 function ServiceStub:async_request(method_name, request, on_response)
     assert("table" == type(request))
     assert(nil == on_response or "function" == type(on_response))
+    self:_assert_simple_rpc(method_name)
     local request_name = self:get_request_name(method_name)
     local request_str = self:_encode_request(method_name, request)
     -- Need to wrap the response callback.
@@ -159,12 +161,40 @@ end  -- _get_response_type()
 -- @string method_name
 -- @treturn MethodInfo
 function ServiceStub:_get_method_info(method_name)
-    local method = self._method_info_map[method_name]
-    if method then return method end
+    local method_info = self._method_info_map[method_name]
+    if method_info then return method_info end
 
-    method = MethodInfo:new(self._service_name, method_name)
-    self._method_info_map[method_name] = method
-    return method
+    method_info = MethodInfo:new(self._service_name, method_name)
+    self._method_info_map[method_name] = method_info
+    return method_info
 end  -- _get_method_info()
+
+--- Assert method is simple rpc.
+-- @string method_name
+function ServiceStub:_assert_simple_rpc(method_name)
+    assert(self:_get_method_info(method_name):is_simple_rpc(),
+        method_name .. " is not simple rpc method.")
+end
+
+--- Assert method is bi-directional streaming.
+-- @string method_name
+function ServiceStub:_assert_bidirectional_streaming(method_name)
+    assert(self:_get_method_info(method_name):is_bidirectional_streaming(),
+        method_name .. " is not bi-directional streaming rpc method.")
+end
+
+--- Assert method is client side streaming rpc.
+-- @string method_name
+function ServiceStub:_assert_client_side_streaming(method_name)
+    assert(self:_get_method_info(method_name):is_client_side_streaming(),
+        method_name .. " is not client side streaming rpc method.")
+end
+
+--- Assert method is server side streaming rpc.
+-- @string method_name
+function ServiceStub:_assert_server_side_streaming(method_name)
+    assert(self:_get_method_info(method_name):is_server_side_streaming(),
+        method_name .. " is not server side streaming rpc method.")
+end
 
 return ServiceStub
