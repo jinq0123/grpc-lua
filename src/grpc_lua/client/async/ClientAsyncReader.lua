@@ -1,5 +1,5 @@
 --- Client async reader class.
--- @classmod grpc_lua.client.sync.ClientAsyncReader
+-- @classmod grpc_lua.client.async.ClientAsyncReader
 
 local ClientAsyncReader = {}
 

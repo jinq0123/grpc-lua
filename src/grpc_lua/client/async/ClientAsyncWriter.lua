@@ -1,5 +1,5 @@
 --- Client async writer class.
--- @classmod grpc_lua.client.sync.ClientAsyncWriter
+-- @classmod grpc_lua.client.async.ClientAsyncWriter
 
 local ClientAsyncWriter = {}
 
