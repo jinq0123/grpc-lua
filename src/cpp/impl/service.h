@@ -6,7 +6,6 @@
 
 #include <vector>
 
-
 // Adapt lua service table to grpc_cb::Service.
 class Service : public grpc_cb::Service
 {
