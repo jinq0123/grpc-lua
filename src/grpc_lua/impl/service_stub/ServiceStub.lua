@@ -87,6 +87,17 @@ function ServiceStub:async_request(method_name, request, on_response)
         self.on_error)
 end  -- async_request()
 
+--- Sync request server side streaming rpc.
+-- Will return immediately.
+-- @string method_name method name
+-- @tab request request message
+-- @treturn Reader XXX
+function ServiceStub:sync_request_read(method_name, request)
+    assert("table" == type(request))
+    self:_assert_server_side_streaming(method_name)
+    -- XXX
+end  -- sync_request_read()
+
 --- Blocking run.
 function ServiceStub:run()
     self._c_stub:run()

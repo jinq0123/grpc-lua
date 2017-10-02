@@ -36,9 +36,9 @@ end  -- sync_get_feature()
 local function sync_list_features()
     print("Sync list features...")
     local stub = new_stub()
-    local rect = rectangle(400000000, -750000000, 420000000, -730000000);
+    local rect = rectangle(400000000, -750000000, 420000000, -730000000)
     print("Looking for features between 40, -75 and 42, -73")
-    local sync_reader = stub:sync_request_read("ListFeatures", rect);
+    local sync_reader = stub:sync_request_read("ListFeatures", rect)
     -- request_read, request_write, request_rw ? XXX
     while true do
         local ok, feature = sync_reader.read_one()  -- XXX
