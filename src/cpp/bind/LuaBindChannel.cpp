@@ -1,6 +1,3 @@
-/// grpc C module binding Channel.
-// @submodule grpc_lua.c
-
 #include "LuaBindChannel.h"
 
 #include <grpc_cb_core/channel.h>  // for Channel
