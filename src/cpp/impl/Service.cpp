@@ -1,4 +1,4 @@
-#include "service.h"
+#include "Service.h"
 
 #include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <grpc/byte_buffer.h>  // for grpc_byte_buffer_reader_init()
@@ -12,7 +12,7 @@
 Service::Service(const ServiceDescriptor& desc,
     const LuaRef& luaService)
     : m_desc(desc),
-    m_luaService(luaService)
+    m_pLuaService(new LuaRef(luaService))
 {
     luaService.checkTable();
 
@@ -76,9 +76,9 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
         LuaIntf::LuaString strReq(reinterpret_cast<const char*>(
             GRPC_SLICE_START_PTR(req_slice)),
             GRPC_SLICE_LENGTH(req_slice));
-        assert(m_luaService.isTable());
+        assert(m_pLuaService->isTable());
         using Replier = grpc_cb_core::ServerReplier;
-        m_luaService.dispatch("call_method", sMethodName,
+        m_pLuaService->dispatch("call_method", sMethodName,
             sReqType, strReq, Replier(call_sptr), sRespType);
     }
     grpc_slice_unref(req_slice);

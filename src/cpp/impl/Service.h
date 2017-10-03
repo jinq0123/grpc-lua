@@ -1,8 +1,9 @@
 #ifndef IMPL_SERVICE_H
 #define IMPL_SERVICE_H
 
+#include "LuaRefFwd.h"  // forward LuaRef
+
 #include <grpc_cb_core/service.h>  // for Service and CallSptr
-#include <LuaIntf/LuaIntf.h>  // for LuaRef
 
 #include <vector>
 
@@ -37,7 +38,7 @@ private:
 
 private:
     const ServiceDescriptor& m_desc;
-    const LuaRef m_luaService;
+    std::unique_ptr<const LuaRef> m_pLuaService;
     std::vector<std::string> m_vMethodNames;
 };  // class Service
 

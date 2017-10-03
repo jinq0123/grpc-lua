@@ -20,10 +20,13 @@ local MethodInfo = require("grpc_lua.impl.MethodInfo")
 function ServiceStub:new(c_channel, service_name)
     assert("userdata" == type(c_channel))
     local stub = {
+        -- public:
+        c_channel = c_channel,
+        timeout_sec = nil,  -- default no timeout
+        service_name = service_name,
+
         -- private:
         _c_stub = c.ServiceStub(c_channel),
-        -- channel = c_channel,  -- to new other ServiceStubs
-        _service_name = service_name,
         _method_info_map = {}  -- map { [method_name] = MethodInfo }
     }
     setmetatable(stub, self)
@@ -42,7 +45,7 @@ end  -- set_timeout_sec()
 --- Get request name.
 -- @string method_name method name, like "/helloworld.Greeter/SayHello"
 function ServiceStub:get_request_name(method_name)
-    return "/" .. self._service_name .. "/" .. method_name
+    return "/" .. self.service_name .. "/" .. method_name
 end  -- get_request_name()
 
 --- Set error callback for async request.
@@ -91,11 +94,12 @@ end  -- async_request()
 -- Will return immediately.
 -- @string method_name method name
 -- @tab request request message
--- @treturn Reader XXX
+-- @treturn ClientSyncReader
 function ServiceStub:sync_request_read(method_name, request)
     assert("table" == type(request))
     self:_assert_server_side_streaming(method_name)
-    -- XXX
+    return client_sync_reader(self.c_channel, method_names, request,
+                              self.timeout_sec * 1000)
 end  -- sync_request_read()
 
 --- Blocking run.
@@ -175,7 +179,7 @@ function ServiceStub:_get_method_info(method_name)
     local method_info = self._method_info_map[method_name]
     if method_info then return method_info end
 
-    method_info = MethodInfo:new(self._service_name, method_name)
+    method_info = MethodInfo:new(self.service_name, method_name)
     self._method_info_map[method_name] = method_info
     return method_info
 end  -- _get_method_info()

@@ -2,9 +2,9 @@
 // Wraps grpc_cb_core library.
 // @module grpc_lua.c
 
-#include "impl/service.h"  // for Service
+#include "bind/LuaBindChannel.h"
+#include "impl/Service.h"  // for Service
 
-#include <grpc_cb_core/channel.h>  // for Channel
 #include <grpc_cb_core/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
 #include <grpc_cb_core/server.h>  // for Server
 #include <grpc_cb_core/server_replier.h>  // for ServerReplier
@@ -138,6 +138,9 @@ int luaopen_grpc_lua_c(lua_State* L)
         .endClass()  // Server
 
         ;
+
+    bind::LuaBindChannel(mod);
+
     mod.pushToStack();
     return 1;
 }  // luaopen_grpc_lua_c()

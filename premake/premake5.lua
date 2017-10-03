@@ -36,6 +36,9 @@ project "grpc_lua"
 		"../examples/**.proto",
 		"../examples/**.json",
 	}
+	includedirs {
+		"../src/cpp",
+	}
 
 	--[[
 	From: https://github.com/SteveKChiu/lua-intf
