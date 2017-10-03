@@ -5,7 +5,7 @@ NOT READY!
 
 ## Dependings
 gRPC-Lua depends on
-* [grpc_cb](https://github.com/jinq0123/grpc_cb)
+* [grpc_cb_core](https://github.com/jinq0123/grpc_cb_core)
 * [lua-intf](https://github.com/SteveKChiu/lua-intf)
 * [lua](https://www.lua.org/)
 

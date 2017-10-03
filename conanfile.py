@@ -14,7 +14,7 @@ class GrpcluaConan(ConanFile):
     exports_sources = "src/*", "CMakeLists.txt"
 
     # conan remote add jinq0123 https://api.bintray.com/conan/jinq0123/test
-    requires = ("grpc_cb/0.1@jinq0123/testing",
+    requires = ("grpc_cb_core/0.1@jinq0123/testing",
                 "lua-cpp/5.3.4@jinq0123/testing",
                 "lua-intf/0.1@jinq0123/testing")
                 
