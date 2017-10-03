@@ -1,13 +1,19 @@
 #ifndef IMPL_SERVICE_H
 #define IMPL_SERVICE_H
 
-#include <grpc_cb/service.h>  // for Service and CallSptr
+#include <grpc_cb_core/service.h>  // for Service and CallSptr
 #include <LuaIntf/LuaIntf.h>  // for LuaRef
 
 #include <vector>
 
-// Adapt lua service table to grpc_cb::Service.
-class Service : public grpc_cb::Service
+namespace google {
+namespace protobuf {
+class MethodDescriptor;
+class ServiceDescriptor;
+}}  // namespace google::protobuf
+
+// Adapt lua service table to grpc_cb_core::Service.
+class Service : public grpc_cb_core::Service
 {
 public:
     using LuaRef = LuaIntf::LuaRef;
@@ -17,16 +23,12 @@ public:
     ~Service();
 
 public:
+    const std::string& GetFullName() const override;
+    size_t GetMethodCount() const override;
+    bool IsMethodClientStreaming(size_t iMthdIdx) const override;
     const std::string& GetMethodName(size_t iMthdIdx) const override;
-
     void CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
-        const grpc_cb::CallSptr& call_sptr) override;
-
-private:
-    const ServiceDescriptor& GetDescriptor() const override
-    {
-        return m_desc;
-    }
+        const grpc_cb_core::CallSptr& call_sptr) override;
 
 private:
     void InitMethodNames();

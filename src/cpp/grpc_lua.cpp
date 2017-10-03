@@ -1,15 +1,15 @@
 /// grpc C module.
-// Wraps grpc_cb library.
+// Wraps grpc_cb_core library.
 // @module grpc_lua.c
 
 #include "impl/service.h"  // for Service
 
-#include <grpc_cb/channel.h>  // for Channel
-#include <grpc_cb/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
-#include <grpc_cb/server.h>  // for Server
-#include <grpc_cb/server_replier.h>  // for ServerReplier
-#include <grpc_cb/service_stub.h>  // for ServiceStub
-#include <grpc_cb/status.h>  // for Status
+#include <grpc_cb_core/channel.h>  // for Channel
+#include <grpc_cb_core/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
+#include <grpc_cb_core/server.h>  // for Server
+#include <grpc_cb_core/server_replier.h>  // for ServerReplier
+#include <grpc_cb_core/service_stub.h>  // for ServiceStub
+#include <grpc_cb_core/status.h>  // for Status
 
 #include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <LuaIntf/LuaIntf.h>
@@ -26,7 +26,7 @@ namespace LuaIntf
 
 namespace {
 
-using Replier = grpc_cb::ServerReplier<std::string>;
+using Replier = grpc_cb_core::ServerReplier;
 
 void test()
 {
@@ -37,13 +37,13 @@ void test()
 // Return (response_string, nil, nil) or
 //   (nil, error_string, grpc_status_code).
 std::tuple<LuaRef, LuaRef, LuaRef>
-SyncRequest(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
+SyncRequest(lua_State* L, grpc_cb_core::ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest)
 {
     assert(L);
     assert(pServiceStub);
     string sResponse;
-    grpc_cb::Status status = pServiceStub->SyncRequest(
+    grpc_cb_core::Status status = pServiceStub->SyncRequest(
         sMethod, sRequest, sResponse);
     const LuaRef NIL(L, nullptr);
     if (status.ok())
@@ -53,12 +53,12 @@ SyncRequest(lua_State* L, grpc_cb::ServiceStub* pServiceStub,
         LuaRef::fromValue(L, status.GetCode()));
 }  // SyncRequest()
 
-void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
+void AsyncRequest(grpc_cb_core::ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest,
     const LuaRef& luaOnResponse, const LuaRef& luaOnError)
 {
     assert(pServiceStub);
-    grpc_cb::ServiceStub::OnResponse onResponse;  // function<void (const string&)>
+    grpc_cb_core::ServiceStub::OnResponse onResponse;  // function<void (const string&)>
     if (luaOnResponse)
     {
         luaOnResponse.checkFunction();  // void (string)
@@ -66,18 +66,18 @@ void AsyncRequest(grpc_cb::ServiceStub* pServiceStub,
             luaOnResponse.call(sResponse);
         };
     }
-    grpc_cb::ErrorCallback onError;  // function<void (const Status& status)>
+    grpc_cb_core::ErrorCallback onError;  // function<void (const Status& status)>
     if (luaOnError)
     {
         luaOnError.checkFunction();  // void (string, int)
-        onError = [luaOnError](const grpc_cb::Status& status) {
+        onError = [luaOnError](const grpc_cb_core::Status& status) {
             luaOnError.call(status.GetDetails(), status.GetCode());
         };
     }
     pServiceStub->AsyncRequest(sMethod, sRequest, onResponse, onError);
 }  // AsyncRequest()
 
-void RegisterService(grpc_cb::Server* pServer,
+void RegisterService(grpc_cb_core::Server* pServer,
     const LuaRef& svcDecsPtr, const LuaRef& luaService)
 {
     assert(pServer);
@@ -99,7 +99,7 @@ int luaopen_grpc_lua_c(lua_State* L)
 {
     assert(L);
 
-    using namespace grpc_cb;
+    using namespace grpc_cb_core;
     LuaRef mod = LuaRef::createTable(L);
     LuaBinding(mod)
         .addFunction("test", &test)
@@ -117,8 +117,8 @@ int luaopen_grpc_lua_c(lua_State* L)
                     return SyncRequest(L, pServiceStub, sMethod, sRequest);
                 })
             .addFunction("async_request", &AsyncRequest)
-            .addFunction("run", &grpc_cb::ServiceStub::Run)
-            .addFunction("shutdown", &grpc_cb::ServiceStub::Shutdown)
+            .addFunction("run", &grpc_cb_core::ServiceStub::Run)
+            .addFunction("shutdown", &grpc_cb_core::ServiceStub::Shutdown)
         .endClass()  // ServiceStub
 
         .beginClass<Server>("Server")
@@ -133,7 +133,7 @@ int luaopen_grpc_lua_c(lua_State* L)
 
         .beginClass<Replier>("Replier")
             .addConstructor(LUA_SP(std::shared_ptr<Replier>),
-                LUA_ARGS(const grpc_cb::CallSptr&))
+                LUA_ARGS(const grpc_cb_core::CallSptr&))
             .addFunction("reply", &Replier::Reply)
         .endClass()  // Server
 

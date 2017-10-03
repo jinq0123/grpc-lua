@@ -3,7 +3,7 @@
 #include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <grpc/byte_buffer.h>  // for grpc_byte_buffer_reader_init()
 #include <grpc/byte_buffer_reader.h>  // for grpc_byte_buffer_reader
-#include <grpc_cb/server_replier.h>  // for ServerReplier
+#include <grpc_cb_core/server_replier.h>  // for ServerReplier
 #include <LuaIntf/LuaIntf.h>
 
 #include <cassert>
@@ -21,6 +21,25 @@ Service::Service(const ServiceDescriptor& desc,
 
 Service::~Service()
 {
+}
+
+const std::string& Service::GetFullName() const
+{
+    return m_desc.full_name();
+}
+
+size_t Service::GetMethodCount() const
+{
+    return m_desc.method_count();
+}
+
+bool Service::IsMethodClientStreaming(size_t iMthdIdx) const
+{
+    assert(iMthdIdx < GetMethodCount());  // XXX is assert enough?
+    const ::google::protobuf::MethodDescriptor*
+        method_desc = m_desc.method(static_cast<int>(iMthdIdx));
+    assert(method_desc);
+    return method_desc->client_streaming();
 }
 
 // Return method name, like: "/helloworld.Greeter/SayHello"
@@ -42,7 +61,7 @@ static grpc_slice BufToSlice(grpc_byte_buffer* buf)
 }
 
 void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
-    const grpc_cb::CallSptr& call_sptr)
+    const grpc_cb_core::CallSptr& call_sptr)
 {
     assert(iMthdIdx < GetMethodCount());
     if (!request) return;
@@ -58,7 +77,7 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
             GRPC_SLICE_START_PTR(req_slice)),
             GRPC_SLICE_LENGTH(req_slice));
         assert(m_luaService.isTable());
-        using Replier = grpc_cb::ServerReplier<std::string>;
+        using Replier = grpc_cb_core::ServerReplier;
         m_luaService.dispatch("call_method", sMethodName,
             sReqType, strReq, Replier(call_sptr), sRespType);
     }
