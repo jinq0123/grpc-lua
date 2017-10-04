@@ -5,6 +5,7 @@
 #include <grpc_cb_core/client_sync_reader.h>  // for ClientSyncReader
 #include <LuaIntf/LuaIntf.h>
 
+#include <functional>  // for std::bind()
 #include <string>
 
 using namespace grpc_cb_core;
@@ -20,13 +21,15 @@ ClientSyncReader GetClientSyncReader(const ChannelSptr& pChannel,
     return ClientSyncReader(pChannel, sMethod, sRequest, nTimeoutMs);
 }
 
-// XXX return string|nil, nil means error or end
-std::tuple<bool, std::string> ReadOne(const ClientSyncReader* pReader)
+// return string|nil, nil means error or end
+LuaRef ReadOne(const ClientSyncReader* pReader, lua_State* L)
 {
     assert(pReader);
+    assert(L);
     std::string sMsg;
-    bool ok = pReader->ReadOne(&sMsg);
-    return std::make_tuple(ok, sMsg);
+    if (pReader->ReadOne(&sMsg))
+        return LuaRef::fromValue(L, sMsg);
+    return LuaRef(L, nullptr);
 }
 
 }  // namespace
@@ -35,9 +38,15 @@ namespace bind {
 
 void BindClientSyncReader(const LuaRef& mod)
 {
+    using namespace std::placeholders;  // for _1, _2, _3...
+    lua_State* L = mod.state();
+    assert(L);
     LuaBinding(mod).beginClass<ClientSyncReader>("ClientSyncReader")
         .addFactory(&GetClientSyncReader)
-        .addFunction("read_one", &ReadOne)
+        .addFunction("read_one",
+            [L](const ClientSyncReader* pReader) {
+                return ReadOne(pReader, L);
+            })
     .endClass();
 }  // ClientSyncReader()
 

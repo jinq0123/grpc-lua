@@ -7,6 +7,7 @@ local ServiceStub = {}
 local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
 local MethodInfo = require("grpc_lua.impl.MethodInfo")
+local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -86,8 +87,10 @@ end  -- async_request()
 function ServiceStub:sync_request_read(method_name, request)
     assert("table" == type(request))
     self:_assert_server_side_streaming(method_name)
-    return c.ClientSyncReader(self.c_channel,
-        method_names, request, self.timeout_sec)
+    local req_str = self:_encode_request(request)
+    local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
+    return ClientSyncReader:new(self.c_channel, method_names,
+        req_str, response_type, self.timeout_sec)
 end  -- sync_request_read()
 
 --- Sync request client side streaming rpc.
