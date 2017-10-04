@@ -25,6 +25,11 @@
 // @string request
 // @tparam number|nil timeout_sec nil means no timeout
 ;
+/// Read one message.
+// @function read_one
+// @treturn boolean is read ok, false means error or end
+// @treturn string message read
+;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @type ServiceStub
