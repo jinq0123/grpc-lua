@@ -45,7 +45,7 @@ local function sync_list_features()
     local rect = rectangle(400000000, -750000000, 420000000, -730000000)
     print("Looking for features between 40, -75 and 42, -73")
     local sync_reader = stub:sync_request_read("ListFeatures", rect)
-    -- request_read, request_write, request_rw ? XXX
+    -- request_read, request_write, request_rdwr ? XXX
     while true do
         local ok, feature = sync_reader.read_one()
         if not ok then break end

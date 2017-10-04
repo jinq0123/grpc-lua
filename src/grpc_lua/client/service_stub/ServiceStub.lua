@@ -90,6 +90,16 @@ function ServiceStub:sync_request_read(method_name, request)
         method_names, request, self.timeout_sec)
 end  -- sync_request_read()
 
+--- Sync request client side streaming rpc.
+-- Will return immediately.
+-- @string method_name method name
+-- @treturn ClientSyncWriter
+function ServiceStub:sync_request_write(method_name)
+    self:_assert_client_side_streaming(method_name)
+    return c.ClientSyncWriter(self.c_channel,
+        method_names, self.timeout_sec)
+end  -- sync_request_read()
+
 --- Blocking run.
 function ServiceStub:run()
     self._c_stub:run()
