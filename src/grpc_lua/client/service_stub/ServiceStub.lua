@@ -36,12 +36,6 @@ end  -- new()
 
 -- Todo: get_channel() to new other stub.
 
---- Set timeout seconds like 0.5s.
--- @tparam number|nil timeout_sec timeout seconds, nil means no timeout.
-function ServiceStub:set_timeout_sec(timeout_sec)
-    self.timeout_sec = timeout_sec
-end  -- set_timeout_sec()
-
 --- Get request name.
 -- @string method_name method name, like "/helloworld.Greeter/SayHello"
 function ServiceStub:get_request_name(method_name)
@@ -98,8 +92,8 @@ end  -- async_request()
 function ServiceStub:sync_request_read(method_name, request)
     assert("table" == type(request))
     self:_assert_server_side_streaming(method_name)
-    return client_sync_reader(self.c_channel, method_names, request,
-                              self.timeout_sec * 1000)
+    return client_sync_reader(self.c_channel,
+        method_names, request, self.timeout_sec)
 end  -- sync_request_read()
 
 --- Blocking run.

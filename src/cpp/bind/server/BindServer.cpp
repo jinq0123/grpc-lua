@@ -9,11 +9,6 @@
 
 using namespace LuaIntf;
 
-namespace LuaIntf
-{
-    LUA_USING_SHARED_PTR_TYPE(std::shared_ptr)
-}
-
 namespace {
 
 void RegisterService(grpc_cb_core::Server* pServer,
@@ -37,7 +32,7 @@ void BindServer(const LuaRef& mod)
 {
     using namespace grpc_cb_core;
     LuaBinding(mod).beginClass<Server>("Server")
-        .addConstructor(LUA_SP(std::shared_ptr<Server>), LUA_ARGS())
+        .addConstructor(LUA_ARGS())
         // Returns bound port number on success, 0 on failure.
         .addFunction("add_listening_port",
             static_cast<int(Server::*)(const std::string&)>(
