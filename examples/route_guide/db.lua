@@ -13,6 +13,12 @@ function M.load()
     local f = assert(io.open(DB_PATH))
     local s = f:read("a")
     M.features = json.decode(s)
+    assert(#M.features > 0)
 end  -- load()
+
+function M.get_rand_feature()
+    local idx = math(#M.features)
+    return assert(M.features[idx])
+end  -- get_rand_feature()
 
 return M

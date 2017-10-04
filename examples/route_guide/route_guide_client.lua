@@ -4,9 +4,11 @@
 require("init_package_path")
 local grpc = require("grpc_lua.grpc_lua")
 local db = require("db")
+local inspect = require("inspect")
 
 local SVC = "routeguide.RouteGuide"
 local c_channel  -- C `Channel` object
+local kCoordFactor = 10000000.0;
 
 -- New stub on the same channel.
 local function new_stub()
@@ -53,6 +55,32 @@ end  -- sync_list_features()
 local function sync_record_route()
     print("Sync record route...")
     local stub = new_stub()
+    local sync_writer = stub.sync_request_write("RecordRoute")  -- XXX
+    for i = 1, 10 do
+        local feature = db.get_rand_feature()
+        local loc = assert(feature.location)
+        print(string.format("Visiting point (%f, %f)",
+            loc.latitude()/kCoordFactor, loc.longitude()/kCoordFactor))
+        if not sync_writer.write(loc) then
+            print("Failed to sync write.")
+            break
+        end  -- if
+    end  -- for
+
+    -- Recv status and reponse. XXX
+    local status_code, status_str, stats = sync_writer.close()  -- Todo: timeout
+    if 0 ~= status_code then
+        print(string.format("RecordRoute rpc failed: (%d)%s.", status_code, status_str)
+        return
+    end
+
+    print(string.format(
+[[[Finished trip with %d points
+Passed %d features
+Traveled %d meters
+It took %d seconds]]],
+        stats.point_count, stats.feature_count,
+        stats.distance, stats.elapsed_time))
 end  -- sync_record_route()
 
 local function sync_route_chat()
