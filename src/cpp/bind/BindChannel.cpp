@@ -1,4 +1,4 @@
-#include "LuaBindChannel.h"
+#include "BindChannel.h"
 
 #include <grpc_cb_core/channel.h>  // for Channel
 #include <LuaIntf/LuaIntf.h>
@@ -9,13 +9,13 @@ using namespace LuaIntf;
 
 namespace bind {
 
-void LuaBindChannel(const LuaRef& mod)
+void BindChannel(const LuaRef& mod)
 {
     LuaBinding(mod)
         .beginClass<Channel>("Channel")
             .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(const std::string&))
         .endClass()  // Channel
         ;
-}  // LuaBindChannel()
+}  // BindChannel()
 
 }  // namespace bind

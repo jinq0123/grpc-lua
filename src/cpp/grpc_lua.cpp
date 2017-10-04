@@ -1,4 +1,4 @@
-#include "bind/LuaBindChannel.h"
+#include "bind/BindChannel.h"
 #include "impl/Service.h"  // for Service
 
 #include <grpc_cb_core/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
@@ -131,7 +131,7 @@ int luaopen_grpc_lua_c(lua_State* L)
 
         ;
 
-    bind::LuaBindChannel(mod);
+    bind::BindChannel(mod);
 
     mod.pushToStack();
     return 1;
