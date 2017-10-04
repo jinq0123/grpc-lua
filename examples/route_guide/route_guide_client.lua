@@ -25,6 +25,10 @@ local function rectangle(lo_latitude, lo_longitude,
              hi = point(hi_latitude, hi_longitude) }
 end  -- rectangle()
 
+local function route_note(name, latitude, longitude)
+    return { name = name, location = point(latitude, longitude) }
+end  -- route_note()
+
 local function sync_get_feature()
     print("Sync get feature...")
     local stub = new_stub()
@@ -86,6 +90,30 @@ end  -- sync_record_route()
 local function sync_route_chat()
     print("Sync route chat...")
     local stub = new_stub()
+    local sync_rdwr = stub.sync_request_rdwr("RouteChat")  -- XXX
+
+    local notes = { route_note("First message", 0, 0),
+                    route_note("Second message", 0, 1),
+                    route_note("Third message", 1, 0),
+                    route_note("Fourth message", 0, 0) }
+    for _, note in ipairs(notes) do
+        print("Sending message: " .. inspect(note))
+        sync_rdwr.write(note)  -- XXX
+
+        -- write one then read one
+        local ok, server_note = sync_rdwr.read_one()  -- XXX
+        if ok then
+            print("Got message: "..inspect(server_note))
+        end
+    }
+    sync_rdwr.close_writing()  -- XXX
+
+    -- read remaining
+    while true do
+        local ok, server_note = sync_rdwr.read_one()
+        if not ok then break end
+        print("Got message: "..inspect(server_note))
+    end  -- while
 end  -- sync_route_chat()
 
 local function get_feature_async()
