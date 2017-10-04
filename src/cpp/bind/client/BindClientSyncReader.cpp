@@ -25,6 +25,7 @@ ClientSyncReader GetClientSyncReader(const ChannelSptr& pChannel,
     return ClientSyncReader(pChannel, sMethod, sRequest, nTimeoutMs);
 }
 
+// XXX return string|nil, nil means error or end
 std::tuple<bool, std::string> ReadOne(const ClientSyncReader* pReader)
 {
     assert(pReader);

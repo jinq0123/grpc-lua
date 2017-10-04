@@ -16,6 +16,7 @@ namespace {
 // Sync request.
 // Return (response_string, nil, nil) or
 //   (nil, error_string, grpc_status_code).
+// XXX change to return (string|nil, string, code)
 std::tuple<LuaRef, LuaRef, LuaRef>
 SyncRequest(lua_State* L, grpc_cb_core::ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest)

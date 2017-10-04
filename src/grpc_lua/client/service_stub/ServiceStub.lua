@@ -36,12 +36,6 @@ end  -- new()
 
 -- Todo: get_channel() to new other stub.
 
---- Get request name.
--- @string method_name method name, like "/helloworld.Greeter/SayHello"
-function ServiceStub:get_request_name(method_name)
-    return "/" .. self.service_name .. "/" .. method_name
-end  -- get_request_name()
-
 --- Set error callback for async request.
 -- @tparam function|nil on_error error callback
 -- `on_error` is `function(error_str, status_code)`
@@ -60,7 +54,7 @@ end  -- set_on_error()
 function ServiceStub:sync_request(method_name, request)
     assert("table" == type(request))
     self:_assert_simple_rpc(method_name)
-    local request_name = self:get_request_name(method_name)
+    local request_name = self:_get_request_name(method_name)
     local request_str = self:_encode_request(method_name, request)
     local response_str, error_str, status_code =
         self._c_stub:sync_request(request_name, request_str)
@@ -76,7 +70,7 @@ function ServiceStub:async_request(method_name, request, on_response)
     assert("table" == type(request))
     assert(nil == on_response or "function" == type(on_response))
     self:_assert_simple_rpc(method_name)
-    local request_name = self:get_request_name(method_name)
+    local request_name = self:_get_request_name(method_name)
     local request_str = self:_encode_request(method_name, request)
     -- Need to wrap the response callback.
     self._c_stub:async_request(request_name, request_str,
@@ -205,5 +199,11 @@ function ServiceStub:_assert_server_side_streaming(method_name)
     assert(self:_get_method_info(method_name):is_server_side_streaming(),
         method_name .. " is not server side streaming rpc method.")
 end
+
+--- Get request name.
+-- @string method_name method name, like "/helloworld.Greeter/SayHello"
+function ServiceStub:_get_request_name(method_name)
+    return "/" .. self.service_name .. "/" .. method_name
+end  -- _get_request_name()
 
 return ServiceStub
