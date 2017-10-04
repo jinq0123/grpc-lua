@@ -39,6 +39,12 @@
 // @param c_channel
 // @string method_name
 // @tparam number|nil timeout_sec nil means no timeout
+;
+/// Write message.
+// @function write
+// @string message
+// @treturn boolean return false on error
+;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @type ServiceStub

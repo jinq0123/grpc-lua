@@ -19,15 +19,6 @@ ClientSyncWriter GetClientSyncWriter(const ChannelSptr& pChannel,
     return ClientSyncWriter(pChannel, sMethod, nTimeoutMs);
 }
 
-// XXX return string|nil, nil means error or end
-//std::tuple<bool, std::string> ReadOne(const ClientSyncReader* pReader)
-//{
-//    assert(pReader);
-//    std::string sMsg;
-//    bool ok = pReader->ReadOne(&sMsg);
-//    return std::make_tuple(ok, sMsg);
-//}
-
 }  // namespace
 
 namespace bind {
@@ -36,7 +27,7 @@ void BindClientSyncWriter(const LuaRef& mod)
 {
     LuaBinding(mod).beginClass<ClientSyncWriter>("ClientSyncWriter")
         .addFactory(&GetClientSyncWriter)
-        // .addFunction("read_one", &ReadOne)
+        .addFunction("write", &ClientSyncWriter::Write)
     .endClass();
 }  // ClientSyncWriter()
 
