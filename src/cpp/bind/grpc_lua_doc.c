@@ -60,10 +60,10 @@
 // @function run
 ;
 
-/// @type Replier
+/// @type ServerReplier
 ;
 /// Constructor.
-// @function Replier
+// @function ServerReplier
 // @param call
 ;
 /// Reply.

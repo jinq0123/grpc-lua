@@ -1,4 +1,4 @@
---- Wraps C `Replier` class.
+--- Wraps C `ServerReplier` class.
 -- @classmod grpc_lua.server.Replier
 
 local Replier = {}
