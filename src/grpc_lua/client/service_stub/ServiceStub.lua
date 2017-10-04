@@ -92,7 +92,7 @@ end  -- async_request()
 function ServiceStub:sync_request_read(method_name, request)
     assert("table" == type(request))
     self:_assert_server_side_streaming(method_name)
-    return client_sync_reader(self.c_channel,
+    return c.ClientSyncReader(self.c_channel,
         method_names, request, self.timeout_sec)
 end  -- sync_request_read()
 

@@ -41,11 +41,11 @@ local function sync_list_features()
     local sync_reader = stub:sync_request_read("ListFeatures", rect)
     -- request_read, request_write, request_rw ? XXX
     while true do
-        local ok, feature = sync_reader.read_one()  -- XXX
+        local ok, feature = sync_reader.read_one()
         if not ok then break end
         print("Found feature: "..inspect(feature))
     end  -- while
-    -- sync_reader.recv_status()
+    -- sync_reader.recv_status() XXX
     print("ListFeatures rpc succeeded.")
     -- print("ListFeatures rpc failed.")
 end  -- sync_list_features()

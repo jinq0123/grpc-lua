@@ -25,6 +25,14 @@ ClientSyncReader GetClientSyncReader(const ChannelSptr& pChannel,
     return ClientSyncReader(pChannel, sMethod, sRequest, nTimeoutMs);
 }
 
+std::tuple<bool, std::string> ReadOne(const ClientSyncReader* pReader)
+{
+    assert(pReader);
+    std::string sMsg;
+    bool ok = pReader->ReadOne(&sMsg);
+    return std::make_tuple(ok, sMsg);
+}
+
 }  // namespace
 
 namespace bind {
@@ -32,7 +40,8 @@ namespace bind {
 void BindClientSyncReader(const LuaRef& mod)
 {
     LuaBinding(mod).beginClass<ClientSyncReader>("ClientSyncReader")
-        .addFactory(GetClientSyncReader)
+        .addFactory(&GetClientSyncReader)
+        .addFunction("read_one", &ReadOne)
     .endClass();
 }  // ClientSyncReader()
 
