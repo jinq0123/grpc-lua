@@ -8,6 +8,7 @@ local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
 local MethodInfo = require("grpc_lua.impl.MethodInfo")
 local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
+local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -99,8 +100,9 @@ end  -- sync_request_read()
 -- @treturn ClientSyncWriter
 function ServiceStub:sync_request_write(method_name)
     self:_assert_client_side_streaming(method_name)
-    return c.ClientSyncWriter(self.c_channel,
-        method_names, self.timeout_sec)
+    local request_type = self:_get_request_type(method_name)
+    return ClientSyncWriter:new(self.c_channel,
+        method_names, request_type, self.timeout_sec)
 end  -- sync_request_read()
 
 --- Blocking run.
