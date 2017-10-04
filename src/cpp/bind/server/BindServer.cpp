@@ -25,7 +25,8 @@ void RegisterService(grpc_cb_core::Server* pServer,
         svcDecsPtr.toPtr());
     if (!pDesc) throw LuaException("ServiceDescriptor pointer is nullptr.");
     luaService.checkTable();
-    pServer->RegisterService(std::make_shared<Service>(*pDesc, luaService));
+    pServer->RegisterService(std::make_shared<
+        impl::Service>(*pDesc, luaService));
 }  // RegisterService()
 
 }  // namespace

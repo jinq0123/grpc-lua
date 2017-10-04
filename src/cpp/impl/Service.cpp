@@ -9,6 +9,8 @@
 #include <cassert>
 #include <sstream>  // for ostringstream
 
+namespace impl {
+
 Service::Service(const ServiceDescriptor& desc,
     const LuaRef& luaService)
     : m_desc(desc),
@@ -111,3 +113,4 @@ Service::GetMthdDesc(size_t iMthdIdx) const
     return *m_desc.method(static_cast<int>(iMthdIdx));
 }
 
+}  // namespace impl

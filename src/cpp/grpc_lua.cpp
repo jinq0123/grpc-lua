@@ -1,7 +1,7 @@
-#include "bind/BindChannel.h"
-#include "bind/BindServiceStub.h"
-#include "bind/BindServer.h"
-#include "bind/BindServerReplier.h"
+#include "bind/client/BindChannel.h"
+#include "bind/client/BindServiceStub.h"
+#include "bind/server/BindServer.h"
+#include "bind/server/BindServerReplier.h"
 
 #include <LuaIntf/LuaIntf.h>
 
@@ -14,8 +14,10 @@ int luaopen_grpc_lua_c(lua_State* L)
     assert(L);
     LuaIntf::LuaRef mod = LuaIntf::LuaRef::createTable(L);
 
+    // client
     bind::BindChannel(mod);
     bind::BindServiceStub(mod);
+    // server
     bind::BindServer(mod);
     bind::BindServerReplier(mod);
 

@@ -2,7 +2,7 @@
 #define IMPL_LUAREFFWD_H
 
 namespace LuaIntf {
-class LuaRef;	
+class LuaRef;
 }
 
 #endif  // IMPL_LUAREFFWD_H

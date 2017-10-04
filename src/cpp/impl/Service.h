@@ -13,6 +13,8 @@ class MethodDescriptor;
 class ServiceDescriptor;
 }}  // namespace google::protobuf
 
+namespace impl {
+
 // Adapt lua service table to grpc_cb_core::Service.
 class Service : public grpc_cb_core::Service
 {
@@ -42,4 +44,5 @@ private:
     std::vector<std::string> m_vMethodNames;
 };  // class Service
 
+}  // namespace impl
 #endif  // IMPL_SERVICE_H
