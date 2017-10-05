@@ -30,8 +30,7 @@ project "grpc_lua"
 	targetprefix ""  -- linux: grpc_lua.so
 
 	files {
-		"../src/cpp/**",
-		"../src/**.lua",
+		"../src/**",
 		"../examples/**.lua",
 		"../examples/**.proto",
 		"../examples/**.json",

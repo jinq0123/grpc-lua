@@ -2,7 +2,7 @@
 -- greeter_server.lua
 
 -- Current work dir: grpc-lua/examples/helloworld
-package.path = "../../src/?.lua;" .. package.path
+package.path = "../../src/lua/?.lua;" .. package.path
 
 local grpc = require("grpc_lua.grpc_lua")
 
