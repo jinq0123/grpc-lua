@@ -130,6 +130,19 @@ end  -- get_feature_async()
 local function list_features_async()
     print("List features async...")
     local stub = new_stub()
+    local rect = rectangle(400000000, -750000000, 420000000, -730000000)
+    print("Looking for features between 40, -75 and 42, -73")
+    -- XXX
+    stub.async_request("ListFeatures", rect,
+        function(f)
+            print(string.format("Got feature %s at %f,%f", f.name,
+                f.location.latitude/kCoordFactor, f.location.longitude/kCoordFactor))
+        end,
+        function(status)  -- XXX
+            print("End status: "..inspect(status))
+            stub.shutdown()  -- To break Run().
+        end)
+    stub.run()  -- until stub.shutdown()
 end  -- list_features_async()
 
 local function record_route_async()
