@@ -29,6 +29,11 @@ local function route_note(name, latitude, longitude)
     return { name = name, location = point(latitude, longitude) }
 end  -- route_note()
 
+local notes = { route_note("First message", 0, 0),
+                route_note("Second message", 0, 1),
+                route_note("Third message", 1, 0),
+                route_note("Fourth message", 0, 0) }
+
 local function print_route_summary(summary)
     print(string.format(
 [[[Finished trip with %d points
@@ -95,10 +100,6 @@ local function sync_route_chat()
     local stub = new_stub()
     local sync_rdwr = stub.sync_request_rdwr("RouteChat")  -- XXX
 
-    local notes = { route_note("First message", 0, 0),
-                    route_note("Second message", 0, 1),
-                    route_note("Third message", 1, 0),
-                    route_note("Fourth message", 0, 0) }
     for _, note in ipairs(notes) do
         -- write one then read one
         print("Sending message: " .. inspect(note))
@@ -171,7 +172,7 @@ local function record_route_async()
             else
                 print_route_summary(resp)
             end  -- if
-            stub.shutdown();
+            stub.shutdown()  -- to break run()
         end)
     stub.run()  -- until stutdown()
 end  -- record_route_async()
@@ -179,6 +180,24 @@ end  -- record_route_async()
 local function route_chat_async()
     print("Route chat async...")
     local stub = new_stub()
+
+    -- XXX
+    local rdwr = stub.async_request("RouteChat",
+        function(status)
+            if not status.ok then
+                print("RouteChat rpc failed. " .. inspect(status))
+            end  -- if
+            stub.shutdown()  -- to break run()
+        end)
+
+    for _, note in ipairs(notes) do
+        print("Sending message: " .. inspect(note))
+        rdwr.write(note)  -- XXX
+    end
+    rdwr.close_writing()  -- Optional.
+    rdwr.read_each(print_server_note)  -- XXX
+
+    stub.run()  -- until shutdown()
 end  -- route_chat_async()
 
 local function main()
