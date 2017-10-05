@@ -5,7 +5,6 @@
 #include <grpc_cb_core/client/client_sync_reader.h>  // for ClientSyncReader
 #include <LuaIntf/LuaIntf.h>
 
-#include <functional>  // for std::bind()
 #include <string>
 
 using namespace grpc_cb_core;

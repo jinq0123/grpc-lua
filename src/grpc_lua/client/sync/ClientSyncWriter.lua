@@ -11,7 +11,6 @@ local pb = require("luapbintf")
 -- @section public
 
 --- Constructor.
--- @function ClientSyncWriter
 -- @tparam Channel c_channel
 -- @string method_name
 -- @string request_type
@@ -20,6 +19,7 @@ local pb = require("luapbintf")
 -- @treturn table object
 function ClientSyncWriter:new(c_channel, method_name,
         request_type, response_type, timeout_sec)
+    assert("userdata" == type(c_channel))
     assert("string" == type(method_name))
     assert("string" == type(request_type))
     assert("string" == type(response_type))

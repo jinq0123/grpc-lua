@@ -23,12 +23,12 @@ function ServiceStub:new(c_channel, service_name)
     assert("userdata" == type(c_channel))
     local stub = {
         -- public:
-        c_channel = c_channel,
         timeout_sec = nil,  -- default no timeout
         service_name = service_name,
 
         -- private:
         _c_stub = c.ServiceStub(c_channel),
+        _c_channel = c_channel,
         _method_info_map = {}  -- map { [method_name] = MethodInfo }
     }
     setmetatable(stub, self)
@@ -90,7 +90,7 @@ function ServiceStub:sync_request_read(method_name, request)
     self:_assert_server_side_streaming(method_name)
     local req_str = self:_encode_request(request)
     local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
-    return ClientSyncReader:new(self.c_channel, method_name,
+    return ClientSyncReader:new(self._c_channel, method_name,
         req_str, response_type, self.timeout_sec)
 end  -- sync_request_read()
 
@@ -102,7 +102,7 @@ function ServiceStub:sync_request_write(method_name)
     self:_assert_client_side_streaming(method_name)
     local request_type = self:_get_request_type(method_name)
     local response_type = self:_get_response_type(method_name)
-    return ClientSyncWriter:new(self.c_channel,
+    return ClientSyncWriter:new(self._c_channel,
         method_name, request_type, response_type, self.timeout_sec)
 end  -- sync_request_read()
 
@@ -112,7 +112,10 @@ end  -- sync_request_read()
 -- @treturn ClientSyncReaderWriter
 function ServiceStub:sync_request_rdwr(method_name)
     self:_assert_bidirectional_streaming(method_name)
-    -- XXX
+    local request_type = self:_get_request_type(method_name)
+    local response_type = self:_get_response_type(method_name)
+    return ClientSyncReaderWriter:new(self._c_channel,
+        method_name, request_type, response_type, self.timeout_sec);
 end  -- sync_request_rdwr()
 
 --- Blocking run.

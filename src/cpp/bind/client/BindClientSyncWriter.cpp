@@ -5,7 +5,6 @@
 #include <grpc_cb_core/client/client_sync_writer.h>  // for ClientSyncWriter
 #include <LuaIntf/LuaIntf.h>
 
-#include <functional>
 #include <string>
 
 using namespace grpc_cb_core;
@@ -37,7 +36,6 @@ namespace bind {
 
 void BindClientSyncWriter(const LuaRef& mod)
 {
-    using namespace std::placeholders;  // for _1
     lua_State* L = mod.state();
     assert(L);
     LuaBinding(mod).beginClass<ClientSyncWriter>("ClientSyncWriter")
