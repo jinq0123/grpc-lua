@@ -3,7 +3,7 @@
 
 #include "LuaRefFwd.h"  // forward LuaRef
 
-#include <grpc_cb_core/service.h>  // for Service and CallSptr
+#include <grpc_cb_core/server/service.h>  // for Service and CallSptr
 
 #include <vector>
 

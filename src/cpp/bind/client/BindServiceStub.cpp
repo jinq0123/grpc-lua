@@ -1,8 +1,8 @@
 #include "BindServiceStub.h"
 
-#include <grpc_cb_core/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
-#include <grpc_cb_core/service_stub.h>  // for ServiceStub
-#include <grpc_cb_core/status.h>  // for Status
+#include <grpc_cb_core/common/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
+#include <grpc_cb_core/client/service_stub.h>  // for ServiceStub
+#include <grpc_cb_core/common/status.h>  // for Status
 
 #include <LuaIntf/LuaIntf.h>
 #include <string>

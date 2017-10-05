@@ -1,6 +1,6 @@
 #include "BindChannel.h"
 
-#include <grpc_cb_core/channel.h>  // for Channel
+#include <grpc_cb_core/client/channel.h>  // for Channel
 #include <LuaIntf/LuaIntf.h>
 #include <string>
 

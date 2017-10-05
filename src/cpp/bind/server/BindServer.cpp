@@ -2,7 +2,7 @@
 
 #include "impl/Service.h"  // for Service
 
-#include <grpc_cb_core/server.h>  // for Server
+#include <grpc_cb_core/server/server.h>  // for Server
 #include <LuaIntf/LuaIntf.h>
 #include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <string>

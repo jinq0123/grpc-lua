@@ -37,8 +37,22 @@ end  -- new()
 function ClientSyncWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
-    self._writer.write(msg_str)
+    self._c_writer.write(msg_str)
 end  -- write()
+
+--- Close and get response.
+-- @treturn table|nil response message or nil on error
+-- @treturn string error string, "" if OK
+-- @treturn int status code
+-- @usage resp, error_str, status_code = writer.close()
+function ClientSyncWriter:close()
+    local resp_str, error_str, status_code = self._c_writer.close()
+    local resp = nil
+    if resp_str then 
+        resp = pb.decode(self._response_type, resp_str)  -- XXX if error?
+    end
+    return resp, error_str, status_code
+end  -- close()
 
 -------------------------------------------------------------------------------
 --- Private functions.

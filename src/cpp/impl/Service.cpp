@@ -3,7 +3,7 @@
 #include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <grpc/byte_buffer.h>  // for grpc_byte_buffer_reader_init()
 #include <grpc/byte_buffer_reader.h>  // for grpc_byte_buffer_reader
-#include <grpc_cb_core/server_replier.h>  // for ServerReplier
+#include <grpc_cb_core/server/server_replier.h>  // for ServerReplier
 #include <LuaIntf/LuaIntf.h>
 
 #include <cassert>

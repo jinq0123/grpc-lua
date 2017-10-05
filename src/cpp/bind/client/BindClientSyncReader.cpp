@@ -2,7 +2,7 @@
 
 #include "impl/GetTimeoutMs.h"
 
-#include <grpc_cb_core/client_sync_reader.h>  // for ClientSyncReader
+#include <grpc_cb_core/client/client_sync_reader.h>  // for ClientSyncReader
 #include <LuaIntf/LuaIntf.h>
 
 #include <functional>  // for std::bind()
@@ -38,7 +38,6 @@ namespace bind {
 
 void BindClientSyncReader(const LuaRef& mod)
 {
-    using namespace std::placeholders;  // for _1, _2, _3...
     lua_State* L = mod.state();
     assert(L);
     LuaBinding(mod).beginClass<ClientSyncReader>("ClientSyncReader")
