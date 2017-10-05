@@ -3,6 +3,9 @@
 
 local ClientSyncWriter = {}
 
+local c = require("grpc_lua.c")  -- from grpc_lua.so
+local pb = require("luapbintf")
+
 -------------------------------------------------------------------------------
 --- Public functions.
 -- @section public

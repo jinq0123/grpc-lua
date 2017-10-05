@@ -90,7 +90,7 @@ function ServiceStub:sync_request_read(method_name, request)
     self:_assert_server_side_streaming(method_name)
     local req_str = self:_encode_request(request)
     local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
-    return ClientSyncReader:new(self.c_channel, method_names,
+    return ClientSyncReader:new(self.c_channel, method_name,
         req_str, response_type, self.timeout_sec)
 end  -- sync_request_read()
 
@@ -102,7 +102,7 @@ function ServiceStub:sync_request_write(method_name)
     self:_assert_client_side_streaming(method_name)
     local request_type = self:_get_request_type(method_name)
     return ClientSyncWriter:new(self.c_channel,
-        method_names, request_type, self.timeout_sec)
+        method_name, request_type, self.timeout_sec)
 end  -- sync_request_read()
 
 --- Blocking run.

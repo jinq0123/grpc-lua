@@ -59,7 +59,7 @@ end  -- sync_list_features()
 local function sync_record_route()
     print("Sync record route...")
     local stub = new_stub()
-    local sync_writer = stub.sync_request_write("RecordRoute")  -- XXX
+    local sync_writer = stub.sync_request_write("RecordRoute")
     for i = 1, 10 do
         local feature = db.get_rand_feature()
         local loc = assert(feature.location)
