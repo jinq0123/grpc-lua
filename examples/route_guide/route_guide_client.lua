@@ -71,10 +71,10 @@ local function sync_record_route()
         end  -- if
     end  -- for
 
-    -- Recv status and reponse. XXX
-    local status_code, status_str, stats = sync_writer.close()  -- Todo: timeout
-    if 0 ~= status_code then
-        print(string.format("RecordRoute rpc failed: (%d)%s.", status_code, status_str)
+    -- Recv status and reponse.
+    local stats, error_str, status_code = sync_writer.close()  -- Todo: timeout
+    if not stats then
+        print(string.format("RecordRoute rpc failed: (%d)%s.", status_code, error_str)
         return
     end
 
