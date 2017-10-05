@@ -8,7 +8,7 @@ local inspect = require("inspect")
 
 local SVC = "routeguide.RouteGuide"
 local c_channel  -- C `Channel` object
-local kCoordFactor = 10000000.0;
+local kCoordFactor = 10000000.0
 
 -- New stub on the same channel.
 local function new_stub()
@@ -28,6 +28,16 @@ end  -- rectangle()
 local function route_note(name, latitude, longitude)
     return { name = name, location = point(latitude, longitude) }
 end  -- route_note()
+
+local function print_route_summary(summary)
+    print(string.format(
+[[[Finished trip with %d points
+Passed %d features
+Traveled %d meters
+It took %d seconds]]],
+        summary.point_count, summary.feature_count,
+        summary.distance, summary.elapsed_time))
+end
 
 local function sync_get_feature()
     print("Sync get feature...")
@@ -72,19 +82,12 @@ local function sync_record_route()
     end  -- for
 
     -- Recv status and reponse.
-    local stats, error_str, status_code = sync_writer.close()  -- Todo: timeout
-    if not stats then
+    local summary, error_str, status_code = sync_writer.close()  -- Todo: timeout
+    if not summary then
         print(string.format("RecordRoute rpc failed: (%d)%s.", status_code, error_str)
         return
     end
-
-    print(string.format(
-[[[Finished trip with %d points
-Passed %d features
-Traveled %d meters
-It took %d seconds]]],
-        stats.point_count, stats.feature_count,
-        stats.distance, stats.elapsed_time))
+    print_route_sumary(summary)
 end  -- sync_record_route()
 
 local function sync_route_chat()
@@ -146,8 +149,31 @@ local function list_features_async()
 end  -- list_features_async()
 
 local function record_route_async()
-    print("Record_route_async...")
+    print("Record route async...")
     local stub = new_stub()
+    -- XXX // ClientAsyncWriter<Point, RouteSummary> async_writer;
+    local async_writer = stub.async_request("RecordRoute")
+    for i = 1, 10 do
+        local f = db.get_rand_feature()
+        local loc = f.location
+        print(string.format("Visiting point %f,%f", 
+              loc.latitude/kCoordFactor, loc.longitude/kCoordFactor))
+        -- XXX
+        if not async_writer:write(loc) do break end  -- Broken stream.
+    end  -- for
+
+    -- Recv reponse and status.
+    async_writer.close(  -- XXX
+        function(status, resp)
+            assert("table" == type(resp))
+            if not status.ok then
+                print("RecordRoute rpc failed. "..inspect(status))
+            else
+                print_route_summary(resp)
+            end  -- if
+            stub.shutdown();
+        end)
+    stub.run()  -- until stutdown()
 end  -- record_route_async()
 
 local function route_chat_async()
