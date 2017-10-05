@@ -101,9 +101,19 @@ end  -- sync_request_read()
 function ServiceStub:sync_request_write(method_name)
     self:_assert_client_side_streaming(method_name)
     local request_type = self:_get_request_type(method_name)
+    local response_type = self:_get_response_type(method_name)
     return ClientSyncWriter:new(self.c_channel,
-        method_name, request_type, self.timeout_sec)
+        method_name, request_type, response_type, self.timeout_sec)
 end  -- sync_request_read()
+
+--- Sync request bi-directional streaming rpc.
+-- Will return immediately.
+-- @string method_name method name
+-- @treturn ClientSyncReaderWriter
+function ServiceStub:sync_request_rdwr(method_name)
+    self:_assert_bidirectional_streaming(method_name)
+    -- XXX
+end  -- sync_request_rdwr()
 
 --- Blocking run.
 function ServiceStub:run()
