@@ -9,6 +9,7 @@ local pb = require("luapbintf")
 local MethodInfo = require("grpc_lua.impl.MethodInfo")
 local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
 local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
+local response_callback = require("grpc_lua.client.service_stub.response_callback")
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -109,6 +110,12 @@ end  -- sync_request_read()
 --     assert("number" == type(status_code))
 --   end)
 function ServiceStub:async_request_read(method_name, request, on_msg, on_status)
+    assert("table" == type(request))
+    assert(not on_msg or "function" == type(on_msg))
+    assert(not on_status or "function" == type(on_status))
+    self:_assert_server_side_streaming(method_name)
+    local req_str = self:_encode_request(request)
+    local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
     -- XXX
 end  -- async_request_read()
 
@@ -165,33 +172,19 @@ function ServiceStub:_decode_response(method_name, response_str)
     return pb.decode(response_type, response_str)
 end  -- _decode_response()
 
---- Async request callback.
--- @string response_type
--- @string response_str
--- @func[opt] on_response
--- @func[opt] on_error
-local function on_response_str(
-        response_type, response_str, on_response, on_error)
-    assert(on_response)  -- while on_error may be nil
-    local response = pb.decode(response_type, response_str)
-    if response then
-        on_response(response)
-        return
-    end
-    if on_error then
-        -- GRPC_STATUS_INTERNAL = 13
-        on_error("Failed to decode response.", 13)
-    end
-end  -- on_response_str()
-
 --- Wrap a response callback.
-function ServiceStub:_get_response_callback(method_name, on_response)
+-- @string method_name
+-- @tparam function|nil on_response `function(table)`
+-- @func[opt] on_error `function(string, int)`
+-- @treturn function `function(string)`
+function ServiceStub:_get_response_callback(method_name, on_response, on_error)
     if not on_response then return nil end
+    on_error = on_error or self.on_error
     local response_type = self:_get_response_type(method_name)
-    return function(response_str)
-        on_response_str(response_type, response_str,
-            on_response, self.on_error)
-    end
+    local cb = response_callback.wrap(on_response, response_type,
+        on_response, self.on_error)
+    assert("function" == type(cb))
+    return cb
 end  -- _get_response_callback()
 
 --- Get request type.
