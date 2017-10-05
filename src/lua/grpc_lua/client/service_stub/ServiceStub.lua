@@ -99,8 +99,15 @@ end  -- sync_request_read()
 -- The callback function on_read and on_status will be called in the run().
 -- @string method_name method name
 -- @tab request request message
--- @tparam[opt] function|nil on_msg message callback, `function(table)`
--- @func[opt] on_status status callback, `function(error_str|nil, status_code)`
+-- @tparam[opt=nil] function|nil on_msg message callback, `function(table)`
+-- @tparam[optchain=nil] function|nil on_status status callback, `function(error_str|nil, status_code)`
+-- @usage
+-- stub.async_request_read("ListFeatures", rect,
+--   function(message) assert("table" == type(message)) end,
+--   function(error_str, status_code)
+--     assert(not error_str or "string" == type(error_str))
+--     assert("number" == type(status_code))
+--   end)
 function ServiceStub:async_request_read(method_name, request, on_msg, on_status)
     -- XXX
 end  -- async_request_read()
