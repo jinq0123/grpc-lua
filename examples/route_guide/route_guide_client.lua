@@ -137,7 +137,7 @@ local function list_features_async()
     local rect = rectangle(400000000, -750000000, 420000000, -730000000)
     print("Looking for features between 40, -75 and 42, -73")
     -- XXX
-    stub.async_request("ListFeatures", rect,
+    stub.async_request_read("ListFeatures", rect,
         function(f)
             print(string.format("Got feature %s at %f,%f", f.name,
                 f.location.latitude/kCoordFactor, f.location.longitude/kCoordFactor))
@@ -153,7 +153,7 @@ local function record_route_async()
     print("Record route async...")
     local stub = new_stub()
     -- XXX // ClientAsyncWriter<Point, RouteSummary> async_writer;
-    local async_writer = stub.async_request("RecordRoute")
+    local async_writer = stub.async_request_write("RecordRoute")
     for i = 1, 10 do
         local f = db.get_rand_feature()
         local loc = f.location
@@ -182,7 +182,7 @@ local function route_chat_async()
     local stub = new_stub()
 
     -- XXX
-    local rdwr = stub.async_request("RouteChat",
+    local rdwr = stub.async_request_rdwr("RouteChat",
         function(status)
             if not status.ok then
                 print("RouteChat rpc failed. " .. inspect(status))

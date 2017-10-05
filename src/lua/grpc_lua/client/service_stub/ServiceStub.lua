@@ -94,6 +94,17 @@ function ServiceStub:sync_request_read(method_name, request)
         req_str, response_type, self.timeout_sec)
 end  -- sync_request_read()
 
+--- Async request server side streaming rpc.
+-- Will return immediately.
+-- The callback function on_read and on_status will be called in the run().
+-- @string method_name method name
+-- @tab request request message
+-- @tparam[opt] function|nil on_msg message callback, `function(table)`
+-- @func[opt] on_status status callback, `function(error_str|nil, status_code)`
+function ServiceStub:async_request_read(method_name, request, on_msg, on_status)
+    -- XXX
+end  -- async_request_read()
+
 --- Sync request client side streaming rpc.
 -- Will return immediately.
 -- @string method_name method name
