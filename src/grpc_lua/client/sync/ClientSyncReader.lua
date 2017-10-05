@@ -34,7 +34,6 @@ function ClientSyncReader:new(c_channel, method_name, req_str,
 end  -- new()
 
 --- Read one message.
--- @function read_one
 -- @treturn table|nil message table, nil means error or end
 function ClientSyncReader:read_one()
     local msg = self._c_reader.read_one()

@@ -47,8 +47,8 @@ local function sync_list_features()
     local sync_reader = stub:sync_request_read("ListFeatures", rect)
     -- request_read, request_write, request_rdwr ? XXX
     while true do
-        local ok, feature = sync_reader.read_one()
-        if not ok then break end
+        local feature = sync_reader.read_one()
+        if not feature then break end
         print("Found feature: "..inspect(feature))
     end  -- while
     -- sync_reader.recv_status() XXX
@@ -97,21 +97,20 @@ local function sync_route_chat()
                     route_note("Third message", 1, 0),
                     route_note("Fourth message", 0, 0) }
     for _, note in ipairs(notes) do
-        print("Sending message: " .. inspect(note))
-        sync_rdwr.write(note)  -- XXX
-
         -- write one then read one
-        local ok, server_note = sync_rdwr.read_one()  -- XXX
-        if ok then
+        print("Sending message: " .. inspect(note))
+        sync_rdwr.write(note)
+        local server_note = sync_rdwr.read_one()
+        if server_note then
             print("Got message: "..inspect(server_note))
         end
     }
-    sync_rdwr.close_writing()  -- XXX
+    sync_rdwr.close_writing()
 
     -- read remaining
     while true do
-        local ok, server_note = sync_rdwr.read_one()
-        if not ok then break end
+        local server_note = sync_rdwr.read_one()
+        if not server_note then break end
         print("Got message: "..inspect(server_note))
     end  -- while
 end  -- sync_route_chat()

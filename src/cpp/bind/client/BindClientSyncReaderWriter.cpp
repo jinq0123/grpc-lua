@@ -19,16 +19,15 @@ ClientSyncReaderWriter GetClientSyncReaderWriter(const ChannelSptr& pChannel,
     return ClientSyncReaderWriter(pChannel, sMethod, nTimeoutMs);
 }
 
-//std::tuple<LuaRef, std::string, grpc_status_code>
-//Close(const ClientSyncWriter& writer, lua_State* L)
-//{
-//    assert(L);
-//    std::string response;
-//    Status status = writer.Close(&response);
-//    LuaRef result = LuaRef(L, nullptr);
-//    if (status.ok()) result = LuaRef::fromValue(L, response);
-//    return std::make_tuple(result, status.GetDetails(), status.GetCode());
-//}  // Close()
+// return string|nil, nil means error or end
+LuaRef ReadOne(const ClientSyncReaderWriter& rw, lua_State* L)
+{
+    assert(L);
+    std::string sMsg;
+    if (rw.ReadOne(&sMsg))
+        return LuaRef::fromValue(L, sMsg);
+    return LuaRef(L, nullptr);
+}
 
 }  // namespace
 
@@ -40,12 +39,13 @@ void BindClientSyncReaderWriter(const LuaRef& mod)
     assert(L);
     LuaBinding(mod).beginClass<ClientSyncReaderWriter>("ClientSyncReaderWriter")
         .addFactory(&GetClientSyncReaderWriter)
-        //.addFunction("write", &ClientSyncWriter::Write)
-        //.addFunction("close",
-        //    [L](const ClientSyncWriter* pWriter) {
-        //        assert(pWriter);
-        //        Close(*pWriter, L);
-        //    })
+        .addFunction("read_one",
+            [L](const ClientSyncReaderWriter* pRdWr) {
+                assert(pRdWr);
+                return ReadOne(*pRdWr, L);
+            })
+        .addFunction("write", &ClientSyncReaderWriter::Write)
+        .addFunction("close_writing", &ClientSyncReaderWriter::CloseWriting)
     .endClass();
 }  // ClientSyncWriter()
 

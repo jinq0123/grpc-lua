@@ -21,12 +21,11 @@ ClientSyncReader GetClientSyncReader(const ChannelSptr& pChannel,
 }
 
 // return string|nil, nil means error or end
-LuaRef ReadOne(const ClientSyncReader* pReader, lua_State* L)
+LuaRef ReadOne(const ClientSyncReader& reader, lua_State* L)
 {
-    assert(pReader);
     assert(L);
     std::string sMsg;
-    if (pReader->ReadOne(&sMsg))
+    if (reader.ReadOne(&sMsg))
         return LuaRef::fromValue(L, sMsg);
     return LuaRef(L, nullptr);
 }
@@ -43,7 +42,8 @@ void BindClientSyncReader(const LuaRef& mod)
         .addFactory(&GetClientSyncReader)
         .addFunction("read_one",
             [L](const ClientSyncReader* pReader) {
-                return ReadOne(pReader, L);
+                assert(pReader);
+                return ReadOne(*pReader, L);
             })
     .endClass();
 }  // ClientSyncReader()

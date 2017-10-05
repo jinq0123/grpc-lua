@@ -27,8 +27,7 @@
 ;
 /// Read one message.
 // @function read_one
-// @treturn boolean is read ok, false means error or end
-// @treturn string message read
+// @treturn string|nil message read, nil on error or end
 ;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -50,6 +49,29 @@
 // @treturn string|nil response, nil on error
 // @treturn string error string, "" if OK
 // @treturn int status code
+;
+
+////////////////////////////////////////////////////////////////////////////////
+/// @type ClientSyncReaderWriter
+;
+/// Constructor.
+// @function ClientSyncReaderWriter
+// @param c_channel
+// @string method_name
+// @tparam number|nil timeout_sec nil means no timeout
+;
+/// Read one message.
+// @function read_one
+// @treturn string|nil message read, nil on error or end
+;
+/// Write message.
+// @function write
+// @string message
+// @treturn boolean return false on error
+;
+/// Close writing.
+// Optional because it will auto close in dtr().
+// @function close_writing
 ;
 
 ////////////////////////////////////////////////////////////////////////////////
