@@ -45,6 +45,12 @@
 // @string message
 // @treturn boolean return false on error
 ;
+/// Close writer and get response.
+// @function close
+// @treturn string|nil response, nil on error
+// @treturn string error string, "" if OK
+// @treturn int status code
+;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// @type ServiceStub
