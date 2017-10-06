@@ -25,8 +25,6 @@ function ServiceStub:new(c_channel, service_name)
     local stub = {
         -- public:
 
-        timeout_sec = nil,  -- default no timeout
-
         -- private:
         _c_stub = c.ServiceStub(c_channel),
         _c_channel = c_channel,
@@ -35,8 +33,9 @@ function ServiceStub:new(c_channel, service_name)
         -- `function(error_str, status_code)`
         -- nil to ignore all errors.
         error_cb = nil,
+        timeout_sec = nil,  -- default no timeout
 
-        _service_name = service_name,
+        _service_name = service_name,  -- full service name
         _method_info_map = {}  -- map { [method_name] = MethodInfo }
     }
     setmetatable(stub, self)
@@ -53,6 +52,20 @@ function ServiceStub:set_error_cb(error_cb)
     self._c_stub.set_error_cb(error_cb)
     self._error_cb = error_cb
 end  -- set_error_cb()
+
+--- Get timeout seconds.
+-- @treturn number|nil timeout in seconds, nil means no timeout
+function ServiceStub:get_timeout_sec()
+    return self._timeout_sec
+end
+
+--- Set timeout seconds
+-- @tparam number|nil timeout seconds, or nil if no timeout
+function ServiceStub:set_timeout_sec(timeout_sec)
+    assert(not timeout_sec or "number" == type(timeout_sec))
+    self._c_stub.set_timeout_sec(timeout_sec)
+    self._timeout_sec = timeout_sec
+end
 
 --- Sync request.
 -- @string method_name

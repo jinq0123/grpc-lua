@@ -1,5 +1,7 @@
 #include "BindServiceStub.h"
 
+#include "impl/GetTimeoutMs.h"
+
 #include <grpc_cb_core/common/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
 #include <grpc_cb_core/client/service_stub.h>  // for ServiceStub
 #include <grpc_cb_core/common/status.h>  // for Status
@@ -32,6 +34,13 @@ void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
     pServiceStub->SetErrorCb(FromLuaErrorCb(luaErrorCb));
+}
+
+void SetTimeoutSec(ServiceStub* pServiceStub, const LuaRef& luaTimeoutSec)
+{
+    assert(pServiceStub);
+    int64_t nTimeoutMs = impl::GetTimeoutMs(luaTimeoutSec);
+    pServiceStub->SetCallTimeoutMs(nTimeoutMs);
 }
 
 // Sync request.
@@ -83,6 +92,7 @@ void BindServiceStub(const LuaRef& mod)
         .addConstructor(LUA_ARGS(const ChannelSptr&,
             _opt<CompletionQueueForNextSptr>))
         .addFunction("set_error_cb", &SetErrorCb)
+        .addFunction("set_timeout_sec", &SetTimeoutSec)
         .addFunction("sync_request",
             [L](ServiceStub* pServiceStub, const string& sMethod,
                     const string& sRequest) {
