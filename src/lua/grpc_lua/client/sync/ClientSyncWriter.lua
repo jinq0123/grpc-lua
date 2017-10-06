@@ -52,7 +52,7 @@ end  -- write()
 function ClientSyncWriter:close()
     local resp_str, error_str, status_code = self._c_writer.close()
     local resp = nil
-    if resp_str then 
+    if resp_str then
         resp = pb.decode(self._response_type, resp_str)  -- XXX if error?
     end
     return resp, error_str, status_code

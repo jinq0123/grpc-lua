@@ -18,7 +18,7 @@ local pb = require("luapbintf")
 -- @tparam number|nil timeout_sec nil means no timeout
 -- @treturn table object
 function ClientSyncReaderWriter:new(c_channel,
-        request_name, request_type, response_type, timeout_sec);
+        request_name, request_type, response_type, timeout_sec)
     assert("userdata" == type(c_channel))
     assert("string" == type(request_name))
     assert("string" == type(request_type))

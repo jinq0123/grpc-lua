@@ -9,6 +9,7 @@ local pb = require("luapbintf")
 local MethodInfo = require("grpc_lua.impl.MethodInfo")
 local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
 local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
+local ClientSyncReaderWriter = require("grpc_lua.client.sync.ClinetSyncReaderWriter")
 local rcb_wrapper = require("grpc_lua.client.service_stub.response_cb_wrapper")
 
 -------------------------------------------------------------------------------
@@ -207,7 +208,7 @@ function ServiceStub:_get_response_callback(method_name, response_cb, error_cb)
     error_cb = error_cb or self._error_cb
     local response_type = self:_get_response_type(method_name)
     local cb = rcb_wrapper.wrap(response_cb, response_type,
-        response_cb, self._error_cb)
+        response_cb, error_cb)
     assert("function" == type(cb))
     return cb
 end  -- _get_response_callback()
