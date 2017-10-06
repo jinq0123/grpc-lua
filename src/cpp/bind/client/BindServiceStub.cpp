@@ -13,15 +13,30 @@ using string = std::string;
 
 namespace {
 
+// Convert lua error callback into ErrorCb.
+// function(error_str, status_code) -> void (const Status&)
+ErrorCb FromLuaErrorCb(const LuaRef& luaErrorCb)
+{
+    if (!luaErrorCb) return ErrorCb();
+    luaErrorCb.checkFunction();  // function(string, int)
+    return [luaErrorCb](const Status& status) {
+        if (!status.ok())
+        {
+            luaErrorCb(status.GetDetails(), status.GetCode());
+            return;
+        }
+
+        // Need to nil error_str if no error.
+        lua_State* L = luaErrorCb.state();
+        const LuaRef NIL(L, nullptr);
+        luaErrorCb(NIL, status.GetCode());
+    };
+}
+
 void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
-    if (!luaErrorCb)
-    {
-        pServiceStub->SetErrorCb(ErrorCb());  // clear error callback
-        return;
-    }
-    // XXX
+    pServiceStub->SetErrorCb(FromLuaErrorCb(luaErrorCb));
 }
 
 // Sync request.
@@ -55,18 +70,10 @@ void AsyncRequest(ServiceStub* pServiceStub,
     {
         luaResponseCb.checkFunction();  // void (string)
         cbResponse = [luaResponseCb](const string& sResponse) {
-            luaResponseCb.call(sResponse);
+            luaResponseCb(sResponse);
         };
     }
-    ErrorCb cbError;  // function<void (const Status& status)>
-    if (luaErrorCb)
-    {
-        luaErrorCb.checkFunction();  // void (string, int)
-        cbError = [luaErrorCb](const Status& status) {
-            // XXX if (status.ok()) call(nil, 0)
-            luaErrorCb.call(status.GetDetails(), status.GetCode());
-        };
-    }
+    ErrorCb cbError = FromLuaErrorCb(luaErrorCb);
     pServiceStub->AsyncRequest(sMethod, sRequest, cbResponse, cbError);
 }  // AsyncRequest()
 
