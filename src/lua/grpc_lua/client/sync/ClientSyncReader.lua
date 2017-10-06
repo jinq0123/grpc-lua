@@ -12,19 +12,19 @@ local pb = require("luapbintf")
 
 --- Constructor.
 -- @tparam Channel c_channel
--- @string method_name
--- @string req_str
+-- @string request_name, like "/helloworld.Greeter/SayHello"
+-- @string request_str
 -- @string response_type
 -- @tparam number|nil timeout_sec nil means no timeout
 -- @treturn table object
-function ClientSyncReader:new(c_channel, method_name, req_str,
-                                response_type, timeout_sec)
-    assert("string" == type(req_str))
+function ClientSyncReader:new(c_channel, request_name, request_str,
+                              response_type, timeout_sec)
+    assert("string" == type(request_str))
     assert("string" == type(response_type))
     local reader = {
         -- private:
         _c_reader = c.ClientSyncReader(c_channel,
-            method_name, req_str, timeout_sec),  -- XXX set timeout later
+            request_name, request_str, timeout_sec),  -- XXX set timeout later
         _response_type = response_type,
     }
 
