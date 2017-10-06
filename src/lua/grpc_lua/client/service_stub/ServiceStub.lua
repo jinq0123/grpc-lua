@@ -24,7 +24,13 @@ function ServiceStub:new(c_channel, service_name)
     assert("userdata" == type(c_channel))
     local stub = {
         -- public:
+
         timeout_sec = nil,  -- default no timeout
+
+        -- Error callback for async request.
+        -- `function(error_str, status_code)`
+        -- nil to ignore all errors.
+        on_error = nil,
 
         -- private:
         _c_stub = c.ServiceStub(c_channel),
@@ -38,15 +44,6 @@ function ServiceStub:new(c_channel, service_name)
 end  -- new()
 
 -- Todo: get_channel() to new other stub.
-
---- Set error callback for async request.
--- @tparam function|nil on_error error callback
--- `on_error` is `function(error_str, status_code)`
--- `on_error` may be nil to ignore all errors.
-function ServiceStub:set_on_error(on_error)
-    assert(nil == on_error or "function" == type(on_error))
-    self.on_error = on_error
-end  -- set_on_error()
 
 --- Sync request.
 -- @string method_name
@@ -102,7 +99,8 @@ end  -- sync_request_read()
 -- @string method_name method name
 -- @tab request request message
 -- @tparam[opt=nil] function|nil on_msg message callback, `function(table)`
--- @tparam[optchain=nil] function|nil on_status status callback, `function(error_str|nil, status_code)`
+-- @tparam[optchain=nil] function|nil on_status status callback,
+--  `function(error_str|nil, status_code)`, nil means to use self.on_error
 -- @usage
 -- stub.async_request_read("ListFeatures", rect,
 --   function(message) assert("table" == type(message)) end,
@@ -113,12 +111,13 @@ end  -- sync_request_read()
 function ServiceStub:async_request_read(method_name, request, on_msg, on_status)
     assert("table" == type(request))
     assert(not on_msg or "function" == type(on_msg))
+    on_status = on_status or self.on_error
     assert(not on_status or "function" == type(on_status))
     self:_assert_server_side_streaming(method_name)
     local request_name = self:_get_request_name(method_name)
     local req_str = self:_encode_request(request)
     local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
-    -- XXX
+    self._c_stub.async_request(self._c_channel, request_name, XXX)
 end  -- async_request_read()
 
 --- Sync request client side streaming rpc.
