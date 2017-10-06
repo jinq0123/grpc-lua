@@ -58,13 +58,12 @@ void SetTimeoutSec(ServiceStub* pServiceStub, const LuaRef& luaTimeoutSec)
 // Sync request.
 // Return (response_str|nil, error_str|nil, status_code).
 std::tuple<LuaRef, LuaRef, LuaRef>
-SyncRequest(lua_State* L, ServiceStub* pServiceStub,
-    const string& sMethod, const string& sRequest)
+SyncRequest(ServiceStub& rServiceStub, const string& sMethod,
+    const string& sRequest, lua_State* L)
 {
     assert(L);
-    assert(pServiceStub);
     string sResponse;
-    Status status = pServiceStub->SyncRequest(
+    Status status = rServiceStub.SyncRequest(
         sMethod, sRequest, sResponse);
     const LuaRef NIL(L, nullptr);
     LuaRef luaStatusCode = LuaRef::fromValue(L, status.GetCode());
@@ -116,7 +115,8 @@ void BindServiceStub(const LuaRef& mod)
         .addFunction("sync_request",
             [L](ServiceStub* pServiceStub, const string& sMethod,
                     const string& sRequest) {
-                return SyncRequest(L, pServiceStub, sMethod, sRequest);
+                assert(pServiceStub);
+                return SyncRequest(*pServiceStub, sMethod, sRequest, L);
             })
         .addFunction("async_request", &AsyncRequest)
 
