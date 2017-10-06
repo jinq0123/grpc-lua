@@ -9,7 +9,7 @@ local pb = require("luapbintf")
 local MethodInfo = require("grpc_lua.impl.MethodInfo")
 local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
 local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
-local response_cb = require("grpc_lua.client.service_stub.response_cb")
+local rcb_wrapper = require("grpc_lua.client.service_stub.response_cb_wrapper")
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -32,8 +32,8 @@ function ServiceStub:new(c_channel, service_name)
         -- Error callback for async request.
         -- `function(error_str, status_code)`
         -- nil to ignore all errors.
-        error_cb = nil,
-        timeout_sec = nil,  -- default no timeout
+        _error_cb = nil,
+        _timeout_sec = nil,  -- default no timeout
 
         _service_name = service_name,  -- full service name
         _method_info_map = {}  -- map { [method_name] = MethodInfo }
@@ -97,7 +97,7 @@ function ServiceStub:async_request(method_name, request, response_cb)
     -- Need to wrap the response callback.
     self._c_stub:async_request(request_name, request_str,
         self:_get_response_callback(method_name, response_cb),
-        self.error_cb)
+        self._error_cb)
 end  -- async_request()
 
 --- Sync request server side streaming rpc.
@@ -112,7 +112,7 @@ function ServiceStub:sync_request_read(method_name, request)
     local req_str = self:_encode_request(request)
     local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
     return ClientSyncReader:new(self._c_channel, request_name,
-        req_str, response_type, self.timeout_sec)
+        req_str, response_type, self._timeout_sec)
 end  -- sync_request_read()
 
 --- Async request server side streaming rpc.
@@ -133,7 +133,7 @@ end  -- sync_request_read()
 function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     assert("table" == type(request))
     assert(not msg_cb or "function" == type(msg_cb))
-    status_cb = status_cb or self.error_cb
+    status_cb = status_cb or self._error_cb
     assert(not status_cb or "function" == type(status_cb))
     self:_assert_server_side_streaming(method_name)
     local request_name = self:_get_request_name(method_name)
@@ -152,7 +152,7 @@ function ServiceStub:sync_request_write(method_name)
     local request_type = self:_get_request_type(method_name)
     local response_type = self:_get_response_type(method_name)
     return ClientSyncWriter:new(self._c_channel,
-        request_name, request_type, response_type, self.timeout_sec)
+        request_name, request_type, response_type, self._timeout_sec)
 end  -- sync_request_read()
 
 --- Sync request bi-directional streaming rpc.
@@ -165,7 +165,7 @@ function ServiceStub:sync_request_rdwr(method_name)
     local request_type = self:_get_request_type(method_name)
     local response_type = self:_get_response_type(method_name)
     return ClientSyncReaderWriter:new(self._c_channel,
-        request_name, request_type, response_type, self.timeout_sec);
+        request_name, request_type, response_type, self._timeout_sec);
 end  -- sync_request_rdwr()
 
 --- Blocking run.
@@ -204,10 +204,10 @@ end  -- _decode_response()
 -- @treturn function `function(string)`
 function ServiceStub:_get_response_callback(method_name, response_cb, error_cb)
     if not response_cb then return nil end
-    error_cb = error_cb or self.error_cb
+    error_cb = error_cb or self._error_cb
     local response_type = self:_get_response_type(method_name)
-    local cb = response_cb.wrap(response_cb, response_type,
-        response_cb, self.error_cb)
+    local cb = rcb_wrapper.wrap(response_cb, response_type,
+        response_cb, self._error_cb)
     assert("function" == type(cb))
     return cb
 end  -- _get_response_callback()
