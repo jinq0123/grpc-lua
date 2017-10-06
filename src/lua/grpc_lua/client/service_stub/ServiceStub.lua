@@ -27,14 +27,15 @@ function ServiceStub:new(c_channel, service_name)
 
         timeout_sec = nil,  -- default no timeout
 
+        -- private:
+        _c_stub = c.ServiceStub(c_channel),
+        _c_channel = c_channel,
+
         -- Error callback for async request.
         -- `function(error_str, status_code)`
         -- nil to ignore all errors.
         error_cb = nil,
 
-        -- private:
-        _c_stub = c.ServiceStub(c_channel),
-        _c_channel = c_channel,
         _service_name = service_name,
         _method_info_map = {}  -- map { [method_name] = MethodInfo }
     }
@@ -44,6 +45,14 @@ function ServiceStub:new(c_channel, service_name)
 end  -- new()
 
 -- Todo: get_channel() to new other stub.
+
+--- Set error callback function.
+-- @func error_cb `function(error_str|nil, status_code)`
+function ServiceStub:set_error_cb(error_cb)
+    assert(not error_cb or "function" == type(error_cb))
+    self._c_stub.set_error_cb(error_cb)
+    self._error_cb = error_cb
+end  -- set_error_cb()
 
 --- Sync request.
 -- @string method_name
