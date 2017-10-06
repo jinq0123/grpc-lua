@@ -136,14 +136,13 @@ local function list_features_async()
     local stub = new_stub()
     local rect = rectangle(400000000, -750000000, 420000000, -730000000)
     print("Looking for features between 40, -75 and 42, -73")
-    -- XXX
     stub.async_request_read("ListFeatures", rect,
         function(f)
             print(string.format("Got feature %s at %f,%f", f.name,
                 f.location.latitude/kCoordFactor, f.location.longitude/kCoordFactor))
         end,
-        function(status)  -- XXX
-            print("End status: "..inspect(status))
+        function(error_str, status_code)
+            print(string.format("End status: (%d)%s", status_code, error_str)
             stub.shutdown()  -- To break Run().
         end)
     stub.run()  -- until stub.shutdown()
