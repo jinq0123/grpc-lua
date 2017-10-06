@@ -149,13 +149,16 @@ end  -- async_request_read()
 -- @string method_name method name
 -- @treturn ClientSyncWriter
 function ServiceStub:sync_request_write(method_name)
-    self:_assert_client_side_streaming(method_name)
-    local request_name = self:_get_request_name(method_name)
-    local request_type = self:_get_request_type(method_name)
-    local response_type = self:_get_response_type(method_name)
-    return ClientSyncWriter:new(self._c_channel,
-        request_name, request_type, response_type, self._timeout_sec)
+    return self:new_writer(method_name, true)  -- is_sync = true
 end  -- sync_request_read()
+
+--- Async request client side streaming rpc.
+-- Will return immediately.
+-- @string method_name method name
+-- @treturn ClientAsyncWriter
+function ServiceStub:async_request_write(method_name)
+    return self:new_writer(method_name, false)  -- is_sync = false
+end  -- async_request_write()
 
 --- Sync request bi-directional streaming rpc.
 -- Will return immediately.
@@ -272,5 +275,20 @@ end
 function ServiceStub:_get_request_name(method_name)
     return "/" .. self._service_name .. "/" .. method_name
 end  -- _get_request_name()
+
+--- New a ClientSyncWriter or ClientAsyncWriter.
+-- @string method_name method name
+-- @tparam booleam is_sync is ClientSyncWriter, false means ClientAsyncWriter
+-- @treturn ClientSyncWriter|ClientAsyncWriter writer object
+function ServiceStub:new_writer(method_name, is_sync)
+    self:_assert_client_side_streaming(method_name)
+    local request_name = self:_get_request_name(method_name)
+    local request_type = self:_get_request_type(method_name)
+    local response_type = self:_get_response_type(method_name)
+    local Writer = ClientAsyncWriter
+    if is_sync the Writer = ClientSyncWriter
+    return Writer:new(self._c_channel, request_name, request_type,
+        response_type, self._timeout_sec)
+end  -- new_writer()
 
 return ServiceStub
