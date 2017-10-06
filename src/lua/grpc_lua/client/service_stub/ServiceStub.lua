@@ -140,7 +140,8 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     local request_name = self:_get_request_name(method_name)
     local req_str = self:_encode_request(request)
     local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
-    self._c_stub.async_request(self._c_channel, request_name, XXX)
+    self._c_stub.async_request_read(self._c_channel,
+        request_name, req_str, msg_cb, status_cb)
 end  -- async_request_read()
 
 --- Sync request client side streaming rpc.

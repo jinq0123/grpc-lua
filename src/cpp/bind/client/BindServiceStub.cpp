@@ -3,8 +3,9 @@
 #include "impl/GetTimeoutMs.h"
 
 #include <grpc_cb_core/common/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
-#include <grpc_cb_core/client/service_stub.h>  // for ServiceStub
 #include <grpc_cb_core/common/status.h>  // for Status
+#include <grpc_cb_core/client/client_async_reader.h>  // for ClientAsyncReader
+#include <grpc_cb_core/client/service_stub.h>  // for ServiceStub
 
 #include <LuaIntf/LuaIntf.h>
 #include <string>
@@ -27,6 +28,17 @@ ErrorCb FromLuaErrorCb(const LuaRef& luaErrorCb)
             luaErrorCb(nullptr, status.GetCode());
         else
             luaErrorCb(status.GetDetails(), status.GetCode());
+    };
+}
+
+// Convert lua message callback into MsgCb.
+// function(string) -> void (const string&)
+MsgCb FromLuaMsgCb(const LuaRef& luaMsgCb)
+{
+    if (!luaMsgCb) return MsgCb();
+    luaMsgCb.checkFunction();  // function(string)
+    return [luaMsgCb](const string& sMsg) {
+        luaMsgCb(sMsg);
     };
 }
 
@@ -69,17 +81,20 @@ void AsyncRequest(ServiceStub* pServiceStub,
     const LuaRef& luaResponseCb, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
-    ResponseCb cbResponse;  // function<void (const string&)>
-    if (luaResponseCb)
-    {
-        luaResponseCb.checkFunction();  // void (string)
-        cbResponse = [luaResponseCb](const string& sResponse) {
-            luaResponseCb(sResponse);
-        };
-    }
+    ResponseCb cbResponse = FromLuaMsgCb(luaResponseCb);
     ErrorCb cbError = FromLuaErrorCb(luaErrorCb);
     pServiceStub->AsyncRequest(sMethod, sRequest, cbResponse, cbError);
 }  // AsyncRequest()
+
+void AsyncRequestRead(ServiceStub* pServiceStub,
+    const string& sMethod, const string sRequest,
+    const LuaRef& luaMsgCb, const LuaRef& luaStatusCb)
+{
+    ClientAsyncReader reader(pServiceStub->GetChannelSptr(),
+        sMethod, sRequest, pServiceStub->GetCompletionQueue(),
+        pServiceStub->GetCallTimeoutMs());
+    reader.ReadEach(FromLuaMsgCb(luaMsgCb), FromLuaErrorCb(luaStatusCb));
+}
 
 }  // namespace
 
@@ -91,14 +106,20 @@ void BindServiceStub(const LuaRef& mod)
     LuaBinding(mod).beginClass<ServiceStub>("ServiceStub")
         .addConstructor(LUA_ARGS(const ChannelSptr&,
             _opt<CompletionQueueForNextSptr>))
+
         .addFunction("set_error_cb", &SetErrorCb)
         .addFunction("set_timeout_sec", &SetTimeoutSec)
+
         .addFunction("sync_request",
             [L](ServiceStub* pServiceStub, const string& sMethod,
                     const string& sRequest) {
                 return SyncRequest(L, pServiceStub, sMethod, sRequest);
             })
         .addFunction("async_request", &AsyncRequest)
+
+        // Async request server side streaming.
+        .addFunction("async_request_read", &AsyncRequestRead)
+
         .addFunction("run", &ServiceStub::Run)
         .addFunction("shutdown", &ServiceStub::Shutdown)
     .endClass();  // ServiceStub
