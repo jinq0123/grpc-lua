@@ -12,7 +12,7 @@ local pb = require("luapbintf")
 
 --- Constructor.
 -- @tparam Channel c_channel
--- @string request_name, like "/helloworld.Greeter/SayHello"
+-- @string request_name, like "/routeguide.RouteGuide/RouteChat"
 -- @string request_type
 -- @string response_type
 -- @tparam number|nil timeout_sec nil means no timeout
