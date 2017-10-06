@@ -12,17 +12,17 @@ local pb = require("luapbintf")
 -- @string response_type
 -- @string response_str
 -- @func response_cb `function(table)`
--- @func[opt] on_error `function(string, int)`
+-- @func[opt] error_cb `function(string, int)`
 local function on_response_str(
-        response_type, response_str, response_cb, on_error)
+        response_type, response_str, response_cb, error_cb)
     local response = pb.decode(response_type, response_str)
     if response then
         response_cb(response)
         return
     end
-    if on_error then
+    if error_cb then
         -- GRPC_STATUS_INTERNAL = 13
-        on_error("Failed to decode response.", 13)
+        error_cb("Failed to decode response.", 13)
     end
 end  -- on_response_str()
 
@@ -33,7 +33,7 @@ end  -- on_response_str()
 --- Wrap message callback into string callback.
 -- @func response_cb `function(table)`
 -- @string response_type
--- @func[opt] on_error `function(error_str, status_code)`
+-- @func[opt] error_cb `function(error_str, status_code)`
 -- @treturn function `function(string)`
 -- @usage
 -- M.wrap(
@@ -45,14 +45,14 @@ end  -- on_response_str()
 --         assert(not error_str or "string" == type(error_str))
 --         assert("number" == type(status_code))
 --     end)
-function M.wrap(response_cb, response_type, on_error)
+function M.wrap(response_cb, response_type, error_cb)
     assert("function" == type(response_cb))
     assert("string" == response_type)
-    assert(not on_error or "function" == type(on_error))
+    assert(not error_cb or "function" == type(error_cb))
 
     return function(response_str)
         on_response_str(response_type, response_str,
-            response_cb, on_error)
+            response_cb, error_cb)
     end
 end  -- wrap()
 

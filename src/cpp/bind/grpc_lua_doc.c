@@ -93,7 +93,7 @@
 // @string method_name
 // @string request serialized message
 // @func[opt] response_cb response callback, `function(response_str)`
-// @func[opt] on_error error handler, `function(error_str, status_code)`
+// @func[opt] error_cb error handler, `function(error_str, status_code)`
 ;
 /// Blocking run.
 // Run async requests until shutdown.

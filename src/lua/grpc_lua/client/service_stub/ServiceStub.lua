@@ -30,7 +30,7 @@ function ServiceStub:new(c_channel, service_name)
         -- Error callback for async request.
         -- `function(error_str, status_code)`
         -- nil to ignore all errors.
-        on_error = nil,
+        error_cb = nil,
 
         -- private:
         _c_stub = c.ServiceStub(c_channel),
@@ -75,7 +75,7 @@ function ServiceStub:async_request(method_name, request, response_cb)
     -- Need to wrap the response callback.
     self._c_stub:async_request(request_name, request_str,
         self:_get_response_callback(method_name, response_cb),
-        self.on_error)
+        self.error_cb)
 end  -- async_request()
 
 --- Sync request server side streaming rpc.
@@ -100,7 +100,7 @@ end  -- sync_request_read()
 -- @tab request request message
 -- @tparam[opt=nil] function|nil on_msg message callback, `function(table)`
 -- @tparam[optchain=nil] function|nil on_status status callback,
---  `function(error_str|nil, status_code)`, nil means to use self.on_error
+--  `function(error_str|nil, status_code)`, nil means to use self.error_cb
 -- @usage
 -- stub.async_request_read("ListFeatures", rect,
 --   function(message) assert("table" == type(message)) end,
@@ -111,7 +111,7 @@ end  -- sync_request_read()
 function ServiceStub:async_request_read(method_name, request, on_msg, on_status)
     assert("table" == type(request))
     assert(not on_msg or "function" == type(on_msg))
-    on_status = on_status or self.on_error
+    on_status = on_status or self.error_cb
     assert(not on_status or "function" == type(on_status))
     self:_assert_server_side_streaming(method_name)
     local request_name = self:_get_request_name(method_name)
@@ -178,14 +178,14 @@ end  -- _decode_response()
 --- Wrap a response callback.
 -- @string method_name
 -- @tparam function|nil response_cb `function(table)`
--- @func[opt] on_error `function(string, int)`
+-- @func[opt] error_cb `function(string, int)`
 -- @treturn function `function(string)`
-function ServiceStub:_get_response_callback(method_name, response_cb, on_error)
+function ServiceStub:_get_response_callback(method_name, response_cb, error_cb)
     if not response_cb then return nil end
-    on_error = on_error or self.on_error
+    error_cb = error_cb or self.error_cb
     local response_type = self:_get_response_type(method_name)
     local cb = response_cb.wrap(response_cb, response_type,
-        response_cb, self.on_error)
+        response_cb, self.error_cb)
     assert("function" == type(cb))
     return cb
 end  -- _get_response_callback()
