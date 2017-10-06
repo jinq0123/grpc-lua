@@ -8,3 +8,8 @@
 * blocking_run(completion_queue)
 
 * Use method name instead of method index?
+
+* c_service_stub
+	+ set_default_error_cb()
+	+ set_error_cb()
+	+ set_timeout_ms()
