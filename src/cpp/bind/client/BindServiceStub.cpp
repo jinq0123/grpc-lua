@@ -56,9 +56,7 @@ void SetTimeoutSec(ServiceStub* pServiceStub, const LuaRef& luaTimeoutSec)
 }
 
 // Sync request.
-// Return (response_string, nil, nil) or
-//   (nil, error_string, grpc_status_code).
-// XXX change to return (string|nil, string, code)
+// Return (response_str|nil, error_str|nil, status_code).
 std::tuple<LuaRef, LuaRef, LuaRef>
 SyncRequest(lua_State* L, ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest)
@@ -69,11 +67,16 @@ SyncRequest(lua_State* L, ServiceStub* pServiceStub,
     Status status = pServiceStub->SyncRequest(
         sMethod, sRequest, sResponse);
     const LuaRef NIL(L, nullptr);
+    LuaRef luaStatusCode = LuaRef::fromValue(L, status.GetCode());
     if (status.ok())
-        return std::make_tuple(LuaRef::fromValue(L, sResponse), NIL, NIL);
-    return std::make_tuple(NIL,
-        LuaRef::fromValue(L, status.GetDetails()),
-        LuaRef::fromValue(L, status.GetCode()));
+    {
+        // (response_str, nil, status_code)
+        return std::make_tuple(LuaRef::fromValue(
+            L, sResponse), NIL, luaStatusCode);
+    }
+    // (nil, error_str, status_code)
+    return std::make_tuple(NIL, LuaRef::fromValue(
+        L, status.GetDetails()), luaStatusCode);
 }  // SyncRequest()
 
 void AsyncRequest(ServiceStub* pServiceStub,
