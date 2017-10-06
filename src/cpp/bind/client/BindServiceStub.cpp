@@ -13,18 +13,29 @@ using string = std::string;
 
 namespace {
 
+void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
+{
+    assert(pServiceStub);
+    if (!luaErrorCb)
+    {
+        pServiceStub->SetErrorCb(ErrorCb());  // clear error callback
+        return;
+    }
+    // XXX
+}
+
 // Sync request.
 // Return (response_string, nil, nil) or
 //   (nil, error_string, grpc_status_code).
 // XXX change to return (string|nil, string, code)
 std::tuple<LuaRef, LuaRef, LuaRef>
-SyncRequest(lua_State* L, grpc_cb_core::ServiceStub* pServiceStub,
+SyncRequest(lua_State* L, ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest)
 {
     assert(L);
     assert(pServiceStub);
     string sResponse;
-    grpc_cb_core::Status status = pServiceStub->SyncRequest(
+    Status status = pServiceStub->SyncRequest(
         sMethod, sRequest, sResponse);
     const LuaRef NIL(L, nullptr);
     if (status.ok())
@@ -34,28 +45,29 @@ SyncRequest(lua_State* L, grpc_cb_core::ServiceStub* pServiceStub,
         LuaRef::fromValue(L, status.GetCode()));
 }  // SyncRequest()
 
-void AsyncRequest(grpc_cb_core::ServiceStub* pServiceStub,
+void AsyncRequest(ServiceStub* pServiceStub,
     const string& sMethod, const string& sRequest,
-    const LuaRef& luaOnResponse, const LuaRef& luaOnError)
+    const LuaRef& luaResponseCb, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
-    grpc_cb_core::ServiceStub::OnResponse onResponse;  // function<void (const string&)>
-    if (luaOnResponse)
+    ResponseCb cbResponse;  // function<void (const string&)>
+    if (luaResponseCb)
     {
-        luaOnResponse.checkFunction();  // void (string)
-        onResponse = [luaOnResponse](const string& sResponse) {
-            luaOnResponse.call(sResponse);
+        luaResponseCb.checkFunction();  // void (string)
+        cbResponse = [luaResponseCb](const string& sResponse) {
+            luaResponseCb.call(sResponse);
         };
     }
-    grpc_cb_core::ErrorCallback onError;  // function<void (const Status& status)>
-    if (luaOnError)
+    ErrorCb cbError;  // function<void (const Status& status)>
+    if (luaErrorCb)
     {
-        luaOnError.checkFunction();  // void (string, int)
-        onError = [luaOnError](const grpc_cb_core::Status& status) {
-            luaOnError.call(status.GetDetails(), status.GetCode());
+        luaErrorCb.checkFunction();  // void (string, int)
+        cbError = [luaErrorCb](const Status& status) {
+            // XXX if (status.ok()) call(nil, 0)
+            luaErrorCb.call(status.GetDetails(), status.GetCode());
         };
     }
-    pServiceStub->AsyncRequest(sMethod, sRequest, onResponse, onError);
+    pServiceStub->AsyncRequest(sMethod, sRequest, cbResponse, cbError);
 }  // AsyncRequest()
 
 }  // namespace
@@ -68,14 +80,15 @@ void BindServiceStub(const LuaRef& mod)
     LuaBinding(mod).beginClass<ServiceStub>("ServiceStub")
         .addConstructor(LUA_ARGS(const ChannelSptr&,
             _opt<CompletionQueueForNextSptr>))
+        .addFunction("set_error_cb", &SetErrorCb)
         .addFunction("sync_request",
             [L](ServiceStub* pServiceStub, const string& sMethod,
                     const string& sRequest) {
                 return SyncRequest(L, pServiceStub, sMethod, sRequest);
             })
         .addFunction("async_request", &AsyncRequest)
-        .addFunction("run", &grpc_cb_core::ServiceStub::Run)
-        .addFunction("shutdown", &grpc_cb_core::ServiceStub::Shutdown)
+        .addFunction("run", &ServiceStub::Run)
+        .addFunction("shutdown", &ServiceStub::Shutdown)
     .endClass();  // ServiceStub
 }  // BindServiceStub()
 
