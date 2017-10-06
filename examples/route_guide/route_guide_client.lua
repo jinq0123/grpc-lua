@@ -138,10 +138,12 @@ local function list_features_async()
     print("Looking for features between 40, -75 and 42, -73")
     stub.async_request_read("ListFeatures", rect,
         function(f)
+            assert("table" == type(f))
             print(string.format("Got feature %s at %f,%f", f.name,
                 f.location.latitude/kCoordFactor, f.location.longitude/kCoordFactor))
         end,
         function(error_str, status_code)
+            assert("number" == type(status_code))
             print(string.format("End status: (%d)%s", status_code, error_str)
             stub.shutdown()  -- To break Run().
         end)

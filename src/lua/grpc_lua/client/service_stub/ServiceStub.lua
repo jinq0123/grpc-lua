@@ -10,7 +10,7 @@ local MethodInfo = require("grpc_lua.impl.MethodInfo")
 local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
 local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
 local ClientSyncReaderWriter = require("grpc_lua.client.sync.ClinetSyncReaderWriter")
-local rcb_wrapper = require("grpc_lua.client.service_stub.response_cb_wrapper")
+local mcb_wrapper = require("grpc_lua.client.service_stub.msg_cb_wrapper")
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -96,9 +96,9 @@ function ServiceStub:async_request(method_name, request, response_cb)
     local request_name = self:_get_request_name(method_name)
     local request_str = self:_encode_request(method_name, request)
     -- Need to wrap the response callback.
+    local response_str_cb = self:_wrap_msg_cb(method_name, response_cb)
     self._c_stub:async_request(request_name, request_str,
-        self:_get_response_callback(method_name, response_cb),
-        self._error_cb)
+        response_str_cb, self._error_cb)
 end  -- async_request()
 
 --- Sync request server side streaming rpc.
@@ -140,8 +140,10 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     local request_name = self:_get_request_name(method_name)
     local req_str = self:_encode_request(request)
     local response_type = self:_get_response_type(method_name)  -- XXX OK for streaming?
+    -- Need to wrap the message callback.
+    local msg_str_cb = self:_wrap_msg_cb(method_name, msg_cb, status_cb)
     self._c_stub.async_request_read(self._c_channel,
-        request_name, req_str, msg_cb, status_cb)
+        request_name, req_str, msg_str_cb, status_cb)  -- XXX wrap msg_cb
 end  -- async_request_read()
 
 --- Sync request client side streaming rpc.
@@ -202,20 +204,19 @@ function ServiceStub:_decode_response(method_name, response_str)
     return pb.decode(response_type, response_str)
 end  -- _decode_response()
 
---- Wrap a response callback.
+--- Wrap a message callback.
 -- @string method_name
--- @tparam function|nil response_cb `function(table)`
+-- @tparam function|nil msg_cb `function(table)`
 -- @func[opt] error_cb `function(string, int)`
 -- @treturn function `function(string)`
-function ServiceStub:_get_response_callback(method_name, response_cb, error_cb)
-    if not response_cb then return nil end
+function ServiceStub:_wrap_msg_cb(method_name, msg_cb, error_cb)
+    if not msg_cb then return nil end
     error_cb = error_cb or self._error_cb
-    local response_type = self:_get_response_type(method_name)
-    local cb = rcb_wrapper.wrap(response_cb, response_type,
-        response_cb, error_cb)
+    local msg_type = self:_get_response_type(method_name)
+    local cb = mcb_wrapper.wrap(msg_cb, msg_type, error_cb)
     assert("function" == type(cb))
     return cb
-end  -- _get_response_callback()
+end  -- _wrap_msg_cb()
 
 --- Get request type.
 -- @string method_name

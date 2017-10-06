@@ -1,8 +1,8 @@
---- Wrap message(table) response callback into string response callback.
+--- Wrap message(table) callback into string callback.
 -- C module need callback `function(string)`,
 --   but user's callback is `function(table)`.
 -- So wrap user's callback to a new function.
--- @module grpc_lua.client.service_stub.response_cb_wrapper
+-- @module grpc_lua.client.service_stub.msg_cb_wrapper
 
 local M = {}
 
