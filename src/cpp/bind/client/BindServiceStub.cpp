@@ -20,16 +20,11 @@ ErrorCb FromLuaErrorCb(const LuaRef& luaErrorCb)
     if (!luaErrorCb) return ErrorCb();
     luaErrorCb.checkFunction();  // function(string, int)
     return [luaErrorCb](const Status& status) {
-        if (!status.ok())
-        {
-            luaErrorCb(status.GetDetails(), status.GetCode());
-            return;
-        }
-
         // Need to nil error_str if no error.
-        lua_State* L = luaErrorCb.state();
-        const LuaRef NIL(L, nullptr);
-        luaErrorCb(NIL, status.GetCode());
+        if (status.ok())
+            luaErrorCb(nullptr, status.GetCode());
+        else
+            luaErrorCb(status.GetDetails(), status.GetCode());
     };
 }
 
