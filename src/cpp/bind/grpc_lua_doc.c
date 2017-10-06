@@ -92,7 +92,7 @@
 // @function async_request
 // @string method_name
 // @string request serialized message
-// @func[opt] on_response response callback, `function(response_str)`
+// @func[opt] response_cb response callback, `function(response_str)`
 // @func[opt] on_error error handler, `function(error_str, status_code)`
 ;
 /// Blocking run.

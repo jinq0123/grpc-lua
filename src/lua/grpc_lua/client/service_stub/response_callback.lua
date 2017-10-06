@@ -11,13 +11,13 @@ local pb = require("luapbintf")
 --- Async request callback.
 -- @string response_type
 -- @string response_str
--- @func on_response `function(table)`
+-- @func response_cb `function(table)`
 -- @func[opt] on_error `function(string, int)`
 local function on_response_str(
-        response_type, response_str, on_response, on_error)
+        response_type, response_str, response_cb, on_error)
     local response = pb.decode(response_type, response_str)
     if response then
-        on_response(response)
+        response_cb(response)
         return
     end
     if on_error then
@@ -31,7 +31,7 @@ end  -- on_response_str()
 -- @section public
 
 --- Wrap message callback into string callback.
--- @func on_response `function(table)`
+-- @func response_cb `function(table)`
 -- @string response_type
 -- @func[opt] on_error `function(error_str, status_code)`
 -- @treturn function `function(string)`
@@ -45,14 +45,14 @@ end  -- on_response_str()
 --         assert(not error_str or "string" == type(error_str))
 --         assert("number" == type(status_code))
 --     end)
-function M.wrap(on_response, response_type, on_error)
-    assert("function" == type(on_response))
+function M.wrap(response_cb, response_type, on_error)
+    assert("function" == type(response_cb))
     assert("string" == response_type)
     assert(not on_error or "function" == type(on_error))
 
     return function(response_str)
         on_response_str(response_type, response_str,
-            on_response, on_error)
+            response_cb, on_error)
     end
 end  -- wrap()
 

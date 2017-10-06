@@ -65,16 +65,16 @@ end  -- request()
 --- Async request.
 -- @string method_name method name
 -- @tab request request message
--- @func[opt] on_response response callback, `function(response_message_table)`
-function ServiceStub:async_request(method_name, request, on_response)
+-- @func[opt] response_cb response callback, `function(response_message_table)`
+function ServiceStub:async_request(method_name, request, response_cb)
     assert("table" == type(request))
-    assert(nil == on_response or "function" == type(on_response))
+    assert(nil == response_cb or "function" == type(response_cb))
     self:_assert_simple_rpc(method_name)
     local request_name = self:_get_request_name(method_name)
     local request_str = self:_encode_request(method_name, request)
     -- Need to wrap the response callback.
     self._c_stub:async_request(request_name, request_str,
-        self:_get_response_callback(method_name, on_response),
+        self:_get_response_callback(method_name, response_cb),
         self.on_error)
 end  -- async_request()
 
@@ -177,15 +177,15 @@ end  -- _decode_response()
 
 --- Wrap a response callback.
 -- @string method_name
--- @tparam function|nil on_response `function(table)`
+-- @tparam function|nil response_cb `function(table)`
 -- @func[opt] on_error `function(string, int)`
 -- @treturn function `function(string)`
-function ServiceStub:_get_response_callback(method_name, on_response, on_error)
-    if not on_response then return nil end
+function ServiceStub:_get_response_callback(method_name, response_cb, on_error)
+    if not response_cb then return nil end
     on_error = on_error or self.on_error
     local response_type = self:_get_response_type(method_name)
-    local cb = response_callback.wrap(on_response, response_type,
-        on_response, self.on_error)
+    local cb = response_callback.wrap(response_cb, response_type,
+        response_cb, self.on_error)
     assert("function" == type(cb))
     return cb
 end  -- _get_response_callback()
