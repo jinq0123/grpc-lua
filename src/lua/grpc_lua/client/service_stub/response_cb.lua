@@ -2,7 +2,7 @@
 -- C module need callback `function(string)`,
 --   but user's callback is `function(table)`.
 -- So wrap user's callback to a new function.
--- @module grpc_lua.client.service_stub.response_callback
+-- @module grpc_lua.client.service_stub.response_cb
 
 local M = {}
 
