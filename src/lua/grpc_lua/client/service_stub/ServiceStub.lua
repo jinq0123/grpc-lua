@@ -95,11 +95,11 @@ end  -- sync_request_read()
 
 --- Async request server side streaming rpc.
 -- Will return immediately.
--- The callback function on_read and on_status will be called in the run().
+-- The callback function msg_cb and status_cb will be called in the run().
 -- @string method_name method name
 -- @tab request request message
--- @tparam[opt=nil] function|nil on_msg message callback, `function(table)`
--- @tparam[optchain=nil] function|nil on_status status callback,
+-- @tparam[opt=nil] function|nil msg_cb message callback, `function(table)`
+-- @tparam[optchain=nil] function|nil status_cb status callback,
 --  `function(error_str|nil, status_code)`, nil means to use self.error_cb
 -- @usage
 -- stub.async_request_read("ListFeatures", rect,
@@ -108,11 +108,11 @@ end  -- sync_request_read()
 --     assert(not error_str or "string" == type(error_str))
 --     assert("number" == type(status_code))
 --   end)
-function ServiceStub:async_request_read(method_name, request, on_msg, on_status)
+function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     assert("table" == type(request))
-    assert(not on_msg or "function" == type(on_msg))
-    on_status = on_status or self.error_cb
-    assert(not on_status or "function" == type(on_status))
+    assert(not msg_cb or "function" == type(msg_cb))
+    status_cb = status_cb or self.error_cb
+    assert(not status_cb or "function" == type(status_cb))
     self:_assert_server_side_streaming(method_name)
     local request_name = self:_get_request_name(method_name)
     local req_str = self:_encode_request(request)
