@@ -110,6 +110,7 @@ void BindServiceStub(const LuaRef& mod)
             _opt<CompletionQueueForNextSptr>))
 
         .addFunction("set_error_cb", &SetErrorCb)
+        .addFunction("get_completion_queue", &ServiceStub::GetCompletionQueue)
         .addFunction("set_timeout_sec", &SetTimeoutSec)
 
         .addFunction("sync_request",

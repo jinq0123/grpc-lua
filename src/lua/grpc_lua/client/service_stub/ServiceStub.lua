@@ -40,7 +40,6 @@ function ServiceStub:new(c_channel, service_name)
         -- private:
         _c_stub = c.ServiceStub(c_channel),
         _c_channel = c_channel,
-        _c_completion_queue = _c_stub:get_completion_queue(),  -- XXX
 
         -- Error callback for async request.
         -- `function(error_str, status_code)`
@@ -176,9 +175,9 @@ end  -- sync_request_read()
 function ServiceStub:async_request_write(method_name)
     local mi = self:_get_method_info(method_name)
     mi:assert_client_side_streaming()
+    local c_cq = _c_stub:get_completion_queue(),
     return ClientAsyncWriter:new(self._c_channel, mi.request_name,
-        self._c_completion_queue, mi.request_type, mi.response_type,
-        self._timeout_sec)
+        c_cq, mi.request_type, mi.response_type, self._timeout_sec)
 end  -- async_request_write()
 
 --- Sync request bi-directional streaming rpc.
