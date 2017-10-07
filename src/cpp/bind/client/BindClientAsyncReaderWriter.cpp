@@ -1,5 +1,6 @@
 #include "BindClientAsyncReaderWriter.h"
 
+#include "impl/CbWrapper.h"
 #include "impl/GetTimeoutMs.h"
 
 #include <grpc_cb_core/client/client_async_reader_writer.h>  // for ClientAsyncReaderWriter
@@ -19,20 +20,9 @@ ClientAsyncReaderWriter GetClientAsyncReaderWriter(const ChannelSptr& pChannel,
 {
     assert(pCq);
     int64_t nTimeoutMs = impl::GetTimeoutMs(timeoutSec);
-    StatusCb cbStatus;
-    if (luaStatusCb)
-    {
-        // luaStatusCb is function(error_str, status_code)
-        cbStatus = [luaStatusCb](const Status& status)
-        {
-            if (status.ok()) luaStatusCb(nullptr, status.GetCode());
-            else luaStatusCb(status.GetDetails(), status.GetCode());
-        };
-        // XXX extract FromLuaStatusCb() ?
-    }
-
-    return ClientAsyncReaderWriter(pChannel,
-        sMethod, pCq, nTimeoutMs, cbStatus);
+    StatusCb cbStatus = CbWrapper::WrapLuaStatusCb(luaStatusCb);
+    return ClientAsyncReaderWriter(pChannel, sMethod, pCq,
+                                   nTimeoutMs, cbStatus);
 }
 
 // return string|nil, nil means error or end

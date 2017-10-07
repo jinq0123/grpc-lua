@@ -21,14 +21,14 @@ void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
     pServiceStub->SetErrorCb(CbWrapper::WrapLuaErrorCb(luaErrorCb));
-}
+}  // SetErrorCb()
 
 void SetTimeoutSec(ServiceStub* pServiceStub, const LuaRef& luaTimeoutSec)
 {
     assert(pServiceStub);
     int64_t nTimeoutMs = impl::GetTimeoutMs(luaTimeoutSec);
     pServiceStub->SetCallTimeoutMs(nTimeoutMs);
-}
+}  // SetTimeoutSec()
 
 // Sync request.
 // Return (response_str|nil, error_str|nil, status_code).
@@ -72,7 +72,7 @@ void AsyncRequestRead(ServiceStub* pServiceStub,
         pServiceStub->GetCallTimeoutMs());
     reader.ReadEach(CbWrapper::WrapLuaMsgCb(luaMsgCb),
         CbWrapper::WrapLuaErrorCb(luaStatusCb));
-}
+}  // AsyncRequestRead()
 
 }  // namespace
 
