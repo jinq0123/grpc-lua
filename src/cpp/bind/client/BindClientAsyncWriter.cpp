@@ -25,19 +25,20 @@ ClientAsyncWriter GetClientAsyncWriter(const ChannelSptr& pChannel,
 void Close(ClientAsyncWriter* pWriter, LuaRef& luaCloseCb)
 {
     assert(pWriter);
-    if (!luaCloseCb)
+    CloseCb cbClose;  // default empty callback
+    if (luaCloseCb)
     {
-        pWriter->Close(CloseCb());  // use empty callback
-        return;
-    }
-
-    pWriter->Close(
-        [luaCloseCb](const Status& status, const std::string& sResponse) {
+        cbClose = [luaCloseCb](const Status& status,
+            const std::string& sResponse)
+        {
             if (status.ok())
                 luaCloseCb(sResponse, nullptr, status.GetCode());
             else
                 luaCloseCb(nullptr, status.GetDetails(), status.GetCode());
-        });
+        };
+    }
+
+    pWriter->Close(cbClose);
 }  // Close()
 
 }  // namespace
