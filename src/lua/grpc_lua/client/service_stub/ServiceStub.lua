@@ -191,6 +191,18 @@ function ServiceStub:sync_request_rdwr(method_name)
         mi.request_name, mi.request_type, mi.response_type, self._timeout_sec);
 end  -- sync_request_rdwr()
 
+--- Async request bi-directional streaming rpc.
+-- Will return immediately.
+-- @string method_name method name
+-- @treturn ClientAsyncReaderWriter
+function ServiceStub:async_request_rdwr(method_name)
+    local mi = self:_get_method_info(method_name)
+    mi:assert_bidirectional_streaming()
+    -- XXX
+    return ClientAsyncReaderWriter:new(self._c_channel,
+        mi.request_name, mi.request_type, mi.response_type, self._timeout_sec);
+end  -- async_request_rdwr()
+
 --- Blocking run.
 function ServiceStub:run()
     self._c_stub:run()
