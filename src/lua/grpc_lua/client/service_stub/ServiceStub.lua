@@ -194,8 +194,9 @@ end  -- sync_request_rdwr()
 --- Async request bi-directional streaming rpc.
 -- Will return immediately.
 -- @string method_name method name
+-- @tparam function|nil error_cb error callback, `function(error_str|nil, status_code)`
 -- @treturn ClientAsyncReaderWriter
-function ServiceStub:async_request_rdwr(method_name)
+function ServiceStub:async_request_rdwr(method_name, error_cb)
     local mi = self:_get_method_info(method_name)
     mi:assert_bidirectional_streaming()
     -- XXX

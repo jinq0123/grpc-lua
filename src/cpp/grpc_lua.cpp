@@ -1,5 +1,6 @@
 // client
 #include "bind/client/BindChannel.h"
+#include "bind/client/BindClientAsyncReaderWriter.h"
 #include "bind/client/BindClientAsyncWriter.h"
 #include "bind/client/BindClientSyncReader.h"
 #include "bind/client/BindClientSyncReaderWriter.h"
@@ -22,6 +23,7 @@ int luaopen_grpc_lua_c(lua_State* L)
 
     // client
     bind::BindChannel(mod);
+    bind::BindClientAsyncReaderWriter(mod);
     bind::BindClientAsyncWriter(mod);
     bind::BindClientSyncReader(mod);
     bind::BindClientSyncReaderWriter(mod);

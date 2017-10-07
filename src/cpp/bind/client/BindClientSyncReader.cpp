@@ -46,6 +46,6 @@ void BindClientSyncReader(const LuaRef& mod)
                 return ReadOne(*pReader, L);
             })
     .endClass();
-}  // ClientSyncReader()
+}  // BindClientSyncReader()
 
 }  // namespace bind

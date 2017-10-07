@@ -182,9 +182,9 @@ local function route_chat_async()
 
     -- XXX
     local rdwr = stub.async_request_rdwr("RouteChat",
-        function(status)
-            if not status.ok then
-                print("RouteChat rpc failed. " .. inspect(status))
+        function(error_str, status_code)
+            if error_str then
+                print(string.format("RouteChat rpc failed. (%d)%s", status_code, error_str)
             end  -- if
             stub.shutdown()  -- to break run()
         end)

@@ -47,6 +47,6 @@ void BindClientSyncReaderWriter(const LuaRef& mod)
         .addFunction("write", &ClientSyncReaderWriter::Write)
         .addFunction("close_writing", &ClientSyncReaderWriter::CloseWriting)
     .endClass();
-}  // ClientSyncWriter()
+}  // BindClientSyncReaderWriter()
 
 }  // namespace bind

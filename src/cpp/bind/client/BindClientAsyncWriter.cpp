@@ -53,6 +53,6 @@ void BindClientAsyncWriter(const LuaRef& mod)
         .addFunction("write", &ClientAsyncWriter::Write)
         .addFunction("close", &Close)
     .endClass();
-}  // ClientAsyncWriter()
+}  // BindClientAsyncWriter()
 
 }  // namespace bind

@@ -10,6 +10,7 @@ local ClientAsyncWriter = {}
 --- Constructor.
 -- @tparam Channel c_channel
 -- @string request_name like "/routeguide.RouteGuide/ListFeatures"
+-- @param c_completion_queue C completion queue object
 -- @string request_type
 -- @string response_type
 -- @tparam number|nil timeout_sec nil means no timeout

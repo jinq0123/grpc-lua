@@ -47,6 +47,6 @@ void BindClientSyncWriter(const LuaRef& mod)
                 Close(*pWriter, L);
             })
     .endClass();
-}  // ClientSyncWriter()
+}  // BindClientSyncWriter()
 
 }  // namespace bind
