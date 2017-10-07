@@ -199,7 +199,6 @@ end  -- sync_request_rdwr()
 function ServiceStub:async_request_rdwr(method_name, error_cb)
     local mi = self:_get_method_info(method_name)
     mi:assert_bidirectional_streaming()
-    -- XXX
     return ClientAsyncReaderWriter:new(self._c_channel,
         mi.request_name, mi.request_type, mi.response_type, self._timeout_sec);
 end  -- async_request_rdwr()
