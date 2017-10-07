@@ -98,7 +98,7 @@ end  -- sync_record_route()
 local function sync_route_chat()
     print("Sync route chat...")
     local stub = new_stub()
-    local sync_rdwr = stub.sync_request_rdwr("RouteChat")  -- XXX
+    local sync_rdwr = stub.sync_request_rdwr("RouteChat")
 
     for _, note in ipairs(notes) do
         -- write one then read one
@@ -163,10 +163,10 @@ local function record_route_async()
     end  -- for
 
     -- Recv reponse and status.
-    async_writer.close(  -- XXX
+    async_writer.close(
         function(resp, error_str, status_code)
-            assert("table" == type(resp))
             if resp then
+                assert("table" == type(resp))
                 print_route_summary(resp)
             else
                 print(string.format("RecordRoute rpc failed. (%d)%s", status_code, error_str)
