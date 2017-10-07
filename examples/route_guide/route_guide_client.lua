@@ -153,25 +153,23 @@ end  -- list_features_async()
 local function record_route_async()
     print("Record route async...")
     local stub = new_stub()
-    -- XXX // ClientAsyncWriter<Point, RouteSummary> async_writer;
     local async_writer = stub.async_request_write("RecordRoute")
     for i = 1, 10 do
         local f = db.get_rand_feature()
         local loc = f.location
         print(string.format("Visiting point %f,%f", 
               loc.latitude/kCoordFactor, loc.longitude/kCoordFactor))
-        -- XXX
         if not async_writer:write(loc) do break end  -- Broken stream.
     end  -- for
 
     -- Recv reponse and status.
     async_writer.close(  -- XXX
-        function(status, resp)
+        function(resp, error_str, status_code)
             assert("table" == type(resp))
-            if not status.ok then
-                print("RecordRoute rpc failed. "..inspect(status))
-            else
+            if resp then
                 print_route_summary(resp)
+            else
+                print(string.format("RecordRoute rpc failed. (%d)%s", status_code, error_str)
             end  -- if
             stub.shutdown()  -- to break run()
         end)
