@@ -8,6 +8,7 @@ local c = require("grpc_lua.c")  -- from grpc_lua.so
 local pb = require("luapbintf")
 local MethodInfo = require("grpc_lua.impl.MethodInfo")
 local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
+local ClientAsyncWriter = require("grpc_lua.client.sync.ClinetAsyncWriter")
 local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
 local ClientSyncReaderWriter = require("grpc_lua.client.sync.ClinetSyncReaderWriter")
 local mcb_wrapper = require("grpc_lua.client.service_stub.msg_cb_wrapper")
@@ -86,7 +87,7 @@ end
 -- @usage request("SayHello", { name = "Jq" })
 function ServiceStub:sync_request(method_name, request)
     assert("table" == type(request))
-    local mi = self:_get_method_info(method)
+    local mi = self:_get_method_info(method_name)
     assert(mi:is_simple_rpc(), method_name .. " is not simple rpc method.")
 
     local request_str = pb.encode(mi.request_type, request)
@@ -220,12 +221,12 @@ end  -- _get_method_info()
 -- @tparam booleam is_sync is ClientSyncWriter, false means ClientAsyncWriter
 -- @treturn ClientSyncWriter|ClientAsyncWriter writer object
 function ServiceStub:new_writer(method_name, is_sync)
-    local mi = self:_get_method_info(method)
+    local mi = self:_get_method_info(method_name)
     assert(mi:is_client_side_streaming(),
-        method_name .. " is not client side streaming rpc method."))
+        method_name .. " is not client side streaming rpc method.")
 
     local Writer = ClientAsyncWriter
-    if is_sync the Writer = ClientSyncWriter
+    if is_sync then Writer = ClientSyncWriter end
     return Writer:new(self._c_channel, mi.request_name, mi.request_type,
         mi.response_type, self._timeout_sec)
 end  -- new_writer()
