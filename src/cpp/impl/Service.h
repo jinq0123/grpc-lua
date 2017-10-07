@@ -13,6 +13,10 @@ class MethodDescriptor;
 class ServiceDescriptor;
 }}  // namespace google::protobuf
 
+namespace LuaIntf {
+class LuaString;
+}  // namespace LuaIntf
+
 namespace impl {
 
 // Adapt lua service table to grpc_cb_core::Service.
@@ -37,6 +41,8 @@ private:
     void InitMethodNames();
     const google::protobuf::MethodDescriptor& GetMthdDesc(
         size_t iMthdIdx) const;
+    void CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
+        const grpc_cb_core::CallSptr& call_sptr);
 
 private:
     const ServiceDescriptor& m_desc;

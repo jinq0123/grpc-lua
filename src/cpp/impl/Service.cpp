@@ -68,20 +68,12 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
     assert(iMthdIdx < GetMethodCount());
     if (!request) return;
 
-    const google::protobuf::MethodDescriptor& mthd = GetMthdDesc(iMthdIdx);
-    const std::string& sReqType = mthd.input_type()->full_name();
-    const std::string& sRespType = mthd.output_type()->full_name();
-    // Like "SayHello", NOT Service::GetMethodName().
-    const std::string& sMethodName = mthd.name();
     grpc_slice req_slice = BufToSlice(request);
     {
         LuaIntf::LuaString strReq(reinterpret_cast<const char*>(
             GRPC_SLICE_START_PTR(req_slice)),
             GRPC_SLICE_LENGTH(req_slice));
-        assert(m_pLuaService->isTable());
-        using Replier = grpc_cb_core::ServerReplier;
-        m_pLuaService->dispatch("call_method", sMethodName,
-            sReqType, strReq, Replier(call_sptr), sRespType);
+        CallMethod(iMthdIdx, strReq, call_sptr);
     }
     grpc_slice_unref(req_slice);
 }
@@ -111,6 +103,23 @@ Service::GetMthdDesc(size_t iMthdIdx) const
 {
     assert(m_desc.method(static_cast<int>(iMthdIdx)));
     return *m_desc.method(static_cast<int>(iMthdIdx));
+}
+
+void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
+    const grpc_cb_core::CallSptr& call_sptr)
+{
+    assert(iMthdIdx < GetMethodCount());
+
+    const google::protobuf::MethodDescriptor& mthd = GetMthdDesc(iMthdIdx);
+    const std::string& sReqType = mthd.input_type()->full_name();
+    const std::string& sRespType = mthd.output_type()->full_name();
+    // Like "SayHello", NOT Service::GetMethodName().
+    const std::string& sMethodName = mthd.name();
+
+    assert(m_pLuaService->isTable());
+    using Replier = grpc_cb_core::ServerReplier;
+    m_pLuaService->dispatch("call_method", sMethodName,
+        sReqType, strReq, Replier(call_sptr), sRespType);
 }
 
 }  // namespace impl
