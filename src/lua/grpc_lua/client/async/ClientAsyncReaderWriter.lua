@@ -44,6 +44,12 @@ function ClientAsyncWriter:write(message)
     self._c_writer.write(msg_str)
 end  -- write()
 
+--- Close writing.
+-- Optional. Writing is auto closed in dtr().
+function ClientAsyncReaderWriter:close_writing()
+    self._c_rdwr.close_writing()
+end  -- close_writing()
+
 -------------------------------------------------------------------------------
 --- Private functions.
 -- @section private
