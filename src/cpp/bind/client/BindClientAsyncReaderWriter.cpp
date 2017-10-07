@@ -5,8 +5,8 @@
 
 #include <grpc_cb_core/client/client_async_reader_writer.h>  // for ClientAsyncReaderWriter
 #include <grpc_cb_core/common/status.h>  // for Status
-#include <LuaIntf/LuaIntf.h>
 
+#include <LuaIntf/LuaIntf.h>
 #include <string>
 
 using namespace grpc_cb_core;
@@ -25,15 +25,12 @@ ClientAsyncReaderWriter GetClientAsyncReaderWriter(const ChannelSptr& pChannel,
                                    nTimeoutMs, cbStatus);
 }
 
-// return string|nil, nil means error or end
-//LuaRef ReadOne(const ClientSyncReaderWriter& rw, lua_State* L)
-//{
-//    assert(L);
-//    std::string sMsg;
-//    if (rw.ReadOne(&sMsg))
-//        return LuaRef::fromValue(L, sMsg);
-//    return LuaRef(L, nullptr);
-//}
+// luaMsgCb is nil or function(string)
+void ReadEach(ClientAsyncReaderWriter* pRw, const LuaRef& luaMsgCb)
+{
+    assert(pRw);
+    pRw->ReadEach(CbWrapper::WrapLuaMsgCb(luaMsgCb));
+}
 
 }  // namespace
 
@@ -45,11 +42,7 @@ void BindClientAsyncReaderWriter(const LuaRef& mod)
     assert(L);
     LuaBinding(mod).beginClass<ClientAsyncReaderWriter>("ClientAsyncReaderWriter")
         .addFactory(&GetClientAsyncReaderWriter)
-        //.addFunction("read_one",
-        //    [L](const ClientSyncReaderWriter* pRdWr) {
-        //        assert(pRdWr);
-        //        return ReadOne(*pRdWr, L);
-        //    })
+        .addFunction("read_each", &ReadEach)
         .addFunction("write", &ClientAsyncReaderWriter::Write)
         .addFunction("close_writing", &ClientAsyncReaderWriter::CloseWriting)
     .endClass();

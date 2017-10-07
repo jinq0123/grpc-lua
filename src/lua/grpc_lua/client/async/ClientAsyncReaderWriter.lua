@@ -35,6 +35,19 @@ function ClientAsyncReaderWriter:new(c_channel, request_name,
     return rdwr
 end  -- new()
 
+--- Read each message.
+-- @tparam function|nil msg_cb message callback, nil to ignore all messages
+-- `function(table)`
+-- @treturn table|nil message table, nil means error or end
+function ClientAsyncReaderWriter:read_each(msg_cb)
+    local msg_str_cb = nil  -- nil|function(string)
+    if msb_cb then
+        assert("function" == type(msg_cb))
+        msg_str_cb = mcb_wrapper.wrap(msg_cb, self._respones_type)
+    end
+    self._c_rdwr.read_each(msg_str_cb)
+end  -- read_one()
+
 --- Write message.
 -- @table message
 -- @treturn boolean return false on error

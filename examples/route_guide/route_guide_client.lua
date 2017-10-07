@@ -190,10 +190,13 @@ local function route_chat_async()
 
     for _, note in ipairs(notes) do
         print("Sending message: " .. inspect(note))
-        rdwr.write(note)  -- XXX
+        rdwr.write(note)
     end
     rdwr.close_writing()  -- Optional.
-    rdwr.read_each(print_server_note)  -- XXX
+    rdwr.read_each(function(server_note)
+        assert("table" == type(server_note))
+        print("Got message: "..inspect(server_note))
+    end)
 
     stub.run()  -- until shutdown()
 end  -- route_chat_async()
