@@ -8,33 +8,34 @@ local M = {}
 
 local pb = require("luapbintf")
 
---- Async request callback.
--- @string response_type
--- @string response_str
--- @func response_cb `function(table)`
+--- Async msg callback.
+-- @string msg_type
+-- @string msg_str
+-- @func msg_cb `function(table)`
 -- @func[opt] error_cb `function(string, int)`
-local function on_response_str(
-        response_type, response_str, response_cb, error_cb)
-    local response = pb.decode(response_type, response_str)
-    if response then
-        response_cb(response)
+local function on_msg_str(
+        msg_type, msg_str, msg_cb, error_cb)
+    assert("funciton" == type(msg_cb))
+    local msg = pb.decode(msg_type, msg_str)
+    if msg then
+        msg_cb(msg)
         return
     end
     if error_cb then
         -- GRPC_STATUS_INTERNAL = 13
-        error_cb("Failed to decode response.", 13)
+        error_cb("Failed to decode message.", 13)
     end
-end  -- on_response_str()
+end  -- on_msg_str()
 
 -------------------------------------------------------------------------------
 --- Public functions.
 -- @section public
 
 --- Wrap message callback into string callback.
--- @func response_cb `function(table)`
--- @string response_type
+-- @tparam function|nil msg_cb message callback `function(table)`
+-- @string msg_type message type
 -- @func[opt] error_cb `function(error_str, status_code)`
--- @treturn function `function(string)`
+-- @treturn function|nil `function(string)`
 -- @usage
 -- M.wrap(
 --     function(message)
@@ -45,14 +46,14 @@ end  -- on_response_str()
 --         assert(not error_str or "string" == type(error_str))
 --         assert("number" == type(status_code))
 --     end)
-function M.wrap(response_cb, response_type, error_cb)
-    assert("function" == type(response_cb))
-    assert("string" == response_type)
+function M.wrap(msg_cb, msg_type, error_cb)
+    if not msg_cb then return nil end
+    assert("function" == type(msg_cb))
+    assert("string" == msg_type)
     assert(not error_cb or "function" == type(error_cb))
 
-    return function(response_str)
-        on_response_str(response_type, response_str,
-            response_cb, error_cb)
+    return function(msg_str)
+        on_msg_str(msg_type, msg_str, msg_cb, error_cb)
     end
 end  -- wrap()
 
