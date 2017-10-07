@@ -50,7 +50,7 @@ void BindClientAsyncReaderWriter(const LuaRef& mod)
         //        assert(pRdWr);
         //        return ReadOne(*pRdWr, L);
         //    })
-        //.addFunction("write", &ClientSyncReaderWriter::Write)
+        .addFunction("write", &ClientAsyncReaderWriter::Write)
         //.addFunction("close_writing", &ClientSyncReaderWriter::CloseWriting)
     .endClass();
 }  // BindClientAsyncReaderWriter()

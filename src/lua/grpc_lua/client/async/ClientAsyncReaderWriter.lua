@@ -8,17 +8,6 @@ local ClientAsyncReaderWriter = {}
 -- @section public
 
 --- Constructor.
--- @treturn table object
-function ClientAsyncReaderWriter:new()
-    local rdwr = {
-    }
-
-    setmetatable(rdwr, self)
-    self.__index = self
-    return rdwr
-end  -- new()
-
---- Constructor.
 -- @tparam Channel c_channel
 -- @string request_name, like "/routeguide.RouteGuide/RouteChat"
 -- @param c_completion_queue C completion queue object
@@ -36,7 +25,7 @@ function ClientAsyncReaderWriter:new(c_channel, request_name,
     local rdwr = {
         -- private:
         _c_rdwr = c.ClientAsyncReaderWriter(c_channel, request_name,
-            c_completioin_queue, timeout_sec),
+            c_completion_queue, timeout_sec),
         _request_type = request_type,
         _response_type = response_type,
     }
@@ -45,6 +34,15 @@ function ClientAsyncReaderWriter:new(c_channel, request_name,
     self.__index = self
     return rdwr
 end  -- new()
+
+--- Write message.
+-- @table message
+-- @treturn boolean return false on error
+function ClientAsyncWriter:write(message)
+    assert("table" == type(message))
+    local msg_str = pb.encode(self._request_type, message)
+    self._c_writer.write(msg_str)
+end  -- write()
 
 -------------------------------------------------------------------------------
 --- Private functions.

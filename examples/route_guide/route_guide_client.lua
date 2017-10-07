@@ -180,7 +180,6 @@ local function route_chat_async()
     print("Route chat async...")
     local stub = new_stub()
 
-    -- XXX
     local rdwr = stub.async_request_rdwr("RouteChat",
         function(error_str, status_code)
             if error_str then
