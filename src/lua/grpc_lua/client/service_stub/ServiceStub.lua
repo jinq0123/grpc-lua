@@ -40,6 +40,7 @@ function ServiceStub:new(c_channel, service_name)
         -- private:
         _c_stub = c.ServiceStub(c_channel),
         _c_channel = c_channel,
+        _c_completion_queue = _c_stub:get_completion_queue(),  -- XXX
 
         -- Error callback for async request.
         -- `function(error_str, status_code)`
@@ -162,7 +163,10 @@ end  -- async_request_read()
 -- @string method_name method name
 -- @treturn ClientSyncWriter
 function ServiceStub:sync_request_write(method_name)
-    return self:new_writer(method_name, true)  -- is_sync = true
+    local mi = self:_get_method_info(method_name)
+    mi:assert_client_side_streaming()
+    return ClientSyncWriter:new(self._c_channel, mi.request_name,
+        mi.request_type, mi.response_type, self._timeout_sec)
 end  -- sync_request_read()
 
 --- Async request client side streaming rpc.
@@ -170,7 +174,11 @@ end  -- sync_request_read()
 -- @string method_name method name
 -- @treturn ClientAsyncWriter
 function ServiceStub:async_request_write(method_name)
-    return self:new_writer(method_name, false)  -- is_sync = false
+    local mi = self:_get_method_info(method_name)
+    mi:assert_client_side_streaming()
+    return ClientAsyncWriter:new(self._c_channel, mi.request_name,
+        self._c_completion_queue, mi.request_type, mi.response_type,
+        self._timeout_sec)
 end  -- async_request_write()
 
 --- Sync request bi-directional streaming rpc.
@@ -211,18 +219,5 @@ function ServiceStub:_get_method_info(method_name)
     self._method_info_map[method_name] = method_info
     return method_info
 end  -- _get_method_info()
-
---- New a ClientSyncWriter or ClientAsyncWriter.
--- @string method_name method name
--- @tparam booleam is_sync is ClientSyncWriter, false means ClientAsyncWriter
--- @treturn ClientSyncWriter|ClientAsyncWriter writer object
-function ServiceStub:new_writer(method_name, is_sync)
-    local mi = self:_get_method_info(method_name)
-    mi:assert_client_side_streaming()
-    local Writer = ClientAsyncWriter
-    if is_sync then Writer = ClientSyncWriter end
-    return Writer:new(self._c_channel, mi.request_name, mi.request_type,
-        mi.response_type, self._timeout_sec)
-end  -- new_writer()
 
 return ServiceStub
