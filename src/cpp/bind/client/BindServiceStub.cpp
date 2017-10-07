@@ -1,5 +1,6 @@
 #include "BindServiceStub.h"
 
+#include "impl/CbWrapper.h"
 #include "impl/GetTimeoutMs.h"
 
 #include <grpc_cb_core/common/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
@@ -16,36 +17,10 @@ using string = std::string;
 
 namespace {
 
-// Convert lua error callback into ErrorCb.
-// function(error_str, status_code) -> void (const Status&)
-ErrorCb FromLuaErrorCb(const LuaRef& luaErrorCb)
-{
-    if (!luaErrorCb) return ErrorCb();
-    luaErrorCb.checkFunction();  // function(string, int)
-    return [luaErrorCb](const Status& status) {
-        // Need to nil error_str if no error.
-        if (status.ok())
-            luaErrorCb(nullptr, status.GetCode());
-        else
-            luaErrorCb(status.GetDetails(), status.GetCode());
-    };
-}
-
-// Convert lua message callback into MsgCb.
-// function(string) -> void (const string&)
-MsgCb FromLuaMsgCb(const LuaRef& luaMsgCb)
-{
-    if (!luaMsgCb) return MsgCb();
-    luaMsgCb.checkFunction();  // function(string)
-    return [luaMsgCb](const string& sMsg) {
-        luaMsgCb(sMsg);
-    };
-}
-
 void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
-    pServiceStub->SetErrorCb(FromLuaErrorCb(luaErrorCb));
+    pServiceStub->SetErrorCb(CbWrapper::WrapLuaErrorCb(luaErrorCb));
 }
 
 void SetTimeoutSec(ServiceStub* pServiceStub, const LuaRef& luaTimeoutSec)
@@ -83,8 +58,8 @@ void AsyncRequest(ServiceStub* pServiceStub,
     const LuaRef& luaResponseCb, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
-    ResponseCb cbResponse = FromLuaMsgCb(luaResponseCb);
-    ErrorCb cbError = FromLuaErrorCb(luaErrorCb);
+    ResponseCb cbResponse = CbWrapper::WrapLuaMsgCb(luaResponseCb);
+    ErrorCb cbError = CbWrapper::WrapLuaErrorCb(luaErrorCb);
     pServiceStub->AsyncRequest(sMethod, sRequest, cbResponse, cbError);
 }  // AsyncRequest()
 
@@ -95,7 +70,8 @@ void AsyncRequestRead(ServiceStub* pServiceStub,
     ClientAsyncReader reader(pServiceStub->GetChannelSptr(),
         sMethod, sRequest, pServiceStub->GetCompletionQueue(),
         pServiceStub->GetCallTimeoutMs());
-    reader.ReadEach(FromLuaMsgCb(luaMsgCb), FromLuaErrorCb(luaStatusCb));
+    reader.ReadEach(CbWrapper::WrapLuaMsgCb(luaMsgCb),
+        CbWrapper::WrapLuaErrorCb(luaStatusCb));
 }
 
 }  // namespace
