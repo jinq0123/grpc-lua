@@ -88,8 +88,7 @@ end
 function ServiceStub:sync_request(method_name, request)
     assert("table" == type(request))
     local mi = self:_get_method_info(method_name)
-    assert(mi:is_simple_rpc(), method_name .. " is not simple rpc method.")
-
+    mi:assert_simple_rpc()
     local request_str = pb.encode(mi.request_type, request)
     local response_str, error_str, status_code =
         self._c_stub:sync_request(mi.request_name, request_str)
@@ -105,7 +104,7 @@ function ServiceStub:async_request(method_name, request, response_cb)
     assert("table" == type(request))
     assert(nil == response_cb or "function" == type(response_cb))
     local mi = self:_get_method_info(method_name)
-    assert(mi:is_simple_rpc(), method_name .. " is not simple rpc method.")
+    mi:assert_simple_rpc()
     local request_str = pb.encode(mi.request_type, request)
     -- Need to wrap the response callback.
     local response_str_cb = mcb_wrapper.wrap(
@@ -122,8 +121,7 @@ end  -- async_request()
 function ServiceStub:sync_request_read(method_name, request)
     assert("table" == type(request))
     local mi = self:get_method_info(method_name)
-    assert(mi:is_server_side_streaming(),
-        method_name .. " is not server side streaming rpc method.")
+    mi:assert_server_side_streaming()
     local req_str = pb:encode(mi.request_type, request)
     return ClientSyncReader:new(self._c_channel, mi.request_name,
         req_str, mi.response_type, self._timeout_sec)
@@ -150,8 +148,7 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     status_cb = status_cb or self._error_cb
     assert(not status_cb or "function" == type(status_cb))
     local mi = self:get_method_info(method_name)
-    assert(mi:is_server_side_streaming(),
-        method_name .. " is not server side streaming rpc method.")
+    mi:assert_server_side_streaming()
 
     local req_str = pb.encode(mi.request_type, request)
     -- Need to wrap the message callback.
@@ -182,8 +179,7 @@ end  -- async_request_write()
 -- @treturn ClientSyncReaderWriter
 function ServiceStub:sync_request_rdwr(method_name)
     local mi = self:_get_method_info(method_name)
-    assert(mi:is_bidirectional_streaming(),
-        method_name .. " is not bi-directional streaming rpc method.")
+    mi:assert_bidirectional_streaming()
     return ClientSyncReaderWriter:new(self._c_channel,
         mi.request_name, mi.request_type, mi.response_type, self._timeout_sec);
 end  -- sync_request_rdwr()
@@ -222,9 +218,7 @@ end  -- _get_method_info()
 -- @treturn ClientSyncWriter|ClientAsyncWriter writer object
 function ServiceStub:new_writer(method_name, is_sync)
     local mi = self:_get_method_info(method_name)
-    assert(mi:is_client_side_streaming(),
-        method_name .. " is not client side streaming rpc method.")
-
+    mi:assert_client_side_streaming()
     local Writer = ClientAsyncWriter
     if is_sync then Writer = ClientSyncWriter end
     return Writer:new(self._c_channel, mi.request_name, mi.request_type,
