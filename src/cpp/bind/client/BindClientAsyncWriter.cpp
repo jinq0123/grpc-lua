@@ -27,7 +27,7 @@ void Close(ClientAsyncWriter* pWriter, LuaRef& luaCloseCb)
     assert(pWriter);
     if (!luaCloseCb)
     {
-        pWriter->Close();
+        pWriter->Close(CloseCb());  // use empty callback
         return;
     }
 
