@@ -3,6 +3,7 @@
 #include "impl/GetTimeoutMs.h"
 
 #include <grpc_cb_core/client/client_async_writer.h>  // for ClientAsyncWriter
+#include <grpc_cb_core/common/status.h>  // for Status
 #include <LuaIntf/LuaIntf.h>
 
 #include <string>
@@ -21,16 +22,23 @@ ClientAsyncWriter GetClientAsyncWriter(const ChannelSptr& pChannel,
     return ClientAsyncWriter(pChannel, sMethod, pCq, nTimeoutMs);
 }
 
-//std::tuple<LuaRef, std::string, grpc_status_code>
-//Close(const ClientSyncWriter& writer, lua_State* L)
-//{
-//    assert(L);
-//    std::string response;
-//    Status status = writer.Close(&response);
-//    LuaRef result = LuaRef(L, nullptr);
-//    if (status.ok()) result = LuaRef::fromValue(L, response);
-//    return std::make_tuple(result, status.GetDetails(), status.GetCode());
-//}  // Close()
+void Close(ClientAsyncWriter* pWriter, LuaRef& luaCloseCb)
+{
+    assert(pWriter);
+    if (!luaCloseCb)
+    {
+        pWriter->Close();
+        return;
+    }
+
+    pWriter->Close(
+        [luaCloseCb](const Status& status, const std::string& sResponse) {
+            if (status.ok())
+                luaCloseCb(sResponse, nullptr, status.GetCode());
+            else
+                luaCloseCb(nullptr, status.GetDetails(), status.GetCode());
+        });
+}  // Close()
 
 }  // namespace
 
@@ -43,11 +51,7 @@ void BindClientAsyncWriter(const LuaRef& mod)
     LuaBinding(mod).beginClass<ClientAsyncWriter>("ClientAsyncWriter")
         .addFactory(&GetClientAsyncWriter)
         .addFunction("write", &ClientAsyncWriter::Write)
-        //.addFunction("close",
-        //    [L](const ClientSyncWriter* pWriter) {
-        //        assert(pWriter);
-        //        Close(*pWriter, L);
-        //    })
+        .addFunction("close", &Close)
     .endClass();
 }  // ClientAsyncWriter()
 
