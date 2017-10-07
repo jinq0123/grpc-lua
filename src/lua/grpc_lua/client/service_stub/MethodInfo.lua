@@ -6,6 +6,14 @@ local MethodInfo = {}
 
 local pb = require("luapbintf")
 
+--- Get request name.
+-- @string service_name full service name, like "helloword.Greeter"
+-- @string method_name method name, like "SayHello"
+-- @treturn request name, like "/helloworld.Greeter/SayHello"
+local function get_request_name(service_name, method_name)
+    return "/" .. service_name .. "/" .. method_name
+end  -- get_request_name()
+
 -------------------------------------------------------------------------------
 --- Public functions.
 -- @section public
@@ -18,6 +26,7 @@ function MethodInfo:new(service_name, method_name)
     local info = {
         -- service_name = service_name,
         -- method_name = method_name,
+        request_name = get_request_name(service_name, method_name)
         request_type = pb.get_rpc_input_name(service_name, method_name),
         response_type = pb.get_rpc_output_name(service_name, method_name),
         is_client_streaming = pb.is_rpc_client_streaming(service_name, method_name),
