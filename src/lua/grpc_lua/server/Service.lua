@@ -25,14 +25,14 @@ function Service:new(svc_impl)
     return svc
 end  -- new()
 
---- Call service method.
+--- Call simple rpc service method.
 -- @string method_name method name, like: "SayHello"
 -- @string request_type request type, like: "helloworld.HelloRequest"
 -- @string request_str request message string
 -- @tparam userdata c_replier C replier object
 -- @string response_type response type, like: "helloworld.HelloResponse"
-function Service:call_method(method_name, request_type, request_str,
-                                c_replier, response_type)
+function Service:call_simple_method(method_name, request_type, request_str,
+                                    c_replier, response_type)
     assert("string" == type(method_name))
     assert("string" == type(request_type))
     assert("string" == type(request_str))

@@ -117,9 +117,26 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
     const std::string& sMethodName = mthd.name();
 
     assert(m_pLuaService->isTable());
-    using Replier = grpc_cb_core::ServerReplier;
-    m_pLuaService->dispatch("call_method", sMethodName,
-        sReqType, strReq, Replier(call_sptr), sRespType);
+    if (mthd.client_streaming())
+    {
+        if (mthd.server_streaming())
+        {
+        }
+        else
+        {
+        }
+    }
+    else if (mthd.server_streaming())
+    {
+        // XXX
+        m_pLuaService->dispatch("call_server_side_streaming_method"
+    }
+    else
+    {
+        using Replier = grpc_cb_core::ServerReplier;
+        m_pLuaService->dispatch("call_simple_method", sMethodName,
+            sReqType, strReq, Replier(call_sptr), sRespType);
+    }
 }
 
 }  // namespace impl
