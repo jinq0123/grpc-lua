@@ -42,6 +42,9 @@ function Server:register_service(service_name, service)
     assert("table" == type(service))
     local desc = pb.get_service_descriptor(service_name)
     assert("userdata" == type(desc))  -- a pointer to service descriptor
+
+    -- service impl table is wrapped by lua Service,
+    --  which is then wrapped by C Service, and then is registered in server.
     self.c_svr:register_service(desc, Service:new(service))
 end  -- register_service()
 

@@ -4,10 +4,13 @@
 #include <grpc/byte_buffer.h>  // for grpc_byte_buffer_reader_init()
 #include <grpc/byte_buffer_reader.h>  // for grpc_byte_buffer_reader
 #include <grpc_cb_core/server/server_replier.h>  // for ServerReplier
+#include <grpc_cb_core/server/server_writer.h>  // for ServerWriter
 #include <LuaIntf/LuaIntf.h>
 
 #include <cassert>
 #include <sstream>  // for ostringstream
+
+using namespace grpc_cb_core;
 
 namespace impl {
 
@@ -64,7 +67,7 @@ static grpc_slice BufToSlice(grpc_byte_buffer* buf)
 }
 
 void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
-    const grpc_cb_core::CallSptr& call_sptr)
+    const CallSptr& call_sptr)
 {
     assert(iMthdIdx < GetMethodCount());
     if (!request) return;
@@ -107,7 +110,7 @@ Service::GetMthdDesc(size_t iMthdIdx) const
 }
 
 void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
-    const grpc_cb_core::CallSptr& call_sptr)
+    const CallSptr& call_sptr)
 {
     assert(iMthdIdx < GetMethodCount());
 
@@ -130,13 +133,13 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
     }
     if (mthd.server_streaming())
     {
-        //  XXX m_pLuaService->dispatch("call_s2c_streaming_method", sMethod,
+        m_pLuaService->dispatch("call_s2c_streaming_method", sMethodName,
+            sReqType, strReq, ServerWriter(call_sptr), sRespType);
         return;
     }
 
-    using Replier = grpc_cb_core::ServerReplier;
     m_pLuaService->dispatch("call_simple_method", sMethodName,
-        sReqType, strReq, Replier(call_sptr), sRespType);
+        sReqType, strReq, ServerReplier(call_sptr), sRespType);
 }
 
 }  // namespace impl

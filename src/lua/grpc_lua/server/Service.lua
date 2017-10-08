@@ -45,4 +45,25 @@ function Service:call_simple_method(method_name, request_type, request_str,
     method(request, replier)
 end
 
+--- Call server-to-client streaming rpc method.
+-- @string method_name method name, like: "ListFeatures"
+-- @string request_type request type, like: "helloworld.HelloRequest"
+-- @string request_str request message string
+-- @tparam userdata c_replier C replier object
+-- @string response_type response type, like: "helloworld.HelloResponse"
+function Service:call_s2c_streaming_method(method_name, request_type, request_str,
+                                    c_replier, response_type)
+   XXX
+    assert("string" == type(method_name))
+    assert("string" == type(request_type))
+    assert("string" == type(request_str))
+    assert("userdata" == type(c_replier))
+    assert("string" == type(response_type))
+
+    local method = assert(self.impl[method_name], "No such method: "..method_name)
+    local request = assert(pb.decode(request_type, request_str))
+    local replier = Replier:new(c_replier, response_type)
+    method(request, replier)
+end
+
 return Service
