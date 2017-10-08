@@ -13,7 +13,8 @@ void BindServerWriter(const LuaRef& mod)
 {
     LuaBinding(mod).beginClass<ServerWriter>("ServerWriter")
         .addConstructor(LUA_ARGS(const grpc_cb_core::CallSptr&))
-        // .addFunction("reply", &ServerReplier::Reply)
+        .addFunction("write", &ServerWriter::Write)
+        .addFunction("close", &ServerWriter::AsyncClose)
     .endClass();
 }  // BindServerWriter()
 

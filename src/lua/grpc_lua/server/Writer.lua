@@ -12,16 +12,16 @@ local pb = require("luapbintf")
 --- New Writer.
 -- Used by `Service`. No not call it directly.
 -- @tparam userdata c_writer C `ServerWriter` object
--- @string response_type response type, like "routeguide.Feature"
+-- @string message_type message type, like "routeguide.Feature"
 -- @treturn table Writer object
-function Writer:new(c_writer, response_type)
+function Writer:new(c_writer, message_type)
     assert("userdata" == type(c_writer))
-    assert("string" == type(response_type))
+    assert("string" == type(message_type))
 
     local writer = {
         -- private:
         _c_writer = c_writer,
-        _response_type = response_type,
+        _message_type = message_type,
     }
 
     setmetatable(writer, self)
@@ -29,12 +29,18 @@ function Writer:new(c_writer, response_type)
     return writer
 end  -- new()
 
---- Reply response.
--- @tab response response
---function Replier:reply(response)
---    assert("table" == type(response))
---    local resp_str = pb.encode(self._response_type, response)
---    self._c_replier:reply(resp_str)
---end  -- reply()
+--- Write message.
+-- @tab message
+-- @treturn boolean return false if error
+function Writer:write(message)
+    assert("table" == type(message))
+    local msg_str = pb.encode(self._message_type, message)
+    self._c_writer:writer(msg_str)
+end  -- write()
+
+--- Close writer.
+function Writer:close()
+    self._c_writer:close()
+end  -- close()
 
 return Writer
