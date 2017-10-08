@@ -46,6 +46,7 @@ bool Service::IsMethodClientStreaming(size_t iMthdIdx) const
 
 // Return method name, like: "/helloworld.Greeter/SayHello"
 // Not full_name: "helloworld.Greeter.SayHello"
+// Used by service register.
 const std::string& Service::GetMethodName(size_t iMthdIdx) const
 {
     assert(iMthdIdx < GetMethodCount());
@@ -121,22 +122,21 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
     {
         if (mthd.server_streaming())
         {
+            //  XXX m_pLuaService->dispatch("call_bidi_streaming_method", sMethod,
+            return;
         }
-        else
-        {
-        }
+        //  XXX m_pLuaService->dispatch("call_c2s_streaming_method", sMethod,
+        return;
     }
-    else if (mthd.server_streaming())
+    if (mthd.server_streaming())
     {
-        // XXX
-        m_pLuaService->dispatch("call_server_side_streaming_method"
+        //  XXX m_pLuaService->dispatch("call_s2c_streaming_method", sMethod,
+        return;
     }
-    else
-    {
-        using Replier = grpc_cb_core::ServerReplier;
-        m_pLuaService->dispatch("call_simple_method", sMethodName,
-            sReqType, strReq, Replier(call_sptr), sRespType);
-    }
+
+    using Replier = grpc_cb_core::ServerReplier;
+    m_pLuaService->dispatch("call_simple_method", sMethodName,
+        sReqType, strReq, Replier(call_sptr), sRespType);
 }
 
 }  // namespace impl
