@@ -1,7 +1,7 @@
 #include "BindClientAsyncReaderWriter.h"
 
 #include "impl/CbWrapper.h"
-#include "impl/GetTimeoutMs.h"
+#include "common/GetTimeoutMs.h"
 
 #include <grpc_cb_core/client/client_async_reader_writer.h>  // for ClientAsyncReaderWriter
 #include <grpc_cb_core/common/status.h>  // for Status
@@ -19,7 +19,7 @@ ClientAsyncReaderWriter GetClientAsyncReaderWriter(const ChannelSptr& pChannel,
     const LuaRef& timeoutSec, const LuaRef& luaStatusCb)
 {
     assert(pCq);
-    int64_t nTimeoutMs = impl::GetTimeoutMs(timeoutSec);
+    int64_t nTimeoutMs = util::GetTimeoutMs(timeoutSec);
     StatusCb cbStatus = CbWrapper::WrapLuaStatusCb(luaStatusCb);
     return ClientAsyncReaderWriter(pChannel, sMethod, pCq,
                                    nTimeoutMs, cbStatus);

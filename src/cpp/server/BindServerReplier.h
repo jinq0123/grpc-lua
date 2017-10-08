@@ -1,7 +1,7 @@
 #ifndef BIND_SERVER_BINDSERVERREPLIER_H
 #define BIND_SERVER_BINDSERVERREPLIER_H
 
-#include "impl/LuaRefFwd.h"  // forward LuaRef
+#include "common/LuaRefFwd.h"  // forward LuaRef
 
 namespace bind {
 void BindServerReplier(const LuaIntf::LuaRef& mod);

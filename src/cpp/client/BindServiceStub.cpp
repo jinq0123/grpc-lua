@@ -1,7 +1,7 @@
 #include "BindServiceStub.h"
 
 #include "impl/CbWrapper.h"
-#include "impl/GetTimeoutMs.h"
+#include "common/GetTimeoutMs.h"
 
 #include <grpc_cb_core/common/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
 #include <grpc_cb_core/common/status.h>  // for Status
@@ -26,7 +26,7 @@ void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
 void SetTimeoutSec(ServiceStub* pServiceStub, const LuaRef& luaTimeoutSec)
 {
     assert(pServiceStub);
-    int64_t nTimeoutMs = impl::GetTimeoutMs(luaTimeoutSec);
+    int64_t nTimeoutMs = util::GetTimeoutMs(luaTimeoutSec);
     pServiceStub->SetCallTimeoutMs(nTimeoutMs);
 }  // SetTimeoutSec()
 

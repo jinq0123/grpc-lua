@@ -1,7 +1,7 @@
 #ifndef IMPL_SERVICE_H
 #define IMPL_SERVICE_H
 
-#include "LuaRefFwd.h"  // forward LuaRef
+#include "common/LuaRefFwd.h"  // forward LuaRef
 
 #include <grpc_cb_core/server/service.h>  // for Service and CallSptr
 

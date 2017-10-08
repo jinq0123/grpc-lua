@@ -1,7 +1,7 @@
 #ifndef BIND_SERVER_BINDSERVER_H
 #define BIND_SERVER_BINDSERVER_H
 
-#include "impl/LuaRefFwd.h"  // forward LuaRef
+#include "common/LuaRefFwd.h"  // forward LuaRef
 
 namespace bind {
 void BindServer(const LuaIntf::LuaRef& mod);

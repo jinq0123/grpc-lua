@@ -1,6 +1,6 @@
 #include "BindClientAsyncWriter.h"
 
-#include "impl/GetTimeoutMs.h"
+#include "common/GetTimeoutMs.h"
 
 #include <grpc_cb_core/client/client_async_writer.h>  // for ClientAsyncWriter
 #include <grpc_cb_core/common/status.h>  // for Status
@@ -18,7 +18,7 @@ ClientAsyncWriter GetClientAsyncWriter(const ChannelSptr& pChannel,
     const LuaRef& timeoutSec)
 {
     assert(pCq);
-    int64_t nTimeoutMs = impl::GetTimeoutMs(timeoutSec);
+    int64_t nTimeoutMs = util::GetTimeoutMs(timeoutSec);
     return ClientAsyncWriter(pChannel, sMethod, pCq, nTimeoutMs);
 }
 

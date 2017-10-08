@@ -1,6 +1,6 @@
 #include "BindClientSyncReader.h"
 
-#include "impl/GetTimeoutMs.h"
+#include "common/GetTimeoutMs.h"
 
 #include <grpc_cb_core/client/client_sync_reader.h>  // for ClientSyncReader
 #include <LuaIntf/LuaIntf.h>
@@ -16,7 +16,7 @@ ClientSyncReader GetClientSyncReader(const ChannelSptr& pChannel,
     const std::string& sMethod, const std::string& sRequest,
     const LuaRef& timeoutSec)
 {
-    int64_t nTimeoutMs = impl::GetTimeoutMs(timeoutSec);
+    int64_t nTimeoutMs = util::GetTimeoutMs(timeoutSec);
     return ClientSyncReader(pChannel, sMethod, sRequest, nTimeoutMs);
 }
 

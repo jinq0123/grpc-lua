@@ -1,14 +1,14 @@
 // client
-#include "bind/client/BindChannel.h"
-#include "bind/client/BindClientAsyncReaderWriter.h"
-#include "bind/client/BindClientAsyncWriter.h"
-#include "bind/client/BindClientSyncReader.h"
-#include "bind/client/BindClientSyncReaderWriter.h"
-#include "bind/client/BindClientSyncWriter.h"
-#include "bind/client/BindServiceStub.h"
+#include "client/BindChannel.h"
+#include "client/BindClientAsyncReaderWriter.h"
+#include "client/BindClientAsyncWriter.h"
+#include "client/BindClientSyncReader.h"
+#include "client/BindClientSyncReaderWriter.h"
+#include "client/BindClientSyncWriter.h"
+#include "client/BindServiceStub.h"
 // server
-#include "bind/server/BindServer.h"
-#include "bind/server/BindServerReplier.h"
+#include "server/BindServer.h"
+#include "server/BindServerReplier.h"
 
 #include <LuaIntf/LuaIntf.h>
 

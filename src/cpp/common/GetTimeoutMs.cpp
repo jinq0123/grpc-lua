@@ -2,7 +2,7 @@
 
 #include <LuaIntf/LuaIntf.h>  // for LuaRef
 
-namespace impl {
+namespace util {
 
 int64_t GetTimeoutMs(const LuaIntf::LuaRef& timeoutSec)
 {
@@ -16,4 +16,4 @@ int64_t GetTimeoutMs(const LuaIntf::LuaRef& timeoutSec)
     return INT64_MAX;
 }
 
-}  // namespace impl
+}  // namespace util

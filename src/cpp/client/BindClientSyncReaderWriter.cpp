@@ -1,6 +1,6 @@
 #include "BindClientSyncReaderWriter.h"
 
-#include "impl/GetTimeoutMs.h"
+#include "common/GetTimeoutMs.h"
 
 #include <grpc_cb_core/client/client_sync_reader_writer.h>  // for ClientSyncReaderWriter
 #include <LuaIntf/LuaIntf.h>
@@ -15,7 +15,7 @@ namespace {
 ClientSyncReaderWriter GetClientSyncReaderWriter(const ChannelSptr& pChannel,
     const std::string& sMethod, const LuaRef& timeoutSec)
 {
-    int64_t nTimeoutMs = impl::GetTimeoutMs(timeoutSec);
+    int64_t nTimeoutMs = util::GetTimeoutMs(timeoutSec);
     return ClientSyncReaderWriter(pChannel, sMethod, nTimeoutMs);
 }
 
