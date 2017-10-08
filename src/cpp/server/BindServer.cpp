@@ -26,7 +26,7 @@ void RegisterService(grpc_cb_core::Server* pServer,
 
 }  // namespace
 
-namespace bind {
+namespace server {
 
 void BindServer(const LuaRef& mod)
 {
@@ -42,4 +42,4 @@ void BindServer(const LuaRef& mod)
     .endClass();  // Server
 }  // BindServer()
 
-}  // namespace bind
+}  // namespace server

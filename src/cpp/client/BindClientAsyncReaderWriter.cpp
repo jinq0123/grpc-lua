@@ -34,7 +34,7 @@ void ReadEach(ClientAsyncReaderWriter* pRw, const LuaRef& luaMsgCb)
 
 }  // namespace
 
-namespace bind {
+namespace client {
 
 void BindClientAsyncReaderWriter(const LuaRef& mod)
 {
@@ -48,4 +48,4 @@ void BindClientAsyncReaderWriter(const LuaRef& mod)
     .endClass();
 }  // BindClientAsyncReaderWriter()
 
-}  // namespace bind
+}  // namespace client

@@ -12,7 +12,7 @@ namespace LuaIntf
     LUA_USING_SHARED_PTR_TYPE(std::shared_ptr)
 }
 
-namespace bind {
+namespace client {
 
 void BindChannel(const LuaRef& mod)
 {
@@ -21,4 +21,4 @@ void BindChannel(const LuaRef& mod)
     .endClass();
 }  // BindChannel()
 
-}  // namespace bind
+}  // namespace client

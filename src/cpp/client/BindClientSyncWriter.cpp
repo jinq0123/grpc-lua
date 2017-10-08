@@ -32,7 +32,7 @@ Close(const ClientSyncWriter& writer, lua_State* L)
 
 }  // namespace
 
-namespace bind {
+namespace client {
 
 void BindClientSyncWriter(const LuaRef& mod)
 {
@@ -49,4 +49,4 @@ void BindClientSyncWriter(const LuaRef& mod)
     .endClass();
 }  // BindClientSyncWriter()
 
-}  // namespace bind
+}  // namespace client

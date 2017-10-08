@@ -1,5 +1,5 @@
-#ifndef BIND_CLIENT_IMPL_CBWRAPPER_H
-#define BIND_CLIENT_IMPL_CBWRAPPER_H
+#ifndef CLIENT_IMPL_CBWRAPPER_H
+#define CLIENT_IMPL_CBWRAPPER_H
 
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
@@ -25,4 +25,4 @@ inline grpc_cb_core::ErrorCb WrapLuaErrorCb(const LuaIntf::LuaRef& luaErrorCb)
 
 }  // namespace CbWrapper
 
-#endif  // BIND_CLIENT_IMPL_CBWRAPPER_H
+#endif  // CLIENT_IMPL_CBWRAPPER_H

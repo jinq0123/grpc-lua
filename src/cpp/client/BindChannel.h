@@ -1,10 +1,10 @@
-#ifndef BIND_CLIENT_BINDCHANNEL_H
-#define BIND_CLIENT_BINDCHANNEL_H
+#ifndef CLIENT_BINDCHANNEL_H
+#define CLIENT_BINDCHANNEL_H
 
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
-namespace bind {
+namespace client {
 void BindChannel(const LuaIntf::LuaRef& mod);
-}  // namespace bind
+}  // namespace client
 
-#endif  // BIND_CLIENT_BINDCHANNEL_H
+#endif  // CLIENT_BINDCHANNEL_H

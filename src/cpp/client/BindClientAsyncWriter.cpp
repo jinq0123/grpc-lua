@@ -43,7 +43,7 @@ void Close(ClientAsyncWriter* pWriter, LuaRef& luaCloseCb)
 
 }  // namespace
 
-namespace bind {
+namespace client {
 
 void BindClientAsyncWriter(const LuaRef& mod)
 {
@@ -56,4 +56,4 @@ void BindClientAsyncWriter(const LuaRef& mod)
     .endClass();
 }  // BindClientAsyncWriter()
 
-}  // namespace bind
+}  // namespace client

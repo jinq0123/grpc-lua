@@ -1,10 +1,10 @@
-#ifndef BIND_SERVER_BINDSERVER_H
-#define BIND_SERVER_BINDSERVER_H
+#ifndef SERVER_BINDSERVER_H
+#define SERVER_BINDSERVER_H
 
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
-namespace bind {
+namespace server {
 void BindServer(const LuaIntf::LuaRef& mod);
-}  // namespace bind
+}  // namespace server
 
-#endif  // BIND_SERVER_BINDSERVER_H
+#endif  // SERVER_BINDSERVER_H

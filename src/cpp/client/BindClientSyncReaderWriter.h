@@ -1,10 +1,10 @@
-#ifndef BIND_CLIENT_BINDCLIENTSYNCREADERWRITER_H
-#define BIND_CLIENT_BINDCLIENTSYNCREADERWRITER_H
+#ifndef CLIENT_BINDCLIENTSYNCREADERWRITER_H
+#define CLIENT_BINDCLIENTSYNCREADERWRITER_H
 
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
-namespace bind {
+namespace client {
 void BindClientSyncReaderWriter(const LuaIntf::LuaRef& mod);
-}  // namespace bind
+}  // namespace client
 
-#endif  // BIND_CLIENT_BINDCLIENTSYNCWRITER_H
+#endif  // CLIENT_BINDCLIENTSYNCWRITER_H

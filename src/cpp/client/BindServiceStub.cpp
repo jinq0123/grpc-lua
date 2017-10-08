@@ -76,7 +76,7 @@ void AsyncRequestRead(ServiceStub* pServiceStub,
 
 }  // namespace
 
-namespace bind {
+namespace client {
 
 void BindServiceStub(const LuaRef& mod)
 {
@@ -105,4 +105,4 @@ void BindServiceStub(const LuaRef& mod)
     .endClass();  // ServiceStub
 }  // BindServiceStub()
 
-}  // namespace bind
+}  // namespace client

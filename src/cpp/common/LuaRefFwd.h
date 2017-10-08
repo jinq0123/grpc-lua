@@ -1,8 +1,8 @@
-#ifndef IMPL_LUAREFFWD_H
+#ifndef COMMON_LUAREFFWD_H
 #define IMPL_LUAREFFWD_H
 
 namespace LuaIntf {
 class LuaRef;
 }
 
-#endif  // IMPL_LUAREFFWD_H
+#endif  // COMMON_LUAREFFWD_H

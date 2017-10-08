@@ -1,5 +1,5 @@
-#ifndef IMPL_SERVICE_H
-#define IMPL_SERVICE_H
+#ifndef SERVER_IMPL_SERVICE_H
+#define SERVER_IMPL_SERVICE_H
 
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
@@ -14,7 +14,7 @@ class ServiceDescriptor;
 }}  // namespace google::protobuf
 
 namespace LuaIntf {
-class LuaString;
+struct LuaString;
 }  // namespace LuaIntf
 
 namespace impl {
@@ -51,4 +51,4 @@ private:
 };  // class Service
 
 }  // namespace impl
-#endif  // IMPL_SERVICE_H
+#endif  // SERVER_IMPL_SERVICE_H

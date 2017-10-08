@@ -1,10 +1,10 @@
-#ifndef BIND_CLIENT_BINDSERVICESTUB_H
-#define BIND_CLIENT_BINDSERVICESTUB_H
+#ifndef CLIENT_BINDSERVICESTUB_H
+#define CLIENT_BINDSERVICESTUB_H
 
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
-namespace bind {
+namespace client {
 void BindServiceStub(const LuaIntf::LuaRef& mod);
-}  // namespace bind
+}  // namespace client
 
-#endif  // BIND_CLIENT_BINDSERVICESTUB_H
+#endif  // CLIENT_BINDSERVICESTUB_H

@@ -31,7 +31,7 @@ LuaRef ReadOne(const ClientSyncReaderWriter& rw, lua_State* L)
 
 }  // namespace
 
-namespace bind {
+namespace client {
 
 void BindClientSyncReaderWriter(const LuaRef& mod)
 {
@@ -49,4 +49,4 @@ void BindClientSyncReaderWriter(const LuaRef& mod)
     .endClass();
 }  // BindClientSyncReaderWriter()
 
-}  // namespace bind
+}  // namespace client

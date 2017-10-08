@@ -22,16 +22,16 @@ int luaopen_grpc_lua_c(lua_State* L)
     LuaIntf::LuaRef mod = LuaIntf::LuaRef::createTable(L);
 
     // client
-    bind::BindChannel(mod);
-    bind::BindClientAsyncReaderWriter(mod);
-    bind::BindClientAsyncWriter(mod);
-    bind::BindClientSyncReader(mod);
-    bind::BindClientSyncReaderWriter(mod);
-    bind::BindClientSyncWriter(mod);
-    bind::BindServiceStub(mod);
+    client::BindChannel(mod);
+    client::BindClientAsyncReaderWriter(mod);
+    client::BindClientAsyncWriter(mod);
+    client::BindClientSyncReader(mod);
+    client::BindClientSyncReaderWriter(mod);
+    client::BindClientSyncWriter(mod);
+    client::BindServiceStub(mod);
     // server
-    bind::BindServer(mod);
-    bind::BindServerReplier(mod);
+    server::BindServer(mod);
+    server::BindServerReplier(mod);
 
     mod.pushToStack();
     return 1;

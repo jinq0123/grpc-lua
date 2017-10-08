@@ -7,7 +7,7 @@
 using namespace grpc_cb_core;
 using namespace LuaIntf;
 
-namespace bind {
+namespace server {
 
 void BindServerReplier(const LuaRef& mod)
 {
@@ -17,4 +17,4 @@ void BindServerReplier(const LuaRef& mod)
     .endClass();
 }  // BindServerReplier()
 
-}  // namespace bind
+}  // namespace server
