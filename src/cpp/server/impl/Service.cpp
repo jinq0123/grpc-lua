@@ -133,6 +133,7 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
     }
     if (mthd.server_streaming())
     {
+        // XXX
         m_pLuaService->dispatch("call_s2c_streaming_method", sMethodName,
             sReqType, strReq, ServerWriter(call_sptr), sRespType);
         return;

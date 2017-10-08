@@ -9,6 +9,7 @@
 // server
 #include "server/BindServer.h"
 #include "server/BindServerReplier.h"
+#include "server/BindServerWriter.h"
 
 #include <LuaIntf/LuaIntf.h>
 
@@ -32,6 +33,7 @@ int luaopen_grpc_lua_c(lua_State* L)
     // server
     server::BindServer(mod);
     server::BindServerReplier(mod);
+    server::BindServerWriter(mod);
 
     mod.pushToStack();
     return 1;
