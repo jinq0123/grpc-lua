@@ -3,6 +3,8 @@
 #include "common/GetTimeoutMs.h"
 
 #include <grpc_cb_core/client/client_sync_writer.h>  // for ClientSyncWriter
+#include <grpc_cb_core/common/status.h>  // for GetCode()
+
 #include <LuaIntf/LuaIntf.h>
 
 #include <string>
