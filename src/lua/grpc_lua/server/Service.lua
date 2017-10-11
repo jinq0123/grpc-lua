@@ -65,4 +65,38 @@ function Service:call_s2c_streaming_method(method_name,
     method(request, writer)
 end
 
+--- Call client-to-server streaming rpc method.
+-- @string method_name method name, like: "RecordRoute"
+-- @string request_type request type, like: "routeguide.Point"
+-- @tparam userdata c_replier C `ServerReplier` object
+-- @string response_type response type, like: "routeguide.Summary"
+function Service:call_c2s_streaming_method(method_name,
+        request_type, c_replier, response_type)
+    assert("string" == type(method_name))
+    assert("string" == type(request_type))
+    assert("userdata" == type(c_replier))
+    assert("string" == type(response_type))
+
+    local method = assert(self.impl[method_name], "No such method: "..method_name)
+    local replier = Replier:new(c_replier, response_type)
+    method(request_type, replier)
+end
+
+--- Call bi-directional streaming rpc method.
+-- @string method_name method name, like: "RouteChat"
+-- @string request_type request type, like: "routeguide.RouteNote"
+-- @tparam userdata c_writer C `ServerWriter` object
+-- @string response_type response type, like: "routeguide.RouteNote"
+function Service:call_s2c_streaming_method(method_name,
+        request_type, c_writer, response_type)
+    assert("string" == type(method_name))
+    assert("string" == type(request_type))
+    assert("userdata" == type(c_writer))
+    assert("string" == type(response_type))
+
+    local method = assert(self.impl[method_name], "No such method: "..method_name)
+    local writer = Writer:new(c_writer, response_type)
+    method(request_type, writer)
+end
+
 return Service

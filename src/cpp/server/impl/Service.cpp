@@ -123,14 +123,26 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
     assert(m_pLuaService->isTable());
     if (mthd.client_streaming())
     {
+        LuaRef luaReader;
         if (mthd.server_streaming())
         {
-            //  XXX m_pLuaService->dispatch("call_bidi_streaming_method", sMethod,
-            return;
+            luaReader = m_pLuaService->dispatch<LuaRef>(
+                "call_bidi_streaming_method", sMethodName,
+                sReqType, ServerWriter(call_sptr), sRespType);
+            std::make_shared<ServerReader>(luaReader)
+                ->StartForBidiStreaming();
         }
-        //  XXX m_pLuaService->dispatch("call_c2s_streaming_method", sMethod,
+        else
+        {
+            luaReader = m_pLuaService->dispatch<LuaRef>(
+                "call_c2s_streaming_method", sMethodName,
+                sReqType, ServerReplier(call_sptr), sRespType);
+            std::make_shared<ServerReader>(luaReader)
+                ->StartForClientSideStreaming();
+        }
         return;
     }
+
     if (mthd.server_streaming())
     {
         m_pLuaService->dispatch("call_s2c_streaming_method", sMethodName,
