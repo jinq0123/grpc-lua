@@ -8,9 +8,11 @@
 
 #include <string>
 
-namespace impl {
-
+namespace grpc_cb_core {
 class Status;
+}  // namespace grpc_cb_core
+
+namespace impl {
 
 // ServerReader is the interface of client streaming handler,
 //  for both client-side streaming and bi-directional streaming.
@@ -22,9 +24,9 @@ class ServerReader : public grpc_cb_core::ServerReader {
   virtual ~ServerReader();
 
  public:
-  void OnMsgStr(const std::string& msg_str) GRPC_OVERRIDE;
-  void OnError(const Status& status) GRPC_OVERRIDE;
-  void OnEnd() GRPC_OVERRIDE;
+  void OnMsgStr(const std::string& msg_str) override;
+  void OnError(const grpc_cb_core::Status& status) override;
+  void OnEnd() override;
 
  private:
   std::unique_ptr<LuaRef> m_pLuaReader;

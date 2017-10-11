@@ -20,7 +20,7 @@ void ServerReader::OnMsgStr(const std::string& msg_str)
     // XXX
 }
 
-void ServerReader::OnError(const Status& status)
+void ServerReader::OnError(const grpc_cb_core::Status& status)
 {
     // XXX
 }

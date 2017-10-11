@@ -3,6 +3,7 @@
 #include "impl/CbWrapper.h"
 #include "common/GetTimeoutMs.h"
 
+#include <grpc_cb_core/common/completion_queue_for_next.h>  // to cast GetCompletionQueue()
 #include <grpc_cb_core/common/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
 #include <grpc_cb_core/common/status.h>  // for Status
 #include <grpc_cb_core/client/client_async_reader.h>  // for ClientAsyncReader
@@ -58,9 +59,9 @@ void AsyncRequest(ServiceStub* pServiceStub,
     const LuaRef& luaResponseCb, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
-    ResponseCb cbResponse = CbWrapper::WrapLuaMsgCb(luaResponseCb);
+    RespStrCb cbRespStr = CbWrapper::WrapLuaMsgCb(luaResponseCb);
     ErrorCb cbError = CbWrapper::WrapLuaErrorCb(luaErrorCb);
-    pServiceStub->AsyncRequest(sMethod, sRequest, cbResponse, cbError);
+    pServiceStub->AsyncRequest(sMethod, sRequest, cbRespStr, cbError);
 }  // AsyncRequest()
 
 void AsyncRequestRead(ServiceStub* pServiceStub,

@@ -107,8 +107,7 @@ function ServiceStub:async_request(method_name, request, response_cb)
     mi:assert_simple_rpc()
     local request_str = pb.encode(mi.request_type, request)
     -- Need to wrap the response callback.
-    local response_str_cb = mcb_wrapper.wrap(
-        response_cb, mi.response_type, self._error_cb)
+    local response_str_cb = mcb_wrapper.wrap(response_cb, mi.response_type)
     self._c_stub:async_request(mi.request_name, request_str,
         response_str_cb, self._error_cb)
 end  -- async_request()
@@ -152,7 +151,7 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
 
     local req_str = pb.encode(mi.request_type, request)
     -- Need to wrap the message callback.
-    local msg_str_cb = mcb_wrapper.wrap(msg_cb, mi.response_type, status_cb)
+    local msg_str_cb = mcb_wrapper.wrap(msg_cb, mi.response_type)
     self._c_stub.async_request_read(self._c_channel,
         mi.request_name, req_str, msg_str_cb, status_cb)
 end  -- async_request_read()

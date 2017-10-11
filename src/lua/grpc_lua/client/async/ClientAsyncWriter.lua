@@ -62,7 +62,8 @@ local function wrap_close_cb(close_cb, response_type)
             return
         end
         -- GRPC_STATUS_INTERNAL = 13
-        close_cb(nil, "Failed to decode response.", 13)
+        local err = "Failed to decode response " .. response_type
+        close_cb(nil, err, 13)
     end
 end  -- wrap_close_cb()
 

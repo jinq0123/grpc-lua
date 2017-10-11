@@ -13,7 +13,7 @@ void BindServerReplier(const LuaRef& mod)
 {
     LuaBinding(mod).beginClass<ServerReplier>("ServerReplier")
         .addConstructor(LUA_ARGS(const grpc_cb_core::CallSptr&))
-        .addFunction("reply", &ServerReplier::Reply)
+        .addFunction("reply", &ServerReplier::ReplyStr)
     .endClass();
 }  // BindServerReplier()
 

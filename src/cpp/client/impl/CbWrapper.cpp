@@ -2,6 +2,7 @@
 
 #include <grpc_cb_core/common/status.h>  // for Status
 #include <LuaIntf/LuaIntf.h>
+#include <cassert>
 #include <string>
 
 using namespace grpc_cb_core;
@@ -9,14 +10,17 @@ using namespace LuaIntf;
 
 namespace CbWrapper {
 
-// Convert lua message callback into MsgCb.
-// function(string) -> void (const string&)
-MsgCb WrapLuaMsgCb(const LuaRef& luaMsgCb)
+// Convert lua message callback into MsgstrCb.
+// function(string):string|nil -> Status (const string&)
+MsgStrCb WrapLuaMsgCb(const LuaRef& luaMsgCb)
 {
-    if (!luaMsgCb) return MsgCb();
+    if (!luaMsgCb) return MsgStrCb();
     luaMsgCb.checkFunction();  // function(string)
     return [luaMsgCb](const std::string& sMsg) {
-        luaMsgCb(sMsg);
+        LuaRef luaErrStr = luaMsgCb.call<LuaRef>(sMsg);
+        if (!luaErrStr) return Status::OK;
+        assert(LuaTypeID::STRING == luaErrStr.type());
+        return Status::InternalError(luaErrStr.toValue<std::string>());
     };
 }
 

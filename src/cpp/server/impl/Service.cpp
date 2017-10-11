@@ -1,5 +1,7 @@
 #include "Service.h"
 
+#include "ServerReader.h"  // for ServerReader
+
 #include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <grpc/byte_buffer.h>  // for grpc_byte_buffer_reader_init()
 #include <grpc/byte_buffer_reader.h>  // for grpc_byte_buffer_reader
@@ -66,18 +68,18 @@ static grpc_slice BufToSlice(grpc_byte_buffer* buf)
     return slice;
 }
 
-void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* request,
-    const CallSptr& call_sptr)
+void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* pReqBuf,
+    const CallSptr& pCall)
 {
     assert(iMthdIdx < GetMethodCount());
-    if (!request) return;
+    if (!pReqBuf) return;
 
-    grpc_slice req_slice = BufToSlice(request);
+    grpc_slice req_slice = BufToSlice(pReqBuf);
     {
         LuaIntf::LuaString strReq(reinterpret_cast<const char*>(
             GRPC_SLICE_START_PTR(req_slice)),
             GRPC_SLICE_LENGTH(req_slice));
-        CallMethod(iMthdIdx, strReq, call_sptr);
+        CallMethod(iMthdIdx, strReq, pCall);
     }
     grpc_slice_unref(req_slice);
 }
@@ -110,7 +112,7 @@ Service::GetMthdDesc(size_t iMthdIdx) const
 }
 
 void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
-    const CallSptr& call_sptr)
+    const CallSptr& pCall)
 {
     assert(iMthdIdx < GetMethodCount());
 
@@ -128,17 +130,17 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
         {
             luaReader = m_pLuaService->dispatch<LuaRef>(
                 "call_bidi_streaming_method", sMethodName,
-                sReqType, ServerWriter(call_sptr), sRespType);
+                sReqType, ServerWriter(pCall), sRespType);
             std::make_shared<ServerReader>(luaReader)
-                ->StartForBidiStreaming();
+                ->StartForBidiStreaming(pCall);
         }
         else
         {
             luaReader = m_pLuaService->dispatch<LuaRef>(
                 "call_c2s_streaming_method", sMethodName,
-                sReqType, ServerReplier(call_sptr), sRespType);
+                sReqType, ServerReplier(pCall), sRespType);
             std::make_shared<ServerReader>(luaReader)
-                ->StartForClientSideStreaming();
+                ->StartForClientSideStreaming(pCall);
         }
         return;
     }
@@ -146,12 +148,12 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
     if (mthd.server_streaming())
     {
         m_pLuaService->dispatch("call_s2c_streaming_method", sMethodName,
-            sReqType, strReq, ServerWriter(call_sptr), sRespType);
+            sReqType, strReq, ServerWriter(pCall), sRespType);
         return;
     }
 
     m_pLuaService->dispatch("call_simple_method", sMethodName,
-        sReqType, strReq, ServerReplier(call_sptr), sRespType);
+        sReqType, strReq, ServerReplier(pCall), sRespType);
 }
 
 }  // namespace impl

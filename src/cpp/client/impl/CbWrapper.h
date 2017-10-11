@@ -3,14 +3,14 @@
 
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
-#include <grpc_cb_core/client/msg_cb.h>  // for MsgCb
+#include <grpc_cb_core/client/msg_str_cb.h>  // for MsgStrCb
 #include <grpc_cb_core/client/status_cb.h>  // for StatusCb
 
 namespace CbWrapper {
 
-// Convert lua message callback into MsgCb.
-// function(string) -> void (const string&)
-grpc_cb_core::MsgCb WrapLuaMsgCb(const LuaIntf::LuaRef& luaMsgCb);
+// Convert lua message callback into MsgStrCb.
+// XXX function(string) -> Status (const string&)
+grpc_cb_core::MsgStrCb WrapLuaMsgCb(const LuaIntf::LuaRef& luaMsgCb);
 
 // Convert lua status callback into StatusCb.
 // function(error_str, status_code) -> void (const Status&)
