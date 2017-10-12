@@ -61,21 +61,17 @@ function M.ListFeatures(rectangle, writer)
 end  -- ListFeatures()
 
 --- Client-to-server streaming method.
--- @string request_type request message type
 -- @tab replier `Replier` object
 -- @treturn table server reader object
-function M.RecordRoute(request_type, replier)
-    assert("string" == type(request_type))
+function M.RecordRoute(replier)
     assert("table" == type(replier))
-    return require("reader.RecordRouteReader"):new(request_type, replier)
+    return require("reader.RecordRouteReader"):new(replier, db)
 end  -- RecordRoute()
 
 --- Bi-directional streaming method.
--- @string request_type request message type
 -- @table writer `Writer` object
 -- @treturn table server reader object
-function M.RouteChat(request_type, writer)
-    assert("string" == type(request_type))
+function M.RouteChat(writer)
     assert("table" == type(writer))
     -- XXX
     return RouteChatReader:new(request_type, writer)
