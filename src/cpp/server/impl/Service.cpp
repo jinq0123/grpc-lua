@@ -138,8 +138,7 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
                 "call_c2s_streaming_method", sMethodName,
                 sReqType, ServerReplier(pCall), sRespType);
         }
-        std::make_shared<ServerReader>(luaReader)
-            ->StartForClientStreaming(pCall);
+        std::make_shared<ServerReader>(luaReader)->Start(pCall);
         return;
     }
 
