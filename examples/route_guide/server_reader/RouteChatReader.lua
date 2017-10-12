@@ -50,6 +50,7 @@ function Reader:on_error(error_str, status_code)
     assert("string" == type(error_str))
     assert("number" == type(status_code))
     print(string.format("RouteChat error: (%d)%s", status_code, error_str)
+    self._writer:close()
 end
 
 function Reader:on_end()

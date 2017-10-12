@@ -37,4 +37,6 @@ function Replier:reply(response)
     self._c_replier:reply(resp_str)
 end  -- reply()
 
+-- XXX reply_error(err_str, status_code) ?
+
 return Replier
