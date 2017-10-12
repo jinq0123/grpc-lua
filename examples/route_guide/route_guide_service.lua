@@ -67,8 +67,7 @@ end  -- ListFeatures()
 function M.RecordRoute(request_type, replier)
     assert("string" == type(request_type))
     assert("table" == type(replier))
-    -- XXX
-    return RecordRouteReader:new(request_type, replier)
+    return require("reader.RecordRouteReader"):new(request_type, replier)
 end  -- RecordRoute()
 
 --- Bi-directional streaming method.

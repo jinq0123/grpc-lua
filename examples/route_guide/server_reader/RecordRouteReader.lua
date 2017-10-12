@@ -10,36 +10,34 @@ local pb = require("luapbintf")
 -- @section public
 
 --- New Reader.
--- @string msg_type
--- @string msg_type message type, like "routeguide.Feature"
+-- @tparam Replier replier Replier object
 -- @treturn table Reader object
-function Reader:new(msg_type, replier)
-    assert("userdata" == type(c_writer))
-    assert("string" == type(msg_type))
+function Reader:new(replier)
+    assert("table" == type(replier))
 
-    local writer = {
+    local reader = {
         -- private:
-        _c_writer = c_writer,
-        _msg_type = msg_type,
+        _replier = replier,
     }
 
-    setmetatable(writer, self)
+    setmetatable(reader, self)
     self.__index = self
-    return writer
+    return reader
 end  -- new()
 
---- Write message.
--- @tab message
--- @treturn boolean return false if error
-function Reader:write(message)
-    assert("table" == type(message))
-    local msg_str = pb.encode(self._msg_type, message)
-    self._c_writer:writer(msg_str)
-end  -- write()
+function Reader:on_msg(msg)
+    assert("table" == type(msg))
+    -- XXX
+end
 
---- Close writer.
-function Reader:close()
-    self._c_writer:close()
-end  -- close()
+function Reader:on_error(error_str, status_code)
+    assert("string" == type(error_str))
+    assert("number" == type(status_code))
+    -- XXX
+end
+
+function Reader:on_end()
+    -- XXX
+end
 
 return Reader
