@@ -4,17 +4,18 @@
 #include <grpc_cb_core/common/status.h>  // for GetDetails()
 
 #include <LuaIntf/LuaIntf.h>  // for LuaRef
+#include <cassert>
 
 using LuaIntf::LuaRef;
 
 namespace impl {
 
-// Lua reader can provide these functions:
+// Functions from server Reader.lua
 struct LuaReaderFunctions
 {
-    LuaRef funOnMsg;  // function(table) | nil
-    LuaRef funOnError;  // function(string, int) | nil
-    LuaRef funOnEnd;  // function() | nil
+    LuaRef funOnMsgStr;  // function(string) -> string|nil
+    LuaRef funOnError;  // function(string, int)
+    LuaRef funOnEnd;  // function()
 };
 
 ServerReader::ServerReader(const LuaRef& luaReader)
@@ -28,22 +29,24 @@ ServerReader::~ServerReader()
 {
 }
 
-void ServerReader::OnMsgStr(const std::string& msg_str)
+grpc_cb_core::Status ServerReader::OnMsgStr(const std::string& msg_str)
 {
-    const LuaRef& f = m_pLuaReaderFunctions->funOnMsg;
-    // XXX if (f) f(msg_str);
+    LuaRef luaErrStr = m_pLuaReaderFunctions->funOnMsgStr.call<LuaRef>(msg_str);
+    if (!luaErrStr) return grpc_cb_core::Status::OK;
+    assert(LuaIntf::LuaTypeID::STRING == luaErrStr.type());
+    return grpc_cb_core::Status::InternalError(
+        luaErrStr.toValue<std::string>());
 }
 
 void ServerReader::OnError(const grpc_cb_core::Status& status)
 {
-    const LuaRef& f = m_pLuaReaderFunctions->funOnError;
-    if (f) f(status.GetDetails(), status.GetCode());
+    m_pLuaReaderFunctions->funOnError(
+        status.GetDetails(), status.GetCode());
 }
 
 void ServerReader::OnEnd()
 {
-    const LuaRef& f = m_pLuaReaderFunctions->funOnEnd;
-    if (f) f();
+    m_pLuaReaderFunctions->funOnEnd();
 }
 
 void ServerReader::InitLuaReaderFunctions(const LuaIntf::LuaRef& luaReader)
@@ -51,9 +54,12 @@ void ServerReader::InitLuaReaderFunctions(const LuaIntf::LuaRef& luaReader)
     assert(luaReader);
     assert(m_pLuaReaderFunctions);
     LuaReaderFunctions& rFuns = *m_pLuaReaderFunctions;
-    rFuns.funOnMsg = luaReader["OnMsg"];
-    rFuns.funOnError = luaReader["OnError"];
-    rFuns.funOnEnd = luaReader["OnEnd"];
+    rFuns.funOnMsgStr = luaReader["on_msg_str"];
+    rFuns.funOnMsgStr.checkFunction();
+    rFuns.funOnError = luaReader["on_error"];
+    rFuns.funOnError.checkFunction();
+    rFuns.funOnEnd = luaReader["on_end"];
+    rFuns.funOnEnd.checkFunction();
 }
 
 }  // namespace impl

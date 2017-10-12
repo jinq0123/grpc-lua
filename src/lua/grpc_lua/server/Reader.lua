@@ -32,15 +32,15 @@ end  -- new()
 
 --- Message string handler.
 -- @string msg_str
--- XXX return error str?
+-- @treturn string|nil error string, nil if no error
 function Reader:on_msg_str(msg_str)
     if not self._impl.on_msg then return end  -- XXX
     local msg = pb.decode(self._msg_type, msg_str)
     if msg then
         self._impl:on_msg(msg)
-        return  -- XXX
+        return nil
     end
-    -- XXX return error?
+    return "Failed to decode message " .. self._msg_type
 end  -- _on_msg_str()
 
 --- Error handler.

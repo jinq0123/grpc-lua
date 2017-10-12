@@ -25,7 +25,7 @@ class ServerReader : public grpc_cb_core::ServerReader {
   virtual ~ServerReader();
 
  public:
-  void OnMsgStr(const std::string& msg_str) override;
+  grpc_cb_core::Status OnMsgStr(const std::string& msg_str) override;
   void OnError(const grpc_cb_core::Status& status) override;
   void OnEnd() override;
 
