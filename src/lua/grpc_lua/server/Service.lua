@@ -41,7 +41,7 @@ function Service:call_simple_method(method_name, request_type, request_str,
     assert("string" == type(response_type))
 
     local method = assert(self.impl[method_name], "No such method: "..method_name)
-    local request = assert(pb.decode(request_type, request_str))
+    local request = assert(pb.decode(request_type, request_str))  -- XXX check result
     local replier = Replier:new(c_replier, response_type)
     method(request, replier)
 end
@@ -61,7 +61,7 @@ function Service:call_s2c_streaming_method(method_name,
     assert("string" == type(response_type))
 
     local method = assert(self.impl[method_name], "No such method: "..method_name)
-    local request = assert(pb.decode(request_type, request_str))
+    local request = assert(pb.decode(request_type, request_str))  -- XXX check result
     local writer = Writer:new(c_writer, response_type)
     method(request, writer)
 end
