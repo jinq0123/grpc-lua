@@ -51,8 +51,6 @@ function Reader:on_error(error_str, status_code)
     self._impl:on_error(error_str, status_code)
 end
 
---- XXX Separate ReaderForBidiStreaming and ReaderForClientSideStream to impl default on_error()
-
 --- End handler.
 function Reader:on_end()
     if not self._impl.on_end then return end
