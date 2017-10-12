@@ -68,3 +68,4 @@ test_package/build
 /premake/premake.bat
 /examples/helloworld/run_server_trace.bat
 /premake/gmake
+/premake/conan_install_debug_x64.bat

@@ -132,7 +132,7 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
                 "call_bidi_streaming_method", sMethodName,
                 sReqType, ServerWriter(pCall), sRespType);
             std::make_shared<ServerReader>(luaReader)
-                ->StartForBidiStreaming(pCall);
+                ->StartForClientStreaming(pCall);
         }
         else
         {
@@ -140,7 +140,7 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
                 "call_c2s_streaming_method", sMethodName,
                 sReqType, ServerReplier(pCall), sRespType);
             std::make_shared<ServerReader>(luaReader)
-                ->StartForClientSideStreaming(pCall);
+                ->StartForClientStreaming(pCall);
         }
         return;
     }
