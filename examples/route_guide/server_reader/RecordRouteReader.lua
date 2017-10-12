@@ -3,8 +3,6 @@
 
 local Reader = {}
 
-local pb = require("luapbintf")
-
 -------------------------------------------------------------------------------
 --- Public functions.
 -- @section public
@@ -66,6 +64,8 @@ function Reader:on_msg(msg)
     end
     self._previous = msg;
 end
+
+-- XXX default on_error() to reply error?
 
 function Reader:on_error(error_str, status_code)
     assert("string" == type(error_str))

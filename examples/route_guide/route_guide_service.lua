@@ -65,7 +65,7 @@ end  -- ListFeatures()
 -- @treturn table server reader object
 function M.RecordRoute(replier)
     assert("table" == type(replier))
-    return require("reader.RecordRouteReader"):new(replier, db)
+    return require("server_reader.RecordRouteReader"):new(replier, db)
 end  -- RecordRoute()
 
 --- Bi-directional streaming method.
@@ -73,8 +73,7 @@ end  -- RecordRoute()
 -- @treturn table server reader object
 function M.RouteChat(writer)
     assert("table" == type(writer))
-    -- XXX
-    return RouteChatReader:new(request_type, writer)
+    return require("server_reader.RouteChatReader"):new(writer, db)
 end  -- RouteChat()
 
 return M
