@@ -22,3 +22,19 @@ impl = {
 ``` 
 
 These functions can be nil.
+
+## Difference from 
+
+[grpc_cb](https://github.com/jinq0123/grpc_cb) has a base class "ServerReader"
+which has a default 'OnError()' implement which close the writer or replier immediately.
+In lua, user should provide similar function in `on_error()` like the route_guide example:
+```
+function Reader:on_error(error_str, status_code)
+    self._replier.reply_error(error_str, status_code)
+end
+```
+```
+function Reader:on_error(error_str, status_code)
+    self._writer:close()
+end
+```
