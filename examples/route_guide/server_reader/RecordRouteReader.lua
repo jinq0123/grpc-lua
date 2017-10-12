@@ -65,13 +65,11 @@ function Reader:on_msg(msg)
     self._previous = msg;
 end
 
--- XXX default on_error() to reply error?
-
 function Reader:on_error(error_str, status_code)
     assert("string" == type(error_str))
     assert("number" == type(status_code))
     print(string.format("RecordRoute error: (%d)%s", status_code, error_str)
-    -- XXX self._replier.reply_error(error_str, status_code)
+    self._replier.reply_error(error_str, status_code)
 end
 
 function Reader:on_end()

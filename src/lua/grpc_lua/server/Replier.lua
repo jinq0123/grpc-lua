@@ -37,6 +37,13 @@ function Replier:reply(response)
     self._c_replier:reply(resp_str)
 end  -- reply()
 
--- XXX reply_error(err_str, status_code) ?
+--- Reply error.
+-- @string error_str
+-- @int status_code
+function Replier:reply_error(error_str, status_code)
+    assert("string" == type(error_str))
+    assert("number" == type(status_code))
+    self._c_replier:reply_error(error_str, status_code)
+end  -- reply_error()
 
 return Replier
