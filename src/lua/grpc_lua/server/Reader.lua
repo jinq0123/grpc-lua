@@ -34,7 +34,7 @@ end  -- new()
 -- @string msg_str
 -- @treturn string|nil error string, nil if no error
 function Reader:on_msg_str(msg_str)
-    if not self._impl.on_msg then return end  -- XXX
+    if not self._impl.on_msg then return nil end
     local msg = pb.decode(self._msg_type, msg_str)
     if msg then
         self._impl:on_msg(msg)

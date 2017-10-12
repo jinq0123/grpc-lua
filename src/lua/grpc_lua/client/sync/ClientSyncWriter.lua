@@ -52,10 +52,17 @@ end  -- write()
 function ClientSyncWriter:close()
     local resp_str, error_str, status_code = self._c_writer.close()
     local resp = nil
-    if resp_str then
-        resp = pb.decode(self._response_type, resp_str)  -- XXX if error?
+    if not resp_str then
+        return nil, error_str, status_code
     end
-    return resp, error_str, status_code
+
+    resp = pb.decode(self._response_type, resp_str)
+    if resp then
+        return resp, error_str, status_code
+    end
+
+    error_str = "Failed to decode response " .. self._response_type
+    return nil, error_str, 13  -- GRPC_STATUS_INTERNAL = 13
 end  -- close()
 
 -------------------------------------------------------------------------------

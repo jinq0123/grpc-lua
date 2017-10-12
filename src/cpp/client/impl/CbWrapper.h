@@ -9,7 +9,7 @@
 namespace CbWrapper {
 
 // Convert lua message callback into MsgStrCb.
-// XXX function(string) -> Status (const string&)
+// function(string):(string|nil) | nil -> Status (const string&)
 grpc_cb_core::MsgStrCb WrapLuaMsgCb(const LuaIntf::LuaRef& luaMsgCb);
 
 // Convert lua status callback into StatusCb.

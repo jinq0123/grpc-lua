@@ -10,8 +10,8 @@ using namespace LuaIntf;
 
 namespace CbWrapper {
 
-// Convert lua message callback into MsgstrCb.
-// function(string):string|nil -> Status (const string&)
+// Convert lua message callback into MsgStrCb.
+// function(string):(string|nil) | nil -> Status (const string&)
 MsgStrCb WrapLuaMsgCb(const LuaRef& luaMsgCb)
 {
     if (!luaMsgCb) return MsgStrCb();
