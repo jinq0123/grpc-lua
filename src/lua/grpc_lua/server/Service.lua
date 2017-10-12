@@ -6,6 +6,7 @@ local Service = {}
 
 local pb = require("luapbintf")
 local Replier = require("grpc_lua.server.Replier")
+local Reader = require("grpc_lua.server.Reader")
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -70,6 +71,7 @@ end
 -- @string request_type request type, like: "routeguide.Point"
 -- @tparam userdata c_replier C `ServerReplier` object
 -- @string response_type response type, like: "routeguide.Summary"
+-- @treturn Reader server reader object
 function Service:call_c2s_streaming_method(method_name,
         request_type, c_replier, response_type)
     assert("string" == type(method_name))
@@ -79,7 +81,8 @@ function Service:call_c2s_streaming_method(method_name,
 
     local method = assert(self.impl[method_name], "No such method: "..method_name)
     local replier = Replier:new(c_replier, response_type)
-    method(request_type, replier)
+    local reader_impl = method(replier)
+    return Reader:new(reader_impl, request_type)
 end
 
 --- Call bi-directional streaming rpc method.
@@ -87,7 +90,8 @@ end
 -- @string request_type request type, like: "routeguide.RouteNote"
 -- @tparam userdata c_writer C `ServerWriter` object
 -- @string response_type response type, like: "routeguide.RouteNote"
-function Service:call_s2c_streaming_method(method_name,
+-- @treturn Reader server reader object
+function Service:call_bidi_streaming_method(method_name,
         request_type, c_writer, response_type)
     assert("string" == type(method_name))
     assert("string" == type(request_type))
@@ -96,7 +100,8 @@ function Service:call_s2c_streaming_method(method_name,
 
     local method = assert(self.impl[method_name], "No such method: "..method_name)
     local writer = Writer:new(c_writer, response_type)
-    method(request_type, writer)
+    local reader_impl = method(writer)
+    return Reader:new(reader_impl, request_type)
 end
 
 return Service

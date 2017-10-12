@@ -68,7 +68,7 @@ function M.RecordRoute(request_type, replier)
     assert("string" == type(request_type))
     assert("table" == type(replier))
     -- XXX
-    return nil
+    return RecordRouteReader:new(request_type, replier)
 end  -- RecordRoute()
 
 --- Bi-directional streaming method.
@@ -79,7 +79,7 @@ function M.RouteChat(request_type, writer)
     assert("string" == type(request_type))
     assert("table" == type(writer))
     -- XXX
-    return nil
+    return RouteChatReader:new(request_type, writer)
 end  -- RouteChat()
 
 return M

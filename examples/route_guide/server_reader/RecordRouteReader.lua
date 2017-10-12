@@ -1,7 +1,7 @@
---- Wraps C `ServerWriter` class.
--- @classmod grpc_lua.server.Writer
+--- Server reader class for RecordRoute method.
+-- @classmod server_reader.RecordRouteReader
 
-local Writer = {}
+local Reader = {}
 
 local pb = require("luapbintf")
 
@@ -9,12 +9,11 @@ local pb = require("luapbintf")
 --- Public functions.
 -- @section public
 
---- New Writer.
--- Used by `Service`. No not call it directly.
--- @tparam userdata c_writer C `ServerWriter` object
+--- New Reader.
+-- @string msg_type
 -- @string msg_type message type, like "routeguide.Feature"
--- @treturn table Writer object
-function Writer:new(c_writer, msg_type)
+-- @treturn table Reader object
+function Reader:new(msg_type, replier)
     assert("userdata" == type(c_writer))
     assert("string" == type(msg_type))
 
@@ -32,15 +31,15 @@ end  -- new()
 --- Write message.
 -- @tab message
 -- @treturn boolean return false if error
-function Writer:write(message)
+function Reader:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._msg_type, message)
     self._c_writer:writer(msg_str)
 end  -- write()
 
 --- Close writer.
-function Writer:close()
+function Reader:close()
     self._c_writer:close()
 end  -- close()
 
-return Writer
+return Reader

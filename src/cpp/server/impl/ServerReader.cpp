@@ -9,11 +9,12 @@ using LuaIntf::LuaRef;
 
 namespace impl {
 
+// Lua reader can provide these functions:
 struct LuaReaderFunctions
 {
-    LuaRef funOnMsgStr;
-    LuaRef funOnError;
-    LuaRef funOnEnd;
+    LuaRef funOnMsg;  // function(table) | nil
+    LuaRef funOnError;  // function(string, int) | nil
+    LuaRef funOnEnd;  // function() | nil
 };
 
 ServerReader::ServerReader(const LuaRef& luaReader)
@@ -29,8 +30,8 @@ ServerReader::~ServerReader()
 
 void ServerReader::OnMsgStr(const std::string& msg_str)
 {
-    const LuaRef& f = m_pLuaReaderFunctions->funOnMsgStr;
-    if (f) f(msg_str);
+    const LuaRef& f = m_pLuaReaderFunctions->funOnMsg;
+    // XXX if (f) f(msg_str);
 }
 
 void ServerReader::OnError(const grpc_cb_core::Status& status)
@@ -50,7 +51,7 @@ void ServerReader::InitLuaReaderFunctions(const LuaIntf::LuaRef& luaReader)
     assert(luaReader);
     assert(m_pLuaReaderFunctions);
     LuaReaderFunctions& rFuns = *m_pLuaReaderFunctions;
-    rFuns.funOnMsgStr = luaReader["OnMsgStr"];
+    rFuns.funOnMsg = luaReader["OnMsg"];
     rFuns.funOnError = luaReader["OnError"];
     rFuns.funOnEnd = luaReader["OnEnd"];
 }
