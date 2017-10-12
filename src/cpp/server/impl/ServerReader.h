@@ -14,13 +14,14 @@ class Status;
 
 namespace impl {
 
+struct LuaReaderFunctions;
+
 // ServerReader is the interface of client streaming handler,
 //  for both client-side streaming and bi-directional streaming.
 // Thread-safe.
 class ServerReader : public grpc_cb_core::ServerReader {
  public:
-  using LuaRef = LuaIntf::LuaRef;
-  explicit ServerReader(const LuaRef& luaReader);
+  explicit ServerReader(const LuaIntf::LuaRef& luaReader);
   virtual ~ServerReader();
 
  public:
@@ -29,7 +30,10 @@ class ServerReader : public grpc_cb_core::ServerReader {
   void OnEnd() override;
 
  private:
-  std::unique_ptr<LuaRef> m_pLuaReader;
+  void InitLuaReaderFunctions(const LuaIntf::LuaRef& luaReader);
+
+ private:
+  std::unique_ptr<LuaReaderFunctions> m_pLuaReaderFunctions;
 };  // class ServerReader
 
 }  // namespace impl
