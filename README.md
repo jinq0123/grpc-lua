@@ -49,6 +49,7 @@ service RouteGuide {
 ```
 
 ### Import proto file
+For both client and server codes:
 ```lua
 local grpc = require("grpc_lua.grpc_lua")
 grpc.import_proto_file("route_guide.proto")
@@ -200,7 +201,92 @@ See [examples/route_guide/route_guide_client.lua](examples/route_guide/route_gui
 		```
 
 ### Server
+See [examples/route_guide/route_guide_server.lua](examples/route_guide/route_guide_server.lua).
 
+#### Start server
+```lua
+    local svr = grpc.server()
+    svr:add_listening_port("0.0.0.0:50051")
+    -- Service implementation is a table.
+    local service = require("route_guide_service")
+    svr:register_service("routeguide.RouteGuide", service)
+    svr:run()
+```
+
+#### Implement service
+
+Service is a table with the service functions defined in the proto file.
+The function name must be the same as in the proto file.
+The function parameters are different for different RPC method types.
+
+1. Simple RPC: ```GetFeature()```
+	```lua
+	--- Simple RPC method.
+	-- @tab request
+	-- @tparam Replier replier
+	function M.GetFeature(request, replier)
+		assert("table" == type(request))
+		assert("table" == type(replier))
+		local name = get_feature_name(request)
+		local response = { name = name, location = request }
+		replier:reply(response);
+	end  -- GetFeature()
+	```
+
+	`replier` can be copied and `reply()` later.
+
+1. Server-side streaming RPC: ```ListFeatures()```
+	```lua
+--- Server-to-client streaming method.
+-- @table rectangle
+-- @tparam Writer writer
+	function M.ListFeatures(rectangle, writer)
+		assert("table" == type(rectangle))
+		assert("table" == type(writer))
+		...
+		for _, f in ipairs(db.features) do
+			local l = f.location
+			if l... then
+				if not writer.write(f) then
+					print("Failed to write.")
+					break
+				end  -- if not writer.write()
+			end  -- if l
+		end  -- for _, f
+		writer.close()
+	end  -- ListFeatures()
+	```
+
+1. Client-side streaming RPC: ```RecordRoute()```
+	- Should return a reader table:
+		```lua
+		--- Client-to-server streaming method.
+		-- @tab replier `Replier` object
+		-- @treturn table server reader object
+		function M.RecordRoute(replier)
+			assert("table" == type(replier))
+			return require("server_reader.RecordRouteReader"):new(replier, db)
+		end  -- RecordRoute()
+		```
+
+	- the reader table should optionally have these methods
+		* ```function Reader:on_msg(msg)```
+		* ```function Reader:on_error(error_str, status_code)```
+		* ```function Reader:on_end()```
+
+1. Bidirectional streaming RPC: ```RouteChat()```
+	* Should return a reader table.
+		```lua
+		--- Bi-directional streaming method.
+		-- @table writer `Writer` object
+		-- @treturn table server reader object
+		function M.RouteChat(writer)
+			assert("table" == type(writer))
+			return require("server_reader.RouteChatReader"):new(writer, db)
+		end  -- RouteChat()
+		```
+
+	* The reader table should optionally have methods as client-side streaming reader.
 
 ## Example codes
 * [greeter_client.lua](examples/helloworld/greeter_client.lua)

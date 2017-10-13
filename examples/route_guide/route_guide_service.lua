@@ -25,6 +25,9 @@ end
 --- Public functions.
 -- @section public
 
+--- Simple RPC method.
+-- @tab request
+-- @tparam Replier replier
 function M.GetFeature(request, replier)
     assert("table" == type(request))
     assert("table" == type(replier))
@@ -33,6 +36,9 @@ function M.GetFeature(request, replier)
     replier:reply(response);
 end  -- GetFeature()
 
+--- Server-to-client streaming method.
+-- @table rectangle
+-- @tparam Writer writer
 function M.ListFeatures(rectangle, writer)
     assert("table" == type(rectangle))
     assert("table" == type(writer))
