@@ -106,7 +106,6 @@ See [examples/route_guide/route_guide_client.lua](examples/route_guide/route_gui
 		
 		for _, note in ipairs(notes) do
 			sync_rdwr.write(note)
-			local server_note = sync_rdwr.read_one()
 		end
 		sync_rdwr.close_writing()
 		
@@ -136,15 +135,16 @@ See [examples/route_guide/route_guide_client.lua](examples/route_guide/route_gui
 			```
 
 		+ Set error callback
+
 			```stub.set_error_cb(function(error_str, status_code) ... end)```
 			before `async_request()`
 
 	* Run the stub
-		+ Async calls need 
+		+ Async calls need `run()`
 			```lua
 			stub.run()  -- run async requests until stub.shutdown()
 			```
-		+ ```stub.shutdown()``` end ```stub.run()```.
+		+ ```stub.shutdown()``` ends ```stub.run()```.
 
 	* Server-side streaming RPC: ```list_features_async()```
 		```lua
@@ -237,9 +237,9 @@ The function parameters are different for different RPC method types.
 
 1. Server-side streaming RPC: ```ListFeatures()```
 	```lua
---- Server-to-client streaming method.
--- @table rectangle
--- @tparam Writer writer
+	--- Server-to-client streaming method.
+	-- @table rectangle
+	-- @tparam Writer writer
 	function M.ListFeatures(rectangle, writer)
 		assert("table" == type(rectangle))
 		assert("table" == type(writer))
