@@ -107,8 +107,8 @@ local function sync_route_chat()
         local server_note = sync_rdwr.read_one()
         if server_note then
             print("Got message: "..inspect(server_note))
-        end
-    }
+        end  -- if
+    end  -- for
     sync_rdwr.close_writing()
 
     -- read remaining

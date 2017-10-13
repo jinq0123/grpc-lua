@@ -11,7 +11,7 @@ gRPC-Lua depends on
 
 See [doc/conan-graph.html](http://htmlpreview.github.io/?https://github.com/jinq0123/grpc-lua/master/doc/conan-graph.html)
 
-All these libraries will be installed by [conan](https://www.conan.io/)
+All these libraries can be installed by [conan](https://www.conan.io/)
 C/C++ package manager.
 
 ## Build
@@ -25,9 +25,184 @@ C/C++ package manager.
 ### VS solution
 See [premake/README.md](premake/README.md) to use premake5 to generate VS solution.
 
-## Usage
+## Tutorial
+Tutorial shows some codes in the route_guide example.
 
-### Example codes
+### Define the service
+See [examples/route_guide/route_guide.proto](examples/route_guide/route_guide.proto).
+```protobuf
+// Interface exported by the server.
+service RouteGuide {
+  // A simple RPC.
+  rpc GetFeature(Point) returns (Feature) {}
+
+  // A server-to-client streaming RPC.
+  rpc ListFeatures(Rectangle) returns (stream Feature) {}
+
+  // A client-to-server streaming RPC.
+  rpc RecordRoute(stream Point) returns (RouteSummary) {}
+
+  // A Bidirectional streaming RPC.
+  rpc RouteChat(stream RouteNote) returns (stream RouteNote) {}
+}
+...
+```
+
+### Import proto file
+```lua
+local grpc = require("grpc_lua.grpc_lua")
+grpc.import_proto_file("route_guide.proto")
+```
+No need to generate codes.
+
+### Client
+See [examples/route_guide/route_guide_client.lua](examples/route_guide/route_guide_client.lua).
+
+#### Create a stub
+```lua
+    local c_channel = grpc.channel("localhost:50051")
+    local stub = grcp.service_stub(c_channel, "routeguide.RouteGuide")
+```
+
+#### Call service method
++ Sync call
+	* Simple RPC: ```sync_get_feature()```
+		```lua
+		local feature = stub.sync_request("GetFeature", point(409146138, -746188906))
+		```
+
+	* Server-side streaming RPC: ```sync_list_features()```
+		```lua
+		local sync_reader = stub:sync_request_read("ListFeatures", rect)
+		while true do
+			local feature = sync_reader.read_one()
+			if not feature then break end
+			print("Found feature: "..inspect(feature))
+		end  -- while
+		```
+
+	* Client-side streaming RPC: ```sync_record_route()```
+		```lua
+		local sync_writer = stub.sync_request_write("RecordRoute")
+		for i = 1, 10 do
+			local feature = db.get_rand_feature()
+			local loc = assert(feature.location)
+			if not sync_writer.write(loc) then
+				break
+			end  -- if
+		end  -- for
+		
+		-- Recv status and reponse.
+		local summary, error_str, status_code = sync_writer.close()
+		if summary then
+			print_route_sumary(summary)
+		end
+		```
+
+	* Bidirectional streaming RPC: ```sync_route_chat()```
+		```lua
+		local sync_rdwr = stub.sync_request_rdwr("RouteChat")
+		
+		for _, note in ipairs(notes) do
+			sync_rdwr.write(note)
+			local server_note = sync_rdwr.read_one()
+		end
+		sync_rdwr.close_writing()
+		
+		-- read remaining
+		while true do
+			local server_note = sync_rdwr.read_one()
+			if not server_note then break end
+			print("Got message: "..inspect(server_note))
+		end  -- while
+		```
+
++ Async call
+
+	* Simple RPC: ```get_feature_async()```
+		```lua
+		stub.async_request("GetFeature", point(409146138, -746188906),
+			function(resp)
+				print("Get feature: "..inspect(resp))
+				stub.shutdown()  -- to return
+			end)
+		stub.run()  -- run async requests until stub.shutdown()
+		```
+
+		+ Ignore response
+			```lua
+			stub.async_request("GetFeature", point())  -- ignore response
+			```
+
+		+ Set error callback
+			```stub.set_error_cb(function(error_str, status_code) ... end)```
+			before `async_request()`
+
+	* Run the stub
+		+ Async calls need 
+			```lua
+			stub.run()  -- run async requests until stub.shutdown()
+			```
+		+ ```stub.shutdown()``` end ```stub.run()```.
+
+	* Server-side streaming RPC: ```list_features_async()```
+		```lua
+		stub.async_request_read("ListFeatures", rect,
+			function(f)
+				assert("table" == type(f))
+				print(string.format("Got feature %s at %f,%f", f.name,
+					f.location.latitude/kCoordFactor, f.location.longitude/kCoordFactor))
+			end,
+			function(error_str, status_code)
+				assert("number" == type(status_code))
+				stub.shutdown()  -- To break Run().
+			end)
+		stub.run()  -- until stub.shutdown()
+		```
+
+	* Client-side streaming RPC: ```record_route_async()```
+		```lua
+		local async_writer = stub.async_request_write("RecordRoute")
+		for i = 1, 10 do
+			local f = db.get_rand_feature()
+			local loc = f.location
+			if not async_writer:write(loc) do break end  -- Broken stream.
+		end  -- for
+		
+		-- Recv reponse and status.
+		async_writer.close(
+			function(resp, error_str, status_code)
+				if resp then
+					print_route_summary(resp)
+				end  -- if
+				stub.shutdown()  -- to break run()
+			end)
+		stub.run()  -- until stutdown()
+		```
+
+	* Bidirectional streaming RPC: ```route_chat_async()```
+		```lua
+		local rdwr = stub.async_request_rdwr("RouteChat",
+			function(error_str, status_code)
+				stub.shutdown()  -- to break run()
+			end)
+	
+		for _, note in ipairs(notes) do
+			rdwr.write(note)
+		end
+		rdwr.close_writing()  -- Optional.
+		rdwr.read_each(function(server_note)
+			assert("table" == type(server_note))
+			print("Got message: "..inspect(server_note))
+		end)
+
+		stub.run()  -- until shutdown()
+		```
+
+### Server
+
+
+## Example codes
 * [greeter_client.lua](examples/helloworld/greeter_client.lua)
 * [greeter_server.lua](examples/helloworld/greeter_server.lua)
 * [route_guide_client.lua](examples/route_guide/route_guide_client.lua)
@@ -53,5 +228,5 @@ See [premake/README.md](premake/README.md) to use premake5 to generate VS soluti
 		+ `lua-cpp.exe route_guide_server.lua`
 		+ `lua-cpp.exe route_guide_client.lua`
 
-### API doc
+## API doc
 See [doc/ldoc/html/index.html](http://htmlpreview.github.io/?https://github.com/jinq0123/grpc-lua/master/doc/ldoc/html/index.html)
