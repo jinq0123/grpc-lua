@@ -297,7 +297,8 @@ The function parameters are different for different RPC method types.
 ### How to run examples
 1. Copy required exe and dll. 
    Rename [examples/conan_install.bat.example](examples/conan_install.bat.example)
-   to `conan_install.bat`, and change `conandata` variable in it. Then run it.
+   to `conan_install.bat`, and change `conandata` and other dir variables in it.
+   Then run it.
    `conan_install.bat` will:
      + Install dependings using `conan` into `~/.conan/data`
      + Copy exe and dlls from `~/.conan/data`
