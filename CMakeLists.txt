@@ -18,4 +18,5 @@ endif()
 
 file(GLOB_RECURSE SRC_LIST "src/cpp/*.cpp")  
 add_library(grpc_lua ${SRC_LIST})
+target_include_directories(grpc_lua PRIVATE "src/cpp")
 target_link_libraries(grpc_lua ${CONAN_LIBS})
