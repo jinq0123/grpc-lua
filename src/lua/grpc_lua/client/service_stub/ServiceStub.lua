@@ -5,14 +5,14 @@
 local ServiceStub = {}
 
 local c = require("grpc_lua.c")  -- from grpc_lua.so
-local pb = require("luapbintf")
-local MethodInfo = require("grpc_lua.impl.MethodInfo")
-local ClientSyncReader = require("grpc_lua.client.sync.ClinetSyncReader")
-local ClientAsyncWriter = require("grpc_lua.client.sync.ClinetAsyncWriter")
-local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
-local ClientSyncReaderWriter = require("grpc_lua.client.sync.ClinetSyncReaderWriter")
+local ClientAsyncReaderWriter = require("grpc_lua.client.async.ClientAsyncReaderWriter")
+local ClientAsyncWriter = require("grpc_lua.client.async.ClientAsyncWriter")
+local ClientSyncReader = require("grpc_lua.client.sync.ClientSyncReader")
+local ClientSyncReaderWriter = require("grpc_lua.client.sync.ClientSyncReaderWriter")
+local ClientSyncWriter = require("grpc_lua.client.sync.ClientSyncWriter")
+local MethodInfo = require("grpc_lua.client.service_stub.MethodInfo")
 local mcb_wrapper = require("grpc_lua.client.service_stub.msg_cb_wrapper")
-local ClientAsyncReaderWriter = require("grpc_lua.client.async.ClinetAsyncReaderWriter")
+local pb = require("luapbintf")
 
 --- Decode response string to message table.
 -- @string response_type
