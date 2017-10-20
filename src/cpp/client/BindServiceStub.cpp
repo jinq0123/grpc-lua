@@ -7,8 +7,7 @@
 #include <grpc_cb_core/client/client_async_reader.h> // for ClientAsyncReader
 #include <grpc_cb_core/client/service_stub.h>        // for ServiceStub
 #include <grpc_cb_core/common/completion_queue_for_next.h> // to cast GetCompletionQueue()
-#include <grpc_cb_core/common/completion_queue_for_next_sptr.h> // for CompletionQueueForNextSptr
-#include <grpc_cb_core/common/status.h>                         // for Status
+#include <grpc_cb_core/common/status.h>                    // for Status
 
 #include <LuaIntf/LuaIntf.h>
 #include <string>
