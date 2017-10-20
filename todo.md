@@ -13,3 +13,5 @@
 	+ set_default_error_cb()
 	+ set_error_cb()
 	+ set_timeout_ms()
+	
+* Fix ChannelSptr like ServiceStub(ChannelSptr) -> GetServiceStub(Channel&)
