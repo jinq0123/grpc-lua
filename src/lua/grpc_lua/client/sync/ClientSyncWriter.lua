@@ -51,12 +51,11 @@ end  -- write()
 -- @usage resp, error_str, status_code = writer.close()
 function ClientSyncWriter:close()
     local resp_str, error_str, status_code = self._c_writer.close()
-    local resp = nil
     if not resp_str then
         return nil, error_str, status_code
     end
 
-    resp = pb.decode(self._response_type, resp_str)
+    local resp = pb.decode(self._response_type, resp_str)
     if resp then
         return resp, error_str, status_code
     end
