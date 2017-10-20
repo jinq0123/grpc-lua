@@ -1,0 +1,30 @@
+REM Copy exe and dlls from conan data dir.
+
+REM CHANGE conandata and package dirs!
+REM To list package names, use conan search command as following:
+REM conan search lua-cpp/5.3.4@jinq0123/testing
+REM conan search luapbintf/0.1@jinq0123/testing
+REM conan search grpc-lua/0.1@jinq0123/testing
+
+set conandata=C:\Users\jinqing\.conan\data
+set lua_cpp_package=c83d8b197f1a331ca3b55943846d427ad4f7f8e1
+set luapbintf_package=33364f43a1ad585f1513b55ab7b5a8ab2b38e187
+set grpc_lua_package=d42d1f1e9fcf248586f05d7311cfb1a7ea65705d
+
+set lua_cpp_bin=%conandata%\lua-cpp\5.3.4\jinq0123\testing\package\%lua_cpp_package%\bin
+set lua_cpp_exe=%lua_cpp_bin%\lua-cpp.exe
+set lua_cpp_dll=%lua_cpp_bin%\lua-cpp.dll
+set luapbintf_dll=%conandata%\luapbintf\0.1\jinq0123\testing\package\%luapbintf_package%\bin\luapbintf.dll
+set grpc_lua_dll=%conandata%\grpc-lua\0.1\jinq0123\testing\package\%grpc_lua_package%\bin\grpc_lua.dll
+REM or set grpc_lua_dll=..\premake\vs2015\bin\x64\Debug\grpc_lua.dll
+
+copy "%lua_cpp_exe%" helloworld\
+copy "%lua_cpp_exe%" route_guide\
+copy "%lua_cpp_dll%" helloworld\
+copy "%lua_cpp_dll%" route_guide\
+copy "%luapbintf_dll%" helloworld\
+copy "%luapbintf_dll%" route_guide\
+copy "%grpc_lua_dll%" helloworld\
+copy "%grpc_lua_dll%" route_guide\
+
+pause

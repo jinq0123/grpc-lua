@@ -295,17 +295,25 @@ The function parameters are different for different RPC method types.
 * [route_guide_server.lua](examples/route_guide/route_guide_server.lua)
 
 ### How to run examples
+1. Install dependings into `~/.conan/data` using `conan install`
+	1. Rename [examples/conan_install.bat.example](examples/conan_install.bat.example)
+       to `conan_install.bat`
+	2. Run it.
+
 1. Copy required exe and dll. 
-   Rename [examples/conan_install.bat.example](examples/conan_install.bat.example)
-   to `conan_install.bat`, and change `conandata` and other dir variables in it.
-   Then run it.
-   `conan_install.bat` will:
-     + Install dependings using `conan` into `~/.conan/data`
-     + Copy exe and dlls from `~/.conan/data`
-		- lua-cpp.exe
-		- lua-cpp.dll
-		- luapbintf.dll
-		- grpc_lua.dll
+    1. Rename [examples/copy_from_conan.bat.example](examples/copy_from_conan.bat.example)
+       to `copy_from_conan.bat`
+    1. Change variables in `copy_from_conan.bat`
+		* `conandata`, conan data dir, default `~/.conan/data`
+		* package names, conan package names for dependings
+			+ `lua_cpp_package`
+			+ `luapbintf_package`
+			+ `grpc_lua_package`
+    1. Run it, which will copy exe and dlls from `~/.conan/data`
+  		- lua-cpp.exe
+  		- lua-cpp.dll
+  		- luapbintf.dll
+  		- grpc_lua.dll
    
 1. Start lua script
 	* helloworld
