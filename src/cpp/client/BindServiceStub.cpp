@@ -18,12 +18,6 @@ using string = std::string;
 
 namespace {
 
-ServiceStub GetServiceStub(Channel& channel)
-{
-    ChannelSptr sp = channel.shared_from_this();
-    return ServiceStub(sp);
-}
-
 void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
 {
     assert(pServiceStub);
@@ -89,7 +83,7 @@ void BindServiceStub(const LuaRef& mod)
 {
     lua_State* L = mod.state();
     LuaBinding(mod).beginClass<ServiceStub>("ServiceStub")
-        .addFactory(&GetServiceStub)
+        .addConstructor(LUA_ARGS(const ChannelSptr& pChannel))
 
         .addFunction("set_error_cb", &SetErrorCb)
         .addFunction("get_completion_queue", &ServiceStub::GetCompletionQueue)

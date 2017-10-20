@@ -7,17 +7,23 @@
 using namespace grpc_cb_core;
 using namespace LuaIntf;
 
-namespace LuaIntf
+namespace {
+
+ChannelSptr GetChannelSptr(const std::string& sTarget)
 {
-    LUA_USING_SHARED_PTR_TYPE(std::shared_ptr)
+    return std::make_shared<Channel>(sTarget);
 }
+
+}  // namespace
 
 namespace client {
 
 void BindChannel(const LuaRef& mod)
 {
-    LuaBinding(mod).beginClass<Channel>("Channel")
-        .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(const std::string&))
+    // Need ChannelSptr object, not LUA_SP(ChannelSptr).
+    LuaBinding(mod).beginClass<ChannelSptr>("Channel")
+        // NOT .addConstructor(LUA_SP(ChannelSptr), LUA_ARGS(const std::string&))
+        .addFactory(&GetChannelSptr)
     .endClass();
 }  // BindChannel()
 
