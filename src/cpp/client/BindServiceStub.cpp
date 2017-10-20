@@ -3,11 +3,12 @@
 #include "impl/CbWrapper.h"
 #include "common/GetTimeoutMs.h"
 
-#include <grpc_cb_core/common/completion_queue_for_next.h>  // to cast GetCompletionQueue()
-#include <grpc_cb_core/common/completion_queue_for_next_sptr.h>  // for CompletionQueueForNextSptr
-#include <grpc_cb_core/common/status.h>  // for Status
-#include <grpc_cb_core/client/client_async_reader.h>  // for ClientAsyncReader
-#include <grpc_cb_core/client/service_stub.h>  // for ServiceStub
+#include <grpc_cb_core/client/channel.h>             // for Channel
+#include <grpc_cb_core/client/client_async_reader.h> // for ClientAsyncReader
+#include <grpc_cb_core/client/service_stub.h>        // for ServiceStub
+#include <grpc_cb_core/common/completion_queue_for_next.h> // to cast GetCompletionQueue()
+#include <grpc_cb_core/common/completion_queue_for_next_sptr.h> // for CompletionQueueForNextSptr
+#include <grpc_cb_core/common/status.h>                         // for Status
 
 #include <LuaIntf/LuaIntf.h>
 #include <string>
@@ -17,6 +18,12 @@ using namespace LuaIntf;
 using string = std::string;
 
 namespace {
+
+ServiceStub GetServiceStub(Channel& channel)
+{
+    ChannelSptr sp = channel.shared_from_this();
+    return ServiceStub(sp);
+}
 
 void SetErrorCb(ServiceStub* pServiceStub, const LuaRef& luaErrorCb)
 {
@@ -83,8 +90,7 @@ void BindServiceStub(const LuaRef& mod)
 {
     lua_State* L = mod.state();
     LuaBinding(mod).beginClass<ServiceStub>("ServiceStub")
-        .addConstructor(LUA_ARGS(const ChannelSptr&,
-            _opt<CompletionQueueForNextSptr>))
+        .addFactory(&GetServiceStub)
 
         .addFunction("set_error_cb", &SetErrorCb)
         .addFunction("get_completion_queue", &ServiceStub::GetCompletionQueue)
