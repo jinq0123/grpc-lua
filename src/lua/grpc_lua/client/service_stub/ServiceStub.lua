@@ -12,6 +12,7 @@ local ClientAsyncWriter = require("grpc_lua.client.sync.ClinetAsyncWriter")
 local ClientSyncWriter = require("grpc_lua.client.sync.ClinetSyncWriter")
 local ClientSyncReaderWriter = require("grpc_lua.client.sync.ClinetSyncReaderWriter")
 local mcb_wrapper = require("grpc_lua.client.service_stub.msg_cb_wrapper")
+local ClientAsyncReaderWriter = require("grpc_lua.client.async.ClinetAsyncReaderWriter")
 
 --- Decode response string to message table.
 -- @string response_type
@@ -174,7 +175,7 @@ end  -- sync_request_read()
 function ServiceStub:async_request_write(method_name)
     local mi = self:_get_method_info(method_name)
     mi:assert_client_side_streaming()
-    local c_cq = _c_stub:get_completion_queue(),
+    local c_cq = self._c_stub:get_completion_queue()
     return ClientAsyncWriter:new(self._c_channel, mi.request_name,
         c_cq, mi.request_type, mi.response_type, self._timeout_sec)
 end  -- async_request_write()
@@ -195,7 +196,7 @@ end  -- sync_request_rdwr()
 -- @string method_name method name
 -- @tparam function|nil error_cb error callback, `function(error_str|nil, status_code)`
 -- @treturn ClientAsyncReaderWriter
-function ServiceStub:async_request_rdwr(method_name, error_cb)
+function ServiceStub:async_request_rdwr(method_name, error_cb)  -- XXX unused error_cb
     local mi = self:_get_method_info(method_name)
     mi:assert_bidirectional_streaming()
     return ClientAsyncReaderWriter:new(self._c_channel,

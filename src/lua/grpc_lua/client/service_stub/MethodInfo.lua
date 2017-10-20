@@ -50,7 +50,7 @@ end
 
 --- Assert simple rpc.
 function MethodInfo:assert_simple_rpc()
-    assert(self:is_simple_rpc(), self:method_name .. " is not simple rpc method.")
+    assert(self:is_simple_rpc(), self.method_name .. " is not simple rpc method.")
 end
 
 --- Is bi-directional streaming.

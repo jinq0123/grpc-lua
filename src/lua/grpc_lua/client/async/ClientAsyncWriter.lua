@@ -3,6 +3,9 @@
 
 local ClientAsyncWriter = {}
 
+local c = require("grpc_lua.c")  -- from grpc_lua.so
+local pb = require("luapbintf")
+
 -------------------------------------------------------------------------------
 --- Public functions.
 -- @section public
@@ -19,7 +22,7 @@ function ClientAsyncWriter:new(c_channel, request_name, c_completion_queue,
         request_type, response_type, timeout_sec)
     assert("userdata" == type(c_channel))
     assert("string" == type(request_name))
-    assert("userdata" == type(c_completion_queue)
+    assert("userdata" == type(c_completion_queue))
     assert("string" == type(request_type))
     assert("string" == type(response_type))
     local writer = {
@@ -77,7 +80,7 @@ end  -- wrap_close_cb()
 --         assert(not error_str or "string" == type(error_str))
 --         assert("number" == type(status_code))
 --     end)
-function ClientSyncWriter:close(close_cb)
+function ClientAsyncWriter:close(close_cb)
     assert(not close_cb or "function" == type(close_cb))
     self._c_writer.close(wrap_close_cb(close_cb, self._response_type))
 end  -- close()

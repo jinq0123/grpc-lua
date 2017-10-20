@@ -3,6 +3,10 @@
 
 local ClientAsyncReaderWriter = {}
 
+local c = require("grpc_lua.c")  -- from grpc_lua.so
+local mcb_wrapper = require("grpc_lua.client.service_stub.msg_cb_wrapper")
+local pb = require("luapbintf")
+
 -------------------------------------------------------------------------------
 --- Public functions.
 -- @section public
@@ -19,7 +23,7 @@ function ClientAsyncReaderWriter:new(c_channel, request_name,
         c_completion_queue, request_type, response_type, timeout_sec)
     assert("userdata" == type(c_channel))
     assert("string" == type(request_name))
-    assert("userdata" == type(c_completion_queue)
+    assert("userdata" == type(c_completion_queue))
     assert("string" == type(request_type))
     assert("string" == type(response_type))
     local rdwr = {
@@ -41,7 +45,7 @@ end  -- new()
 -- @treturn table|nil message table, nil means error or end
 function ClientAsyncReaderWriter:read_each(msg_cb)
     local msg_str_cb = nil  -- nil|function(string)
-    if msb_cb then
+    if msg_cb then
         assert("function" == type(msg_cb))
         msg_str_cb = mcb_wrapper.wrap(msg_cb, self._respones_type)
     end
@@ -51,7 +55,7 @@ end  -- read_one()
 --- Write message.
 -- @table message
 -- @treturn boolean return false on error
-function ClientAsyncWriter:write(message)
+function ClientAsyncReaderWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
     self._c_writer.write(msg_str)
