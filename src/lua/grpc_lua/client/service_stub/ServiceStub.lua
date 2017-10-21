@@ -10,7 +10,7 @@ local ClientAsyncWriter = require("grpc_lua.client.async.ClientAsyncWriter")
 local ClientSyncReader = require("grpc_lua.client.sync.ClientSyncReader")
 local ClientSyncReaderWriter = require("grpc_lua.client.sync.ClientSyncReaderWriter")
 local ClientSyncWriter = require("grpc_lua.client.sync.ClientSyncWriter")
-local MethodInfo = require("grpc_lua.client.service_stub.MethodInfo")
+local MethodInfo = require("grpc_lua.common.MethodInfo")
 local mcb_wrapper = require("grpc_lua.client.service_stub.msg_cb_wrapper")
 local pb = require("luapbintf")
 
