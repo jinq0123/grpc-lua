@@ -14,7 +14,7 @@ local pb = require("luapbintf")
 -- @func msg_cb `function(table)`
 -- @treturn string|nil error string, nil means no error
 local function on_msg_str(msg_type, msg_str, msg_cb)
-    assert("funciton" == type(msg_cb))
+    assert("function" == type(msg_cb))
     local msg = pb.decode(msg_type, msg_str)
     if msg then
         msg_cb(msg)
@@ -41,7 +41,7 @@ end  -- on_msg_str()
 function M.wrap(msg_cb, msg_type)
     if not msg_cb then return nil end
     assert("function" == type(msg_cb))
-    assert("string" == msg_type)
+    assert("string" == type(msg_type))
     return function(msg_str)
         on_msg_str(msg_type, msg_str, msg_cb)
     end
