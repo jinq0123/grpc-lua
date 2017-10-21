@@ -18,6 +18,7 @@ local function main()
     -- Async request.
     stub:async_request("SayHello", request, function(resp)
         print("Async greeter received: " .. resp.message)
+        stub:shutdown()  -- to stop stub:run()
     end)
     stub:run()
 end  -- main()
