@@ -1,0 +1,32 @@
+Service descriptor example
+
+t = pb.get_service_descriptor("test.Test2")
+
+> inspect(t)                                            
+{                                                       
+  method = { {                                          
+      client_streaming = false,                         
+      input_type = ".test2.TestMsg",                    
+      name = "Foo",                                     
+      output_type = ".test.CommonMsg",                  
+      server_streaming = false                          
+    }, {                                                
+      client_streaming = false,                         
+      input_type = ".test2.TestMsg",                    
+      name = "Foo2",                                    
+      output_type = ".test2.TestMsg",                   
+      server_streaming = false                          
+    } },                                                
+  name = "Test2"                                        
+}                                                       
+                                                       
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        

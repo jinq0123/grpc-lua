@@ -7,12 +7,6 @@
 
 #include <vector>
 
-namespace google {
-namespace protobuf {
-class MethodDescriptor;
-class ServiceDescriptor;
-}}  // namespace google::protobuf
-
 namespace LuaIntf {
 struct LuaString;
 }  // namespace LuaIntf
@@ -24,30 +18,39 @@ class Service : public grpc_cb_core::Service
 {
 public:
     using LuaRef = LuaIntf::LuaRef;
-    using ServiceDescriptor = google::protobuf::ServiceDescriptor;
-
-    Service(const ServiceDescriptor& desc, const LuaRef& luaService);
+    explicit Service(const LuaRef& luaService);
     ~Service();
 
 public:
-    const std::string& GetFullName() const override;
+    using string = std::string;
+    const string& GetFullName() const override;
     size_t GetMethodCount() const override;
     bool IsMethodClientStreaming(size_t iMthdIdx) const override;
-    const std::string& GetMethodName(size_t iMthdIdx) const override;
+    const string& GetMethodName(size_t iMthdIdx) const override;
     void CallMethod(size_t iMthdIdx, grpc_byte_buffer* pReqBuf,
         const grpc_cb_core::CallSptr& pCall) override;
 
 private:
-    void InitMethodNames();
-    const google::protobuf::MethodDescriptor& GetMthdDesc(
-        size_t iMthdIdx) const;
+    void InitMethods();
+    void InitMethod(size_t iMthdIdx, const LuaRef& luaMethod);
     void CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
         const grpc_cb_core::CallSptr& pCall);
 
 private:
-    const ServiceDescriptor& m_desc;
     std::unique_ptr<const LuaRef> m_pLuaService;
-    std::vector<std::string> m_vMethodNames;
+    string m_sFullName;  // like "helloworld.Greeter"
+
+    struct MethodInfo
+    {
+        string sName;
+        // Method request name is like: "/helloworld.Greeter/SayHello"
+        string sRequestName;
+        string sInputType;  // full name, like "helloworld.HelloRequest"
+        string sOutputType;  // full name, like "helloworld.HelloReply"
+        bool IsClientStreaming;
+        bool IsServerStreaming;
+    };  // struct MethodInfo
+    std::vector<MethodInfo> m_vMethods;
 };  // class Service
 
 }  // namespace impl

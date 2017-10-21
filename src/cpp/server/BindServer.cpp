@@ -4,24 +4,17 @@
 
 #include <grpc_cb_core/server/server.h>  // for Server
 #include <LuaIntf/LuaIntf.h>
-#include <google/protobuf/descriptor.h>  // for ServiceDescriptor
 #include <string>
 
 using namespace LuaIntf;
 
 namespace {
 
-void RegisterService(grpc_cb_core::Server* pServer,
-    const LuaRef& svcDecsPtr, const LuaRef& luaService)
+void RegisterService(grpc_cb_core::Server* pServer, const LuaRef& luaService)
 {
     assert(pServer);
-    svcDecsPtr.checkType(LuaIntf::LuaTypeID::LIGHTUSERDATA);
-    const auto* pDesc = static_cast<const google::protobuf::ServiceDescriptor*>(
-        svcDecsPtr.toPtr());
-    if (!pDesc) throw LuaException("ServiceDescriptor pointer is nullptr.");
     luaService.checkTable();
-    pServer->RegisterService(std::make_shared<
-        impl::Service>(*pDesc, luaService));
+    pServer->RegisterService(std::make_shared<impl::Service>(luaService));
 }  // RegisterService()
 
 }  // namespace

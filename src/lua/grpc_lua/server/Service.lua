@@ -15,17 +15,36 @@ local Writer = require("grpc_lua.server.Writer")
 
 --- Service constructor.
 -- Used by `Server`. Do not call it directly.
+-- @string svc_full_name like "helloworld.Greeter"
+-- @tab svc_desc service descriptor message table
 -- @tab svc_impl service implementation
 -- @treturn Service
-function Service:new(svc_impl)
+function Service:new(svc_full_name, svc_desc, svc_impl)
+    assert("string" == type(svc_full_name))
+    assert("table" == type(svc_desc))
     assert("table" == type(svc_impl))
     local svc = {
-        impl = svc_impl,
+        -- private:
+        _full_name = svc_full_name,
+        _descriptor = svc_desc,
+        _impl = svc_impl,
     }
     setmetatable(svc, self)
     self.__index = self
     return svc
 end  -- new()
+
+-- Get service full name, like "helloworld.Greeter".
+-- @treturn string
+function Service:get_full_name()
+    return self._full_name
+end  -- get_full_name()
+
+-- Get service descriptor table.
+-- @treturn table
+function Service:get_descriptor()
+    return self._descriptor
+end  -- get_descriptor()
 
 --- Call simple rpc service method.
 -- @string method_name method name, like: "SayHello"
@@ -41,7 +60,7 @@ function Service:call_simple_method(method_name, request_type, request_str,
     assert("userdata" == type(c_replier))
     assert("string" == type(response_type))
 
-    local method = assert(self.impl[method_name], "No such method: "..method_name)
+    local method = assert(self._impl[method_name], "No such method: "..method_name)
     local request = assert(pb.decode(request_type, request_str))  -- XXX check result
     local replier = Replier:new(c_replier, response_type)
     method(request, replier)
@@ -61,7 +80,7 @@ function Service:call_s2c_streaming_method(method_name,
     assert("userdata" == type(c_writer))
     assert("string" == type(response_type))
 
-    local method = assert(self.impl[method_name], "No such method: "..method_name)
+    local method = assert(self._impl[method_name], "No such method: "..method_name)
     local request = assert(pb.decode(request_type, request_str))  -- XXX check result
     local writer = Writer:new(c_writer, response_type)
     method(request, writer)
@@ -80,7 +99,7 @@ function Service:call_c2s_streaming_method(method_name,
     assert("userdata" == type(c_replier))
     assert("string" == type(response_type))
 
-    local method = assert(self.impl[method_name], "No such method: "..method_name)
+    local method = assert(self._impl[method_name], "No such method: "..method_name)
     local replier = Replier:new(c_replier, response_type)
     local reader_impl = method(replier)
     return Reader:new(reader_impl, request_type)
@@ -99,7 +118,7 @@ function Service:call_bidi_streaming_method(method_name,
     assert("userdata" == type(c_writer))
     assert("string" == type(response_type))
 
-    local method = assert(self.impl[method_name], "No such method: "..method_name)
+    local method = assert(self._impl[method_name], "No such method: "..method_name)
     local writer = Writer:new(c_writer, response_type)
     local reader_impl = method(writer)
     return Reader:new(reader_impl, request_type)
