@@ -9,6 +9,28 @@ local Replier = require("grpc_lua.server.Replier")
 local Reader = require("grpc_lua.server.Reader")
 local Writer = require("grpc_lua.server.Writer")
 
+--- Get service method info map.
+-- @string svc_full_name like "helloworld.Greeter"
+-- @tab svc_desc service descriptor message table
+-- @treturn table map from method name to method info
+local function get_method_info_map(svc_full_name, svc_desc)
+    assert("table" == type(svc_desc))
+    -- See: service_descriptor_example.txt
+    local methods = svc_desc.methods
+    assert("table" == type(methods))
+    local result = {}
+    for i = 1, #methods do
+        local mthd = methods[i]
+        assert("table" == type(mthd))
+        local mthd_name = mthd.name
+        result[mthd_name] = {  -- method info table
+            request_type = pb.get_rpc_input_name(svc_full_name, mthd_name),
+            response_type = pb.get_rpc_output_name(svc_full_name, mthd_name),
+        }
+    end  -- for
+    return result
+end  -- get_method_info_map()
+
 -------------------------------------------------------------------------------
 --- Public functions.
 -- @section public
@@ -28,6 +50,9 @@ function Service:new(svc_full_name, svc_desc, svc_impl)
         _full_name = svc_full_name,
         _descriptor = svc_desc,
         _impl = svc_impl,
+
+        -- map method name to method info
+        _method_info_map = get_method_info_map(svc_full_name, svc_desc),
     }
     setmetatable(svc, self)
     self.__index = self
@@ -60,7 +85,10 @@ function Service:call_simple_method(method_name, request_type, request_str,
     assert("userdata" == type(c_replier))
     assert("string" == type(response_type))
 
-    local method = assert(self._impl[method_name], "No such method: "..method_name)
+    local method, info = self._get_method(method_name)
+
+    local info = assert(self._method_info_map[method_name], "No such method info: "..method_name)
+    local method = assert(self._impl[method_name], "No such method impl: "..method_name)
     local request = assert(pb.decode(request_type, request_str))  -- XXX check result
     local replier = Replier:new(c_replier, response_type)
     method(request, replier)
@@ -123,5 +151,18 @@ function Service:call_bidi_streaming_method(method_name,
     local reader_impl = method(writer)
     return Reader:new(reader_impl, request_type)
 end
+
+-------------------------------------------------------------------------------
+--- Private functions.
+-- @section private
+
+--- Get method.
+-- @string method_name
+-- @treturn function method implementation function
+-- @treturn table method info
+function Service:_get_method(method_name)
+    local info = assert(self._method_info_map[method_name], "No such method info: "..method_name)
+    local method = assert(self._impl[method_name], "No such method impl: "..method_name)
+end  -- _get_method()
 
 return Service

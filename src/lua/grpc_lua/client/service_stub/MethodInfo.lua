@@ -1,6 +1,6 @@
 --- Service method info class.
--- Internal used by `ServiceStub` and `Service`.
--- @classmod grpc_lua.cpmmon.MethodInfo
+-- Internal used by `ServiceStub`.
+-- @classmod grpc_lua.client.service_stub.MethodInfo
 
 local MethodInfo = {}
 

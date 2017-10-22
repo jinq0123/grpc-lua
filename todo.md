@@ -15,3 +15,4 @@
 	+ set_timeout_ms()
 	
 * Do not depend on protobuf.
+* Move Service::CallMethod() to Service.lua
