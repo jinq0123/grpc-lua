@@ -23,7 +23,7 @@ function Reader:new(replier, db)
             feature_count = 0,
             distance = 0.0,
             elapsed_time = 0,  -- in seconds
-        }
+        },
         _previous = nil,  -- Point
         _start_time = os.time(),
     }
@@ -68,7 +68,7 @@ end
 function Reader:on_error(error_str, status_code)
     assert("string" == type(error_str))
     assert("number" == type(status_code))
-    print(string.format("RecordRoute error: (%d)%s", status_code, error_str)
+    print(string.format("RecordRoute error: (%d)%s", status_code, error_str))
     self._replier.reply_error(error_str, status_code)
 end
 

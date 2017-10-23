@@ -6,23 +6,12 @@
 #include <LuaIntf/LuaIntf.h>  // for LuaRef
 #include <cassert>
 
-using LuaIntf::LuaRef;
-
 namespace impl {
 
-// Functions from server Reader.lua
-struct LuaReaderFunctions
-{
-    LuaRef funOnMsgStr;  // function(string) -> string|nil
-    LuaRef funOnError;  // function(string, int)
-    LuaRef funOnEnd;  // function()
-};
-
 ServerReader::ServerReader(const LuaRef& luaReader)
-    : m_pLuaReaderFunctions(new LuaReaderFunctions)
+    : m_pLuaReader(new LuaRef(luaReader))
 {
     assert(luaReader);
-    InitLuaReaderFunctions(luaReader);
 }
 
 ServerReader::~ServerReader()
@@ -31,7 +20,7 @@ ServerReader::~ServerReader()
 
 grpc_cb_core::Status ServerReader::OnMsgStr(const std::string& msg_str)
 {
-    LuaRef luaErrStr = m_pLuaReaderFunctions->funOnMsgStr.call<LuaRef>(msg_str);
+    LuaRef luaErrStr = m_pLuaReader->dispatch<LuaRef>("on_msg_str", msg_str);
     if (!luaErrStr) return grpc_cb_core::Status::OK;
     assert(LuaIntf::LuaTypeID::STRING == luaErrStr.type());
     return grpc_cb_core::Status::InternalError(
@@ -40,26 +29,13 @@ grpc_cb_core::Status ServerReader::OnMsgStr(const std::string& msg_str)
 
 void ServerReader::OnError(const grpc_cb_core::Status& status)
 {
-    m_pLuaReaderFunctions->funOnError(
+    m_pLuaReader->dispatch("on_error",
         status.GetDetails(), status.GetCode());
 }
 
 void ServerReader::OnEnd()
 {
-    m_pLuaReaderFunctions->funOnEnd();
-}
-
-void ServerReader::InitLuaReaderFunctions(const LuaIntf::LuaRef& luaReader)
-{
-    assert(luaReader);
-    assert(m_pLuaReaderFunctions);
-    LuaReaderFunctions& rFuns = *m_pLuaReaderFunctions;
-    rFuns.funOnMsgStr = luaReader["on_msg_str"];
-    rFuns.funOnMsgStr.checkFunction();
-    rFuns.funOnError = luaReader["on_error"];
-    rFuns.funOnError.checkFunction();
-    rFuns.funOnEnd = luaReader["on_end"];
-    rFuns.funOnEnd.checkFunction();
+    m_pLuaReader->dispatch("on_end");
 }
 
 }  // namespace impl

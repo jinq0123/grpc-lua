@@ -21,7 +21,8 @@ struct LuaReaderFunctions;
 // Thread-safe.
 class ServerReader : public grpc_cb_core::ServerReader {
  public:
-  explicit ServerReader(const LuaIntf::LuaRef& luaReader);
+  using LuaRef = LuaIntf::LuaRef;
+  explicit ServerReader(const LuaRef& luaReader);
   virtual ~ServerReader();
 
  public:
@@ -30,10 +31,10 @@ class ServerReader : public grpc_cb_core::ServerReader {
   void OnEnd() override;
 
  private:
-  void InitLuaReaderFunctions(const LuaIntf::LuaRef& luaReader);
+  void InitLuaReaderFunctions(const LuaRef& luaReader);
 
  private:
-  std::unique_ptr<LuaReaderFunctions> m_pLuaReaderFunctions;
+  std::unique_ptr<LuaRef> m_pLuaReader;
 };  // class ServerReader
 
 }  // namespace impl
