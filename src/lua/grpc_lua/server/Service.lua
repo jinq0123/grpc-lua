@@ -97,7 +97,7 @@ function Service:call_simple_method(method_index, request_str, c_replier)
     local mi = self._get_method_info(method_index)
     local request = assert(pb.decode(mi.input_type, request_str))  -- XXX check result
     local replier = Replier:new(c_replier, mi.output_type)
-    method(request, replier)
+    mi.func(request, replier)
 end
 
 --- Call server-to-client streaming rpc method.
@@ -112,7 +112,7 @@ function Service:call_s2c_streaming_method(method_index, request_str, c_writer)
     local mi = self._get_method_info(method_index)
     local request = assert(pb.decode(mi.input_type, request_str))  -- XXX check result
     local writer = Writer:new(c_writer, mi.output_type)
-    method(request, writer)
+    mi.func(request, writer)
 end
 
 --- Call client-to-server streaming rpc method.
@@ -125,7 +125,7 @@ function Service:call_c2s_streaming_method(method_index, c_replier)
 
     local mi = self._get_method_info(method_index)
     local replier = Replier:new(c_replier, mi.output_type)
-    local reader_impl = method(replier)
+    local reader_impl = mi.func(replier)
     return Reader:new(reader_impl, mi.input_type)
 end
 
@@ -139,7 +139,7 @@ function Service:call_bidi_streaming_method(method_index, c_writer)
 
     local mi = self._get_method_info(method_index)
     local writer = Writer:new(c_writer, mi.output_type)
-    local reader_impl = method(writer)
+    local reader_impl = mi.func(writer)
     return Reader:new(reader_impl, mi.input_type)
 end
 
