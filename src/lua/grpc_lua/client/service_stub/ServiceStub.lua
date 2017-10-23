@@ -62,7 +62,7 @@ end  -- new()
 -- @func error_cb `function(error_str|nil, status_code)`
 function ServiceStub:set_error_cb(error_cb)
     assert(not error_cb or "function" == type(error_cb))
-    self._c_stub.set_error_cb(error_cb)
+    self._c_stub:set_error_cb(error_cb)
     self._error_cb = error_cb
 end  -- set_error_cb()
 
@@ -76,7 +76,7 @@ end
 -- @tparam number|nil timeout seconds, or nil if no timeout
 function ServiceStub:set_timeout_sec(timeout_sec)
     assert(not timeout_sec or "number" == type(timeout_sec))
-    self._c_stub.set_timeout_sec(timeout_sec)
+    self._c_stub:set_timeout_sec(timeout_sec)
     self._timeout_sec = timeout_sec
 end
 
@@ -153,7 +153,7 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     local req_str = pb.encode(mi.request_type, request)
     -- Need to wrap the message callback.
     local msg_str_cb = mcb_wrapper.wrap(msg_cb, mi.response_type)
-    self._c_stub.async_request_read(self._c_channel,
+    self._c_stub:async_request_read(self._c_channel,
         mi.request_name, req_str, msg_str_cb, status_cb)
 end  -- async_request_read()
 

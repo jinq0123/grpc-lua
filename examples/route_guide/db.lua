@@ -17,7 +17,7 @@ function M.load()
 end  -- load()
 
 function M.get_rand_feature()
-    local idx = math(#M.features)
+    local idx = math.random(#M.features)
     return assert(M.features[idx])
 end  -- get_rand_feature()
 

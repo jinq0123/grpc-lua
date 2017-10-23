@@ -48,7 +48,7 @@ end  -- write()
 -- @treturn table|nil response message or nil on error
 -- @treturn string error string, "" if OK
 -- @treturn int status code
--- @usage resp, error_str, status_code = writer.close()
+-- @usage resp, error_str, status_code = writer:close()
 function ClientSyncWriter:close()
     local resp_str, error_str, status_code = self._c_writer:close()
     if not resp_str then

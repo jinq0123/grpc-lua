@@ -40,7 +40,7 @@ function Reader:on_msg(msg)
         local l = n.location
         if l.latitude == l0.latitude and
                 l.longitude == l0.longitude then
-            self._writer.write(n)
+            self._writer:write(n)
         end  -- if
     end  -- for
     table.insert(self._received_notes, msg)
@@ -55,7 +55,7 @@ end
 
 function Reader:on_end()
     print("RouteChat reader end.")
-    self._writer.write({});
+    self._writer:write({});
 end
 
 -------------------------------------------------------------------------------

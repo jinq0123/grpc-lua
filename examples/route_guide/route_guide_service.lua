@@ -57,13 +57,13 @@ function M.ListFeatures(rectangle, writer)
            l.longitude <= right and
            l.latitude >= bottom and
            l.latitude <= top then
-            if not writer.write(f) then
+            if not writer:write(f) then
                 print("Failed to write.")
                 break
-            end  -- if not writer.write()
+            end  -- if not writer:write()
         end  -- if l
     end  -- for _, f
-    writer.close()
+    writer:close()
 end  -- ListFeatures()
 
 --- Client-to-server streaming method.

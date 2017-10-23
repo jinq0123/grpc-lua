@@ -44,7 +44,7 @@ end  -- new()
 function ClientAsyncWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
-    self._c_writer.write(msg_str)
+    self._c_writer:write(msg_str)
 end  -- write()
 
 --- Wrap close callback.
@@ -74,7 +74,7 @@ end  -- wrap_close_cb()
 -- @tparam func|nil close_cb close callback function, or nil to ignore response.
 -- `function(table|nil, error_str|nil, status_code)`
 -- @usage
--- writer.close(
+-- writer:close(
 --     function(response, error_str, status_code)
 --         assert(not response or "table" == type(response))
 --         assert(not error_str or "string" == type(error_str))
@@ -82,7 +82,7 @@ end  -- wrap_close_cb()
 --     end)
 function ClientAsyncWriter:close(close_cb)
     assert(not close_cb or "function" == type(close_cb))
-    self._c_writer.close(wrap_close_cb(close_cb, self._response_type))
+    self._c_writer:close(wrap_close_cb(close_cb, self._response_type))
 end  -- close()
 
 -------------------------------------------------------------------------------

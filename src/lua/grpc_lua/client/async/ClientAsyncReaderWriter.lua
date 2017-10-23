@@ -49,7 +49,7 @@ function ClientAsyncReaderWriter:read_each(msg_cb)
         assert("function" == type(msg_cb))
         msg_str_cb = mcb_wrapper.wrap(msg_cb, self._respones_type)
     end
-    self._c_rdwr.read_each(msg_str_cb)
+    self._c_rdwr:read_each(msg_str_cb)
 end  -- read_one()
 
 --- Write message.
@@ -58,13 +58,13 @@ end  -- read_one()
 function ClientAsyncReaderWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
-    self._c_writer.write(msg_str)
+    self._c_writer:write(msg_str)
 end  -- write()
 
 --- Close writing.
 -- Optional. Writing is auto closed in dtr().
 function ClientAsyncReaderWriter:close_writing()
-    self._c_rdwr.close_writing()
+    self._c_rdwr:close_writing()
 end  -- close_writing()
 
 -------------------------------------------------------------------------------

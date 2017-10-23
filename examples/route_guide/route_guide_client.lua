@@ -79,15 +79,15 @@ local function sync_record_route()
         local feature = db.get_rand_feature()
         local loc = assert(feature.location)
         print(string.format("Visiting point (%f, %f)",
-            loc.latitude()/kCoordFactor, loc.longitude()/kCoordFactor))
-        if not sync_writer.write(loc) then
+            loc.latitude/kCoordFactor, loc.longitude/kCoordFactor))
+        if not sync_writer:write(loc) then
             print("Failed to sync write.")
             break
         end  -- if
     end  -- for
 
     -- Recv status and reponse.
-    local summary, error_str, status_code = sync_writer.close()  -- Todo: timeout
+    local summary, error_str, status_code = sync_writer:close()  -- Todo: timeout
     if not summary then
         print(string.format("RecordRoute rpc failed: (%d)%s.",
             status_code, error_str))
@@ -104,13 +104,13 @@ local function sync_route_chat()
     for _, note in ipairs(notes) do
         -- write one then read one
         print("Sending message: " .. inspect(note))
-        sync_rdwr.write(note)
+        sync_rdwr:write(note)
         local server_note = sync_rdwr:read_one()
         if server_note then
             print("Got message: "..inspect(server_note))
         end  -- if
     end  -- for
-    sync_rdwr.close_writing()
+    sync_rdwr:close_writing()
 
     -- read remaining
     while true do
@@ -164,7 +164,7 @@ local function record_route_async()
     end  -- for
 
     -- Recv reponse and status.
-    async_writer.close(
+    async_writer:close(
         function(resp, error_str, status_code)
             if resp then
                 assert("table" == type(resp))
@@ -193,10 +193,10 @@ local function route_chat_async()
 
     for _, note in ipairs(notes) do
         print("Sending message: " .. inspect(note))
-        rdwr.write(note)
+        rdwr:write(note)
     end
-    rdwr.close_writing()  -- Optional.
-    rdwr.read_each(function(server_note)
+    rdwr:close_writing()  -- Optional.
+    rdwr:read_each(function(server_note)
         assert("table" == type(server_note))
         print("Got message: "..inspect(server_note))
     end)
