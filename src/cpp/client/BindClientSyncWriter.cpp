@@ -46,7 +46,7 @@ void BindClientSyncWriter(const LuaRef& mod)
         .addFunction("close",
             [L](const ClientSyncWriter* pWriter) {
                 assert(pWriter);
-                Close(*pWriter, L);
+                return Close(*pWriter, L);
             })
     .endClass();
 }  // BindClientSyncWriter()
