@@ -45,26 +45,27 @@ It took %d seconds]],
 end
 
 local function sync_get_feature()
-    print("Sync get feature...")
+    print("-------------- Sync get feature --------------")
     local stub = new_stub()
     local feature
     feature = stub:sync_request("GetFeature", point(409146138, -746188906))
-    print("Get feature: "..inspect(feature))
+    print("Found feature: "..inspect(feature))
     feature = stub:sync_request("GetFeature", point(0, 0))
-    print("Get feature: "..inspect(feature))
+    print("Found feature: "..inspect(feature))
 end  -- sync_get_feature()
 
 local function sync_list_features()
-    print("Sync list features...")
+    print("-------------- Sync list features --------------")
     local stub = new_stub()
     local rect = rectangle(400000000, -750000000, 420000000, -730000000)
     print("Looking for features between 40, -75 and 42, -73")
     local sync_reader = stub:sync_request_read("ListFeatures", rect)
     -- request_read, request_write, request_rdwr ? XXX
     while true do
-        local feature = sync_reader:read_one()
-        if not feature then break end
-        print("Found feature: "..inspect(feature))
+        local f = sync_reader:read_one()
+        if not f then break end
+        print(string.format("Found feature %s at %f,%f", f.name,
+            f.location.latitude/kCoordFactor, f.location.longitude/kCoordFactor))
     end  -- while
     -- sync_reader.recv_status() XXX
     print("ListFeatures rpc succeeded.")
@@ -72,7 +73,7 @@ local function sync_list_features()
 end  -- sync_list_features()
 
 local function sync_record_route()
-    print("Sync record route...")
+    print("-------------- Sync record route --------------")
     local stub = new_stub()
     local sync_writer = stub:sync_request_write("RecordRoute")
     for i = 1, 10 do
@@ -97,7 +98,7 @@ local function sync_record_route()
 end  -- sync_record_route()
 
 local function sync_route_chat()
-    print("Sync route chat...")
+    print("-------------- Sync route chat --------------")
     local stub = new_stub()
     local sync_rdwr = stub:sync_request_rdwr("RouteChat")
 
@@ -116,7 +117,7 @@ local function sync_route_chat()
 end  -- sync_route_chat()
 
 local function get_feature_async()
-    print("Get feature async...")
+    print("-------------- Get feature async --------------")
     local stub = new_stub()
     stub:async_request("GetFeature", point())  -- ignore response
     stub:async_request("GetFeature", point(409146138, -746188906),
@@ -128,14 +129,14 @@ local function get_feature_async()
 end  -- get_feature_async()
 
 local function list_features_async()
-    print("List features async...")
+    print("-------------- List features async --------------")
     local stub = new_stub()
     local rect = rectangle(400000000, -750000000, 420000000, -730000000)
     print("Looking for features between 40, -75 and 42, -73")
     stub:async_request_read("ListFeatures", rect,
         function(f)
             assert("table" == type(f))
-            print(string.format("Got feature %s at %f,%f", f.name,
+            print(string.format("Found feature %s at %f,%f", f.name,
                 f.location.latitude/kCoordFactor, f.location.longitude/kCoordFactor))
         end,
         function(error_str, status_code)
@@ -147,7 +148,7 @@ local function list_features_async()
 end  -- list_features_async()
 
 local function record_route_async()
-    print("Record route async...")
+    print("-------------- Record route async --------------")
     local stub = new_stub()
     local async_writer = stub:async_request_write("RecordRoute")
     for i = 1, 10 do
@@ -174,7 +175,7 @@ local function record_route_async()
 end  -- record_route_async()
 
 local function route_chat_async()
-    print("Route chat async...")
+    print("-------------- Route chat async --------------")
     local stub = new_stub()
 
     local rdwr = stub:async_request_rdwr("RouteChat",
