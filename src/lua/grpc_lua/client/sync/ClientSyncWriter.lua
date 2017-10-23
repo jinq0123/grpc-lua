@@ -41,7 +41,7 @@ end  -- new()
 function ClientSyncWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
-    self._c_writer:write(msg_str)
+    return self._c_writer:write(msg_str)
 end  -- write()
 
 --- Close and get response.
