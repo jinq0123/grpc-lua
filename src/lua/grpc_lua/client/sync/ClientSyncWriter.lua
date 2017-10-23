@@ -41,7 +41,7 @@ end  -- new()
 function ClientSyncWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
-    self._c_writer.write(msg_str)
+    self._c_writer:write(msg_str)
 end  -- write()
 
 --- Close and get response.
@@ -50,7 +50,7 @@ end  -- write()
 -- @treturn int status code
 -- @usage resp, error_str, status_code = writer.close()
 function ClientSyncWriter:close()
-    local resp_str, error_str, status_code = self._c_writer.close()
+    local resp_str, error_str, status_code = self._c_writer:close()
     if not resp_str then
         return nil, error_str, status_code
     end

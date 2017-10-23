@@ -38,7 +38,7 @@ end  -- new()
 --- Read one message.
 -- @treturn table|nil message table, nil means error or end
 function ClientSyncReaderWriter:read_one()
-    local msg = self._c_rdwr.read_one()
+    local msg = self._c_rdwr:read_one()
     if not msg then return nil end
     return pb.decode(self._response_type, msg)  -- return nil if decode error
 end  -- read_one()
@@ -49,13 +49,13 @@ end  -- read_one()
 function ClientSyncReaderWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
-    self._c_rdwr.write(msg_str)
+    self._c_rdwr:write(msg_str)
 end  -- write()
 
 --- Close writing.
 -- Optional. Writing is auto closed in dtr().
 function ClientSyncReaderWriter:close_writing()
-    self._c_rdwr.close_writing()
+    self._c_rdwr:close_writing()
 end  -- close_writing()
 
 -------------------------------------------------------------------------------

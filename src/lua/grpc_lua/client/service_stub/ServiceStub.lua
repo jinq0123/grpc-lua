@@ -120,9 +120,9 @@ end  -- async_request()
 -- @treturn ClientSyncReader
 function ServiceStub:sync_request_read(method_name, request)
     assert("table" == type(request))
-    local mi = self:get_method_info(method_name)
+    local mi = self:_get_method_info(method_name)
     mi:assert_server_side_streaming()
-    local req_str = pb:encode(mi.request_type, request)
+    local req_str = pb.encode(mi.request_type, request)
     return ClientSyncReader:new(self._c_channel, mi.request_name,
         req_str, mi.response_type, self._timeout_sec)
 end  -- sync_request_read()
@@ -136,7 +136,7 @@ end  -- sync_request_read()
 -- @tparam[optchain=nil] function|nil status_cb status callback,
 --  `function(error_str|nil, status_code)`, nil means to use self.error_cb
 -- @usage
--- stub.async_request_read("ListFeatures", rect,
+-- stub:async_request_read("ListFeatures", rect,
 --   function(message) assert("table" == type(message)) end,
 --   function(error_str, status_code)
 --     assert(not error_str or "string" == type(error_str))
@@ -147,7 +147,7 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     assert(not msg_cb or "function" == type(msg_cb))
     status_cb = status_cb or self._error_cb
     assert(not status_cb or "function" == type(status_cb))
-    local mi = self:get_method_info(method_name)
+    local mi = self:_get_method_info(method_name)
     mi:assert_server_side_streaming()
 
     local req_str = pb.encode(mi.request_type, request)

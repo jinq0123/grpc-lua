@@ -36,7 +36,7 @@ end  -- new()
 --- Read one message.
 -- @treturn table|nil message table, nil means error or end
 function ClientSyncReader:read_one()
-    local msg = self._c_reader.read_one()
+    local msg = self._c_reader:read_one()
     if not msg then return nil end
     return pb.decode(self._response_type, msg)  -- return nil if decode error
 end  -- read_one()

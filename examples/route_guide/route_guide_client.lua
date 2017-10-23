@@ -48,9 +48,9 @@ local function sync_get_feature()
     print("Sync get feature...")
     local stub = new_stub()
     local feature
-    feature = stub.sync_request("GetFeature", point(409146138, -746188906))
+    feature = stub:sync_request("GetFeature", point(409146138, -746188906))
     print("Get feature: "..inspect(feature))
-    feature = stub.sync_request("GetFeature", point(0, 0))
+    feature = stub:sync_request("GetFeature", point(0, 0))
     print("Get feature: "..inspect(feature))
 end  -- sync_get_feature()
 
@@ -62,7 +62,7 @@ local function sync_list_features()
     local sync_reader = stub:sync_request_read("ListFeatures", rect)
     -- request_read, request_write, request_rdwr ? XXX
     while true do
-        local feature = sync_reader.read_one()
+        local feature = sync_reader:read_one()
         if not feature then break end
         print("Found feature: "..inspect(feature))
     end  -- while
@@ -74,7 +74,7 @@ end  -- sync_list_features()
 local function sync_record_route()
     print("Sync record route...")
     local stub = new_stub()
-    local sync_writer = stub.sync_request_write("RecordRoute")
+    local sync_writer = stub:sync_request_write("RecordRoute")
     for i = 1, 10 do
         local feature = db.get_rand_feature()
         local loc = assert(feature.location)
@@ -99,13 +99,13 @@ end  -- sync_record_route()
 local function sync_route_chat()
     print("Sync route chat...")
     local stub = new_stub()
-    local sync_rdwr = stub.sync_request_rdwr("RouteChat")
+    local sync_rdwr = stub:sync_request_rdwr("RouteChat")
 
     for _, note in ipairs(notes) do
         -- write one then read one
         print("Sending message: " .. inspect(note))
         sync_rdwr.write(note)
-        local server_note = sync_rdwr.read_one()
+        local server_note = sync_rdwr:read_one()
         if server_note then
             print("Got message: "..inspect(server_note))
         end  -- if
@@ -114,7 +114,7 @@ local function sync_route_chat()
 
     -- read remaining
     while true do
-        local server_note = sync_rdwr.read_one()
+        local server_note = sync_rdwr:read_one()
         if not server_note then break end
         print("Got message: "..inspect(server_note))
     end  -- while
@@ -123,13 +123,13 @@ end  -- sync_route_chat()
 local function get_feature_async()
     print("Get feature async...")
     local stub = new_stub()
-    stub.async_request("GetFeature", point())  -- ignore response
-    stub.async_request("GetFeature", point(409146138, -746188906),
+    stub:async_request("GetFeature", point())  -- ignore response
+    stub:async_request("GetFeature", point(409146138, -746188906),
         function(resp)
             print("Get feature: "..inspect(resp))
-            stub.shutdown()  -- to return
+            stub:shutdown()  -- to return
         end)
-    stub.run()  -- run async requests until stub.shutdown()
+    stub:run()  -- run async requests until stub:shutdown()
 end  -- get_feature_async()
 
 local function list_features_async()
@@ -137,7 +137,7 @@ local function list_features_async()
     local stub = new_stub()
     local rect = rectangle(400000000, -750000000, 420000000, -730000000)
     print("Looking for features between 40, -75 and 42, -73")
-    stub.async_request_read("ListFeatures", rect,
+    stub:async_request_read("ListFeatures", rect,
         function(f)
             assert("table" == type(f))
             print(string.format("Got feature %s at %f,%f", f.name,
@@ -146,15 +146,15 @@ local function list_features_async()
         function(error_str, status_code)
             assert("number" == type(status_code))
             print(string.format("End status: (%d)%s", status_code, error_str))
-            stub.shutdown()  -- To break Run().
+            stub:shutdown()  -- To break Run().
         end)
-    stub.run()  -- until stub.shutdown()
+    stub:run()  -- until stub:shutdown()
 end  -- list_features_async()
 
 local function record_route_async()
     print("Record route async...")
     local stub = new_stub()
-    local async_writer = stub.async_request_write("RecordRoute")
+    local async_writer = stub:async_request_write("RecordRoute")
     for i = 1, 10 do
         local f = db.get_rand_feature()
         local loc = f.location
@@ -173,22 +173,22 @@ local function record_route_async()
                 print(string.format("RecordRoute rpc failed. (%d)%s",
                     status_code, error_str))
             end  -- if
-            stub.shutdown()  -- to break run()
+            stub:shutdown()  -- to break run()
         end)
-    stub.run()  -- until stutdown()
+    stub:run()  -- until stutdown()
 end  -- record_route_async()
 
 local function route_chat_async()
     print("Route chat async...")
     local stub = new_stub()
 
-    local rdwr = stub.async_request_rdwr("RouteChat",
+    local rdwr = stub:async_request_rdwr("RouteChat",
         function(error_str, status_code)
             if error_str then
                 print(string.format("RouteChat rpc failed. (%d)%s",
                     status_code, error_str))
             end  -- if
-            stub.shutdown()  -- to break run()
+            stub:shutdown()  -- to break run()
         end)
 
     for _, note in ipairs(notes) do
@@ -201,7 +201,7 @@ local function route_chat_async()
         print("Got message: "..inspect(server_note))
     end)
 
-    stub.run()  -- until shutdown()
+    stub:run()  -- until shutdown()
 end  -- route_chat_async()
 
 local function main()
