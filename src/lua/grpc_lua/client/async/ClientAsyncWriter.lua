@@ -11,24 +11,21 @@ local pb = require("luapbintf")
 -- @section public
 
 --- Constructor.
--- @tparam Channel c_channel
+-- @param c_stub c.ServiceStub object
 -- @string request_name like "/routeguide.RouteGuide/ListFeatures"
--- @param c_completion_queue C completion queue object
 -- @string request_type
 -- @string response_type
 -- @tparam number|nil timeout_sec nil means no timeout
 -- @treturn table object
-function ClientAsyncWriter:new(c_channel, request_name, c_completion_queue,
-        request_type, response_type, timeout_sec)
-    assert("userdata" == type(c_channel))
+function ClientAsyncWriter:new(c_stub, request_name, request_type,
+                               response_type, timeout_sec)
+    assert("userdata" == type(c_stub))
     assert("string" == type(request_name))
-    assert("userdata" == type(c_completion_queue))
     assert("string" == type(request_type))
     assert("string" == type(response_type))
     local writer = {
         -- private:
-        _c_writer = c.ClientAsyncWriter(c_channel,
-            request_name, c_completion_queue, timeout_sec),
+        _c_writer = c.ClientAsyncWriter(c_stub, request_name, timeout_sec),
         _request_type = request_type,
         _response_type = response_type,
     }

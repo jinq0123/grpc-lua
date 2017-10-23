@@ -175,9 +175,8 @@ end  -- sync_request_read()
 function ServiceStub:async_request_write(method_name)
     local mi = self:_get_method_info(method_name)
     mi:assert_client_side_streaming()
-    local c_cq = self._c_stub:get_completion_queue()
-    return ClientAsyncWriter:new(self._c_channel, mi.request_name,
-        c_cq, mi.request_type, mi.response_type, self._timeout_sec)
+    return ClientAsyncWriter:new(self._c_stub, mi.request_name,
+        mi.request_type, mi.response_type, self._timeout_sec)
 end  -- async_request_write()
 
 --- Sync request bi-directional streaming rpc.
@@ -199,7 +198,7 @@ end  -- sync_request_rdwr()
 function ServiceStub:async_request_rdwr(method_name, error_cb)  -- XXX unused error_cb
     local mi = self:_get_method_info(method_name)
     mi:assert_bidirectional_streaming()
-    return ClientAsyncReaderWriter:new(self._c_channel,
+    return ClientAsyncReaderWriter:new(self._c_stub,
         mi.request_name, mi.request_type, mi.response_type, self._timeout_sec);
 end  -- async_request_rdwr()
 

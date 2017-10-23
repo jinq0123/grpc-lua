@@ -86,7 +86,6 @@ void BindServiceStub(const LuaRef& mod)
         .addConstructor(LUA_ARGS(const ChannelSptr& pChannel))
 
         .addFunction("set_error_cb", &SetErrorCb)
-        .addFunction("get_completion_queue", &ServiceStub::GetCompletionQueue)
         .addFunction("set_timeout_sec", &SetTimeoutSec)
 
         .addFunction("sync_request",
