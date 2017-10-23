@@ -12,7 +12,7 @@ local kCoordFactor = 10000000.0
 
 -- New stub on the same channel.
 local function new_stub()
-    return grcp.service_stub(c_channel, SVC)
+    return grpc.service_stub(c_channel, SVC)
 end
 
 local function point(latitude, longitude)
@@ -89,7 +89,8 @@ local function sync_record_route()
     -- Recv status and reponse.
     local summary, error_str, status_code = sync_writer.close()  -- Todo: timeout
     if not summary then
-        print(string.format("RecordRoute rpc failed: (%d)%s.", status_code, error_str)
+        print(string.format("RecordRoute rpc failed: (%d)%s.",
+            status_code, error_str))
         return
     end
     print_route_sumary(summary)
@@ -144,7 +145,7 @@ local function list_features_async()
         end,
         function(error_str, status_code)
             assert("number" == type(status_code))
-            print(string.format("End status: (%d)%s", status_code, error_str)
+            print(string.format("End status: (%d)%s", status_code, error_str))
             stub.shutdown()  -- To break Run().
         end)
     stub.run()  -- until stub.shutdown()
@@ -159,7 +160,7 @@ local function record_route_async()
         local loc = f.location
         print(string.format("Visiting point %f,%f", 
               loc.latitude/kCoordFactor, loc.longitude/kCoordFactor))
-        if not async_writer:write(loc) do break end  -- Broken stream.
+        if not async_writer:write(loc) then break end  -- Broken stream.
     end  -- for
 
     -- Recv reponse and status.
@@ -169,7 +170,8 @@ local function record_route_async()
                 assert("table" == type(resp))
                 print_route_summary(resp)
             else
-                print(string.format("RecordRoute rpc failed. (%d)%s", status_code, error_str)
+                print(string.format("RecordRoute rpc failed. (%d)%s",
+                    status_code, error_str))
             end  -- if
             stub.shutdown()  -- to break run()
         end)
@@ -183,7 +185,8 @@ local function route_chat_async()
     local rdwr = stub.async_request_rdwr("RouteChat",
         function(error_str, status_code)
             if error_str then
-                print(string.format("RouteChat rpc failed. (%d)%s", status_code, error_str)
+                print(string.format("RouteChat rpc failed. (%d)%s",
+                    status_code, error_str))
             end  -- if
             stub.shutdown()  -- to break run()
         end)
