@@ -26,7 +26,7 @@ local function init_method_info_arr(svc_full_name, svc_desc, svc_impl)
     assert("table" == type(svc_desc))
     assert("table" == type(svc_impl))
     -- See: service_descriptor_example.txt
-    local methods = svc_desc.methods
+    local methods = svc_desc.method
     assert("table" == type(methods))
     local result = {}
     for i = 1, #methods do
