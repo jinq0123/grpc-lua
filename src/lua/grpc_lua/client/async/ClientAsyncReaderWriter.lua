@@ -44,7 +44,7 @@ function ClientAsyncReaderWriter:read_each(msg_cb)
     local msg_str_cb = nil  -- nil|function(string)
     if msg_cb then
         assert("function" == type(msg_cb))
-        msg_str_cb = mcb_wrapper.wrap(msg_cb, self._respones_type)
+        msg_str_cb = mcb_wrapper.wrap(msg_cb, self._response_type)
     end
     self._c_rdwr:read_each(msg_str_cb)
 end  -- read_one()
@@ -55,7 +55,7 @@ end  -- read_one()
 function ClientAsyncReaderWriter:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._request_type, message)
-    self._c_writer:write(msg_str)
+    self._c_rdwr:write(msg_str)
 end  -- write()
 
 --- Close writing.
