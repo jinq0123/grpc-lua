@@ -8,10 +8,12 @@ local grpc = require("grpc_lua.grpc_lua")
 
 local function main()
     local svr = grpc.server()
-    svr:add_listening_port("0.0.0.0:50051")
+    local server_address = "0.0.0.0:50051"
+    svr:add_listening_port(server_address)
     -- Service implementation is a table.
     local service = require("greeter_service")
     svr:register_service("helloworld.Greeter", service)
+    print("Server listening on " .. server_address)
     svr:run()
 end  -- main()
 
