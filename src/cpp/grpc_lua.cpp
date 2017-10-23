@@ -1,5 +1,4 @@
 // client
-#include "client/BindCall.h"
 #include "client/BindChannel.h"
 #include "client/BindClientAsyncReaderWriter.h"
 #include "client/BindClientAsyncWriter.h"
@@ -24,7 +23,6 @@ int luaopen_grpc_lua_c(lua_State* L)
     LuaIntf::LuaRef mod = LuaIntf::LuaRef::createTable(L);
 
     // client
-    client::BindCall(mod);
     client::BindChannel(mod);
     client::BindClientAsyncReaderWriter(mod);
     client::BindClientAsyncWriter(mod);

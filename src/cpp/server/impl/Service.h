@@ -4,9 +4,12 @@
 #include "common/LuaRefFwd.h"  // forward LuaRef
 
 #include <grpc_cb_core/server/service.h>  // for Service and CallSptr
-#include <LuaIntf/LuaIntf.h>  // for LuaRef
 
 #include <vector>
+
+namespace LuaIntf {
+struct LuaString;
+}  // namespace LuaIntf
 
 namespace impl {
 
@@ -30,13 +33,11 @@ public:
 private:
     void InitMethods();
     void InitMethod(size_t iMthdIdx, const LuaRef& luaMethod);
-    // DEL
-    //void CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
-    //    const grpc_cb_core::CallSptr& pCall);
+    void CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
+        const grpc_cb_core::CallSptr& pCall);
 
 private:
-    LuaRef m_luaService;
-    LuaRef m_luaCallMethod;
+    std::unique_ptr<const LuaRef> m_pLuaService;
     string m_sFullName;  // like "helloworld.Greeter"
 
     struct MethodInfo
