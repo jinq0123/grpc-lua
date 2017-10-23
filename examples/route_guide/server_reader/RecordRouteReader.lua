@@ -47,7 +47,7 @@ local function get_distance(p1, p2)
     local a = math.sin(delta_lat_rad/2) ^ 2
                + math.cos(lat_rad_1) * math.cos(lat_rad_2) *
                   math.sin(delta_lon_rad/2) ^ 2
-    local c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    local c = 2 * math.atan(math.sqrt(a), math.sqrt(1-a))
     local R = 6371000  -- metres
     return R * c
 end  -- get_distance()
@@ -69,13 +69,15 @@ function Reader:on_error(error_str, status_code)
     assert("string" == type(error_str))
     assert("number" == type(status_code))
     print(string.format("RecordRoute error: (%d)%s", status_code, error_str))
-    self._replier.reply_error(error_str, status_code)
+    self._replier:reply_error(error_str, status_code)
 end
 
 function Reader:on_end()
     print("RecordRoute reader end.")
     self._summary.elapsed_time = os.time() - self._start_time
-    self._replier.Reply(self._summary);
+    -- distance must be integer
+    self._summary.distance = math.ceil(self._summary.distance)
+    self._replier:reply(self._summary);
 end
 
 -------------------------------------------------------------------------------
