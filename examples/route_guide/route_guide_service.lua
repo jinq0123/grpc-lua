@@ -11,7 +11,7 @@ db.load()
 
 local function get_feature_name(point)
     assert("table" == type(point))
-    for _, f in ipairs(db.features)
+    for _, f in ipairs(db.features) do
         local l = f.location
         if l.latitude == point.latitude and
                 l.longitude == point.longitude then

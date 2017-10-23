@@ -35,12 +35,12 @@ end  -- new()
 function Writer:write(message)
     assert("table" == type(message))
     local msg_str = pb.encode(self._msg_type, message)
-    self._c_writer:writer(msg_str)
+    return self._c_writer:write(msg_str)
 end  -- write()
 
 --- Close writer.
 function Writer:close()
-    self._c_writer:close()
+    self._c_writer:close()  -- always close with OK status
 end  -- close()
 
 return Writer
