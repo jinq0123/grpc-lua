@@ -33,11 +33,13 @@ local function init_method_info_arr(svc_full_name, svc_desc, svc_impl)
         local mthd = methods[i]
         assert("table" == type(mthd))
         local name = mthd.name
+        local func = svc_impl[name]
+        assert(not func or "function" == type(func))
         result[i] = {  -- method info array
             name = name,
             input_type = pb.get_rpc_input_name(svc_full_name, name),
             output_type = pb.get_rpc_output_name(svc_full_name, name),
-            func = svc_impl[name],  -- may nil to load later
+            func = func,  -- may nil to load later
         }  -- result
     end  -- for
     return result
@@ -89,17 +91,12 @@ end  -- get_descriptor()
 -- @tparam userdata c_replier C replier object
 function Service:call_simple_method(method_index, request_str, c_replier)
     assert("number" == type(method_index) and method_index >= 1)
-    assert("string" == type(request_type))
     assert("string" == type(request_str))
     assert("userdata" == type(c_replier))
-    assert("string" == type(response_type))
 
-    local method, info = self._get_method(method_name)
-
-    local info = assert(self._method_info_map[method_name], "No such method info: "..method_name)
-    local method = assert(self._impl[method_name], "No such method impl: "..method_name)
-    local request = assert(pb.decode(request_type, request_str))  -- XXX check result
-    local replier = Replier:new(c_replier, response_type)
+    local mi = self._get_method_info(method_index)
+    local request = assert(pb.decode(mi.input_type, request_str))  -- XXX check result
+    local replier = Replier:new(c_replier, mi.output_type)
     method(request, replier)
 end
 
@@ -109,14 +106,12 @@ end
 -- @tparam userdata c_writer C `ServerWriter` object
 function Service:call_s2c_streaming_method(method_index, request_str, c_writer)
     assert("number" == type(method_index) and method_index >= 1)
-    assert("string" == type(request_type))
     assert("string" == type(request_str))
     assert("userdata" == type(c_writer))
-    assert("string" == type(response_type))
 
-    local method = assert(self._impl[method_name], "No such method: "..method_name)
-    local request = assert(pb.decode(request_type, request_str))  -- XXX check result
-    local writer = Writer:new(c_writer, response_type)
+    local mi = self._get_method_info(method_index)
+    local request = assert(pb.decode(mi.input_type, request_str))  -- XXX check result
+    local writer = Writer:new(c_writer, mi.output_type)
     method(request, writer)
 end
 
@@ -126,14 +121,12 @@ end
 -- @treturn Reader server reader object
 function Service:call_c2s_streaming_method(method_index, c_replier)
     assert("number" == type(method_index) and method_index >= 1)
-    assert("string" == type(request_type))
     assert("userdata" == type(c_replier))
-    assert("string" == type(response_type))
 
-    local method = assert(self._impl[method_name], "No such method: "..method_name)
-    local replier = Replier:new(c_replier, response_type)
+    local mi = self._get_method_info(method_index)
+    local replier = Replier:new(c_replier, mi.output_type)
     local reader_impl = method(replier)
-    return Reader:new(reader_impl, request_type)
+    return Reader:new(reader_impl, mi.input_type)
 end
 
 --- Call bi-directional streaming rpc method.
@@ -142,27 +135,31 @@ end
 -- @treturn Reader server reader object
 function Service:call_bidi_streaming_method(method_index, c_writer)
     assert("number" == type(method_index) and method_index >= 1)
-    assert("string" == type(request_type))
     assert("userdata" == type(c_writer))
-    assert("string" == type(response_type))
 
-    local method = assert(self._impl[method_name], "No such method: "..method_name)
-    local writer = Writer:new(c_writer, response_type)
+    local mi = self._get_method_info(method_index)
+    local writer = Writer:new(c_writer, mi.output_type)
     local reader_impl = method(writer)
-    return Reader:new(reader_impl, request_type)
+    return Reader:new(reader_impl, mi.input_type)
 end
 
 -------------------------------------------------------------------------------
 --- Private functions.
 -- @section private
 
---- Get method.
--- @string method_name
--- @treturn function method implementation function
+--- Get method info.
+-- Reload method function if necessary.
+-- @int method_index
 -- @treturn table method info
-function Service:_get_method(method_name)
-    local info = assert(self._method_info_map[method_name], "No such method info: "..method_name)
-    local method = assert(self._impl[method_name], "No such method impl: "..method_name)
+function Service:_get_method_info(method_index)
+    -- assert("number" == type(method_index) and method_index >= 1)
+    local info = assert(self._method_info_arr[method_index],
+        "No such method index: "..method_index)
+    if not info.func then
+        info.func = assert(self._impl[info.name], "No such method: "..info.name)
+        assert("function" == type(info.func))
+    end
+    return info
 end  -- _get_method()
 
 return Service
