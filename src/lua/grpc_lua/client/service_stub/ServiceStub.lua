@@ -153,8 +153,8 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     local req_str = pb.encode(mi.request_type, request)
     -- Need to wrap the message callback.
     local msg_str_cb = mcb_wrapper.wrap(msg_cb, mi.response_type)
-    self._c_stub:async_request_read(self._c_channel,
-        mi.request_name, req_str, msg_str_cb, status_cb)
+    self._c_stub:async_request_read(mi.request_name,
+        req_str, msg_str_cb, status_cb)
 end  -- async_request_read()
 
 --- Sync request client side streaming rpc.

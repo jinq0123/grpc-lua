@@ -105,14 +105,9 @@ local function sync_route_chat()
         -- write one then read one
         print("Sending message: " .. inspect(note))
         sync_rdwr:write(note)
-        local server_note = sync_rdwr:read_one()
-        if server_note then
-            print("Got message: "..inspect(server_note))
-        end  -- if
     end  -- for
     sync_rdwr:close_writing()
 
-    -- read remaining
     while true do
         local server_note = sync_rdwr:read_one()
         if not server_note then break end
@@ -191,15 +186,16 @@ local function route_chat_async()
             stub:shutdown()  -- to break run()
         end)
 
-    for _, note in ipairs(notes) do
-        print("Sending message: " .. inspect(note))
-        rdwr:write(note)
-    end
-    rdwr:close_writing()  -- Optional.
     rdwr:read_each(function(server_note)
         assert("table" == type(server_note))
         print("Got message: "..inspect(server_note))
     end)
+
+    for _, note in ipairs(notes) do
+        print("Sending message: " .. inspect(note))
+        rdwr:write(note)
+    end
+    rdwr:close_writing()
 
     stub:run()  -- until shutdown()
 end  -- route_chat_async()
