@@ -9,12 +9,22 @@ local Replier = require("grpc_lua.server.Replier")
 local Reader = require("grpc_lua.server.Reader")
 local Writer = require("grpc_lua.server.Writer")
 
---- Get service method info map.
+--[[ Method info = {
+    name = string, like "SayHello"
+    input_type = string, like "helloworld.HelloRequest"
+    output_type = string, like "helloworld.HelloReply"
+
+    func = function of implementation (nil to load later)
+} ]]
+
+--- Get initial service method info array.
 -- @string svc_full_name like "helloworld.Greeter"
 -- @tab svc_desc service descriptor message table
--- @treturn table map from method name to method info
-local function get_method_info_map(svc_full_name, svc_desc)
+-- @tab svc_impl service implementation
+-- @treturn table array of method info
+local function init_method_info_arr(svc_full_name, svc_desc, svc_impl)
     assert("table" == type(svc_desc))
+    assert("table" == type(svc_impl))
     -- See: service_descriptor_example.txt
     local methods = svc_desc.methods
     assert("table" == type(methods))
@@ -22,14 +32,16 @@ local function get_method_info_map(svc_full_name, svc_desc)
     for i = 1, #methods do
         local mthd = methods[i]
         assert("table" == type(mthd))
-        local mthd_name = mthd.name
-        result[mthd_name] = {  -- method info table
-            request_type = pb.get_rpc_input_name(svc_full_name, mthd_name),
-            response_type = pb.get_rpc_output_name(svc_full_name, mthd_name),
-        }
+        local name = mthd.name
+        result[i] = {  -- method info array
+            name = name,
+            input_type = pb.get_rpc_input_name(svc_full_name, name),
+            output_type = pb.get_rpc_output_name(svc_full_name, name),
+            func = svc_impl[name],  -- may nil to load later
+        }  -- result
     end  -- for
     return result
-end  -- get_method_info_map()
+end  -- init_method_info_arr()
 
 -------------------------------------------------------------------------------
 --- Public functions.
@@ -51,8 +63,8 @@ function Service:new(svc_full_name, svc_desc, svc_impl)
         _descriptor = svc_desc,
         _impl = svc_impl,
 
-        -- map method name to method info
-        _method_info_map = get_method_info_map(svc_full_name, svc_desc),
+        -- method info array
+        _method_info_arr = init_method_info_arr(svc_full_name, svc_desc, svc_impl),
     }
     setmetatable(svc, self)
     self.__index = self
@@ -72,14 +84,11 @@ function Service:get_descriptor()
 end  -- get_descriptor()
 
 --- Call simple rpc service method.
--- @string method_name method name, like: "SayHello"
--- @string request_type request type, like: "helloworld.HelloRequest"
+-- @int method_index method index, start from 1
 -- @string request_str request message string
 -- @tparam userdata c_replier C replier object
--- @string response_type response type, like: "helloworld.HelloResponse"
-function Service:call_simple_method(method_name, request_type, request_str,
-                                    c_replier, response_type)
-    assert("string" == type(method_name))
+function Service:call_simple_method(method_index, request_str, c_replier)
+    assert("number" == type(method_index) and method_index >= 1)
     assert("string" == type(request_type))
     assert("string" == type(request_str))
     assert("userdata" == type(c_replier))
@@ -95,14 +104,11 @@ function Service:call_simple_method(method_name, request_type, request_str,
 end
 
 --- Call server-to-client streaming rpc method.
--- @string method_name method name, like: "ListFeatures"
--- @string request_type request type, like: "routeguide.Rectangle"
+-- @int method_index method index, start from 1
 -- @string request_str request message string
 -- @tparam userdata c_writer C `ServerWriter` object
--- @string response_type response type, like: "routeguide.Feature"
-function Service:call_s2c_streaming_method(method_name,
-        request_type, request_str, c_writer, response_type)
-    assert("string" == type(method_name))
+function Service:call_s2c_streaming_method(method_index, request_str, c_writer)
+    assert("number" == type(method_index) and method_index >= 1)
     assert("string" == type(request_type))
     assert("string" == type(request_str))
     assert("userdata" == type(c_writer))
@@ -115,14 +121,11 @@ function Service:call_s2c_streaming_method(method_name,
 end
 
 --- Call client-to-server streaming rpc method.
--- @string method_name method name, like: "RecordRoute"
--- @string request_type request type, like: "routeguide.Point"
+-- @int method_index method index, start from 1
 -- @tparam userdata c_replier C `ServerReplier` object
--- @string response_type response type, like: "routeguide.Summary"
 -- @treturn Reader server reader object
-function Service:call_c2s_streaming_method(method_name,
-        request_type, c_replier, response_type)
-    assert("string" == type(method_name))
+function Service:call_c2s_streaming_method(method_index, c_replier)
+    assert("number" == type(method_index) and method_index >= 1)
     assert("string" == type(request_type))
     assert("userdata" == type(c_replier))
     assert("string" == type(response_type))
@@ -134,14 +137,11 @@ function Service:call_c2s_streaming_method(method_name,
 end
 
 --- Call bi-directional streaming rpc method.
--- @string method_name method name, like: "RouteChat"
--- @string request_type request type, like: "routeguide.RouteNote"
+-- @int method_index method index, start from 1
 -- @tparam userdata c_writer C `ServerWriter` object
--- @string response_type response type, like: "routeguide.RouteNote"
 -- @treturn Reader server reader object
-function Service:call_bidi_streaming_method(method_name,
-        request_type, c_writer, response_type)
-    assert("string" == type(method_name))
+function Service:call_bidi_streaming_method(method_index, c_writer)
+    assert("number" == type(method_index) and method_index >= 1)
     assert("string" == type(request_type))
     assert("userdata" == type(c_writer))
     assert("string" == type(response_type))

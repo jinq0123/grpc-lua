@@ -131,14 +131,12 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
         if (mi.IsServerStreaming)
         {
             luaReader = m_pLuaService->dispatch<LuaRef>(
-                "call_bidi_streaming_method", mi.sName,
-                mi.sInputType, ServerWriter(pCall), mi.sOutputType);
+                "call_bidi_streaming_method", iMthdIdx+1, ServerWriter(pCall));
         }
         else
         {
             luaReader = m_pLuaService->dispatch<LuaRef>(
-                "call_c2s_streaming_method", mi.sName,
-                mi.sInputType, ServerReplier(pCall), mi.sOutputType);
+                "call_c2s_streaming_method", iMthdIdx+1, ServerReplier(pCall));
         }
         std::make_shared<ServerReader>(luaReader)->Start(pCall);
         return;
@@ -146,13 +144,13 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
 
     if (mi.IsServerStreaming)
     {
-        m_pLuaService->dispatch("call_s2c_streaming_method", mi.sName,
-            mi.sInputType, strReq, ServerWriter(pCall), mi.sOutputType);
+        m_pLuaService->dispatch("call_s2c_streaming_method",
+            iMthdIdx+1, strReq, ServerWriter(pCall));
         return;
     }
 
-    m_pLuaService->dispatch("call_simple_method", mi.sName,
-        mi.sInputType, strReq, ServerReplier(pCall), mi.sOutputType);
+    m_pLuaService->dispatch("call_simple_method",
+        iMthdIdx+1, strReq, ServerReplier(pCall));
 }  // CallMethod()
 
 }  // namespace impl
