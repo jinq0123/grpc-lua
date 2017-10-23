@@ -66,14 +66,18 @@ void Service::CallMethod(size_t iMthdIdx, grpc_byte_buffer* pReqBuf,
     const CallSptr& pCall)
 {
     assert(iMthdIdx < GetMethodCount());
-    if (!pReqBuf) return;
+    if (!pReqBuf)
+    {
+        CallClientStreamingMethod(iMthdIdx, pCall);
+        return;
+    }
 
     grpc_slice req_slice = BufToSlice(pReqBuf);
     {
         LuaIntf::LuaString strReq(reinterpret_cast<const char*>(
             GRPC_SLICE_START_PTR(req_slice)),
             GRPC_SLICE_LENGTH(req_slice));
-        CallMethod(iMthdIdx, strReq, pCall);
+        CallNonClientStreamingMethod(iMthdIdx, strReq, pCall);
     }
     grpc_slice_unref(req_slice);
 }  // CallMethod()
@@ -117,29 +121,35 @@ void Service::InitMethod(size_t iMthdIdx, const LuaRef& luaMethod)
     r.IsServerStreaming = luaMethod.get<bool>("server_streaming");
 }  // InitMethod()
 
-void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
-    const CallSptr& pCall)
+void Service::CallClientStreamingMethod(size_t iMthdIdx, const CallSptr& pCall)
 {
     assert(iMthdIdx < GetMethodCount());
     const MethodInfo& mi = m_vMethods[iMthdIdx];
-    assert(m_pLuaService->isTable());
-    if (mi.IsClientStreaming)
-    {
-        LuaRef luaReader;
-        if (mi.IsServerStreaming)
-        {
-            luaReader = m_pLuaService->dispatch<LuaRef>(
-                "call_bidi_streaming_method", iMthdIdx+1, ServerWriter(pCall));
-        }
-        else
-        {
-            luaReader = m_pLuaService->dispatch<LuaRef>(
-                "call_c2s_streaming_method", iMthdIdx+1, ServerReplier(pCall));
-        }
-        std::make_shared<ServerReader>(luaReader)->Start(pCall);
-        return;
-    }
+    if (!mi.IsClientStreaming) return;
 
+    assert(m_pLuaService->isTable());
+    LuaRef luaReader;
+    if (mi.IsServerStreaming)
+    {
+        luaReader = m_pLuaService->dispatch<LuaRef>(
+            "call_bidi_streaming_method", iMthdIdx+1, ServerWriter(pCall));
+    }
+    else
+    {
+        luaReader = m_pLuaService->dispatch<LuaRef>(
+            "call_c2s_streaming_method", iMthdIdx+1, ServerReplier(pCall));
+    }
+    std::make_shared<ServerReader>(luaReader)->Start(pCall);
+}  // CallClientStreamingMethod()
+
+void Service::CallNonClientStreamingMethod(size_t iMthdIdx,
+    LuaIntf::LuaString& strReq, const CallSptr& pCall)
+{
+    assert(iMthdIdx < GetMethodCount());
+    const MethodInfo& mi = m_vMethods[iMthdIdx];
+    if (mi.IsClientStreaming) return;
+
+    assert(m_pLuaService->isTable());
     if (mi.IsServerStreaming)
     {
         m_pLuaService->dispatch("call_s2c_streaming_method",
@@ -149,6 +159,6 @@ void Service::CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
 
     m_pLuaService->dispatch("call_simple_method",
         iMthdIdx+1, strReq, ServerReplier(pCall));
-}  // CallMethod()
+}  // CallNonClientStreamingMethod()
 
 }  // namespace impl

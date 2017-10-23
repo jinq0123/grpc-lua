@@ -33,8 +33,10 @@ public:
 private:
     void InitMethods();
     void InitMethod(size_t iMthdIdx, const LuaRef& luaMethod);
-    void CallMethod(size_t iMthdIdx, LuaIntf::LuaString& strReq,
+    void CallClientStreamingMethod(size_t iMthdIdx,
         const grpc_cb_core::CallSptr& pCall);
+    void CallNonClientStreamingMethod(size_t iMthdIdx,
+        LuaIntf::LuaString& strReq, const grpc_cb_core::CallSptr& pCall);
 
 private:
     std::unique_ptr<const LuaRef> m_pLuaService;
