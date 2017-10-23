@@ -110,11 +110,9 @@ void Service::InitMethod(size_t iMthdIdx, const LuaRef& luaMethod)
 {
     assert(luaMethod.isTable());
     MethodInfo& r = m_vMethods[iMthdIdx];
-    r.sName = luaMethod.get<string>("name");
+    std::string sName = luaMethod.get<string>("name");
     // Method name is like: "/helloworld.Greeter/SayHello"
-    r.sRequestName = "/" + m_sFullName + "/" + r.sName;
-    r.sInputType = TrimLeadingDot(luaMethod.get<string>("input_type"));
-    r.sOutputType = TrimLeadingDot(luaMethod.get<string>("output_type"));
+    r.sRequestName = "/" + m_sFullName + "/" + sName;
     r.IsClientStreaming = luaMethod.get<bool>("client_streaming");
     r.IsServerStreaming = luaMethod.get<bool>("server_streaming");
 }  // InitMethod()

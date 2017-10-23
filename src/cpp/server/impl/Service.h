@@ -42,11 +42,9 @@ private:
 
     struct MethodInfo
     {
-        string sName;
+        // string sName;  like "SayHello"
         // Method request name is like: "/helloworld.Greeter/SayHello"
         string sRequestName;
-        string sInputType;  // full name, like "helloworld.HelloRequest"
-        string sOutputType;  // full name, like "helloworld.HelloReply"
         bool IsClientStreaming;
         bool IsServerStreaming;
     };  // struct MethodInfo
