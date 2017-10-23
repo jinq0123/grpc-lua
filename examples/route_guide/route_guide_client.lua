@@ -36,10 +36,10 @@ local notes = { route_note("First message", 0, 0),
 
 local function print_route_summary(summary)
     print(string.format(
-[[[Finished trip with %d points
+[[Finished trip with %d points
 Passed %d features
 Traveled %d meters
-It took %d seconds]]],
+It took %d seconds]],
         summary.point_count, summary.feature_count,
         summary.distance, summary.elapsed_time))
 end
@@ -50,7 +50,7 @@ local function sync_get_feature()
     local feature
     feature = stub.sync_request("GetFeature", point(409146138, -746188906))
     print("Get feature: "..inspect(feature))
-    feature = stub.sync_request("GetFeature", point(0, 0)
+    feature = stub.sync_request("GetFeature", point(0, 0))
     print("Get feature: "..inspect(feature))
 end  -- sync_get_feature()
 
