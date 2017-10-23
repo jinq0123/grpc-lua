@@ -154,7 +154,7 @@ function ServiceStub:async_request_read(method_name, request, msg_cb, status_cb)
     -- Need to wrap the message callback.
     local msg_str_cb = mcb_wrapper.wrap(msg_cb, mi.response_type)
     self._c_stub:async_request_read(mi.request_name,
-        req_str, msg_str_cb, status_cb)
+        req_str, msg_str_cb, status_cb)  -- XXX timeout
 end  -- async_request_read()
 
 --- Sync request client side streaming rpc.
@@ -193,13 +193,16 @@ end  -- sync_request_rdwr()
 --- Async request bi-directional streaming rpc.
 -- Will return immediately.
 -- @string method_name method name
--- @tparam function|nil error_cb error callback, `function(error_str|nil, status_code)`
+-- @tparam function|nil status_cb status callback, `function(error_str|nil, status_code)`
 -- @treturn ClientAsyncReaderWriter
-function ServiceStub:async_request_rdwr(method_name, error_cb)  -- XXX unused error_cb
+function ServiceStub:async_request_rdwr(method_name, status_cb)
+    status_cb = status_cb or self._error_cb
+    assert(not status_cb or "function" == type(status_cb))
     local mi = self:_get_method_info(method_name)
     mi:assert_bidirectional_streaming()
     return ClientAsyncReaderWriter:new(self._c_stub,
-        mi.request_name, mi.request_type, mi.response_type, self._timeout_sec);
+        mi.request_name, mi.request_type, mi.response_type,
+        self._timeout_sec, status_cb);
 end  -- async_request_rdwr()
 
 --- Blocking run.

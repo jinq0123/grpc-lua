@@ -17,16 +17,20 @@ local pb = require("luapbintf")
 -- @string request_type
 -- @string response_type
 -- @tparam number|nil timeout_sec nil means no timeout
+-- @tparam function|nil status_cb `function(error_str, status_code)`
 -- @treturn table object
 function ClientAsyncReaderWriter:new(c_stub, request_name, request_type,
-                                     response_type, timeout_sec)
+                                     response_type, timeout_sec, status_cb)
     assert("userdata" == type(c_stub))
     assert("string" == type(request_name))
     assert("string" == type(request_type))
     assert("string" == type(response_type))
+    assert(not timeout_sec or "number" == type(timeout_sec))
+    assert(not status_cb or "function" == type(status_cb))
     local rdwr = {
         -- private:
-        _c_rdwr = c.ClientAsyncReaderWriter(c_stub, request_name, timeout_sec),
+        _c_rdwr = c.ClientAsyncReaderWriter(c_stub,
+            request_name, timeout_sec, status_cb),
         _request_type = request_type,
         _response_type = response_type,
     }
