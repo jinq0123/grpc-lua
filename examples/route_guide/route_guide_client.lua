@@ -25,8 +25,8 @@ local function rectangle(lo_latitude, lo_longitude,
              hi = point(hi_latitude, hi_longitude) }
 end  -- rectangle()
 
-local function route_note(name, latitude, longitude)
-    return { name = name, location = point(latitude, longitude) }
+local function route_note(message, latitude, longitude)
+    return { message = message, location = point(latitude, longitude) }
 end  -- route_note()
 
 local notes = { route_note("First message", 0, 0),
@@ -93,7 +93,7 @@ local function sync_record_route()
             status_code, error_str))
         return
     end
-    print_route_sumary(summary)
+    print_route_summary(summary)
 end  -- sync_record_route()
 
 local function sync_route_chat()
