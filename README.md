@@ -1,7 +1,7 @@
 # gRPC-Lua
 The Lua [gRPC](http://www.grpc.io/) binding.
 
-## Dependings
+## Dependencies
 gRPC-Lua depends on
 * [grpc_cb_core](https://github.com/jinq0123/grpc_cb_core)
 * [lua-intf](https://github.com/SteveKChiu/lua-intf)
@@ -293,7 +293,7 @@ The function parameters are different for different RPC method types.
 * [route_guide_server.lua](examples/route_guide/route_guide_server.lua)
 
 ### How to run examples
-1. Install dependings into `~/.conan/data` using `conan install`
+1. Install dependencies into `~/.conan/data` using `conan install`
 	1. Rename [examples/conan_install.bat.example](examples/conan_install.bat.example)
        to `conan_install.bat`
 	2. Run it.
@@ -303,7 +303,7 @@ The function parameters are different for different RPC method types.
        to `copy_from_conan.bat`
     1. Change variables in `copy_from_conan.bat`
 		* `conandata`, conan data dir, default `~/.conan/data`
-		* package names, conan package names for dependings
+		* package names, conan package names for dependencies
 			+ `lua_cpp_package`
 			+ `luapbintf_package`
 			+ `grpc_lua_package`
