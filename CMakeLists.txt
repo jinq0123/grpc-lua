@@ -16,6 +16,10 @@ if(MSVC)
     add_definitions(-D_WIN32_WINNT=0x600) # This is a GRPC requirement!!
 endif()
 
+if(NOT MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+
 file(GLOB_RECURSE SRC_LIST "src/cpp/*.cpp")  
 add_library(grpc_lua ${SRC_LIST})
 target_include_directories(grpc_lua PRIVATE "src/cpp")
