@@ -15,6 +15,7 @@ class GrpcluaConan(ConanFile):
 
     # conan remote add jinq0123 https://api.bintray.com/conan/jinq0123/test
     requires = ("grpc_cb_core/0.1@jinq0123/testing",
+                "gRPC/1.8.3@inexorgame/stable",
                 "lua-cpp/5.3.4@jinq0123/testing",
                 "lua-intf/0.1@jinq0123/testing")
                 

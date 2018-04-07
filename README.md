@@ -17,6 +17,7 @@ C/C++ package manager.
 ### Quick Build
 1. Install [conan](http://docs.conan.io/en/latest/installation.html).
 1. Add conan repository
+	+ `conan remote add remote_bintray_conan-community https://api.bintray.com/conan/conan-community/conan`
 	+ `conan remote add remote_bintray_bincrafters https://api.bintray.com/conan/bincrafters/public-conan`
 	+ `conan remote add remote_bintray_inexorgame https://api.bintray.com/conan/inexorgame/inexor-conan`
 	+ `conan remote add remote_bintray_jinq0123 https://api.bintray.com/conan/jinq0123/test`
