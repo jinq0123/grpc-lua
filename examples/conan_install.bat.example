@@ -2,6 +2,8 @@ REM Install lua-cpp, luapbintf and grpc-lua from conan.
 
 REM Ignore if ERROR: Remote 'jinq0123' already exists with same URL
 conan remote add remote_bintray_jinq0123 https://api.bintray.com/conan/jinq0123/test
+conan remote add remote_bintray_inexorgame https://api.bintray.com/conan/inexorgame/inexor-conan
+conan remote add remote_bintray_bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 REM Using debug_x64
 set arg=--build missing --build outdated --update -s build_type=Debug -s arch=x86_64 -s compiler.runtime=MDd
@@ -12,3 +14,5 @@ conan install grpc-lua/0.1@jinq0123/testing %arg%
 
 REM Ignore if ERROR: Remote 'remote_bintray_jinq0123' not found in remotes
 conan remote remove remote_bintray_jinq0123
+conan remote remove remote_bintray_inexorgame
+conan remote remove remote_bintray_bincrafters
