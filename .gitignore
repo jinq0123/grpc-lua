@@ -49,6 +49,7 @@
 /examples/helloworld/.vs
 # /examples/conan_install.bat
 /examples/*.bat
+/examples/*.sh
 
 *.pyc
 test_package/build
