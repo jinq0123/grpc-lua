@@ -20,8 +20,8 @@ cp "${lua_cpp_exe}" helloworld/
 cp "${lua_cpp_exe}" route_guide/
 cp "${lua_cpp_so}" helloworld/
 cp "${lua_cpp_so}" route_guide/
-cp "${luapbintf_so}" helloworld/
-cp "${luapbintf_so}" route_guide/
+cp "${luapbintf_so}" helloworld/luapbintf.so 
+cp "${luapbintf_so}" route_guide/luapbintf.so
 cp "${grpc_lua_so}" helloworld/
 cp "${grpc_lua_so}" route_guide/
 
