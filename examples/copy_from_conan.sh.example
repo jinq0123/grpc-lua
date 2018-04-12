@@ -11,11 +11,10 @@ lua_cpp_package=c83d8b197f1a331ca3b55943846d427ad4f7f8e1
 luapbintf_package=33364f43a1ad585f1513b55ab7b5a8ab2b38e187
 grpc_lua_package=d42d1f1e9fcf248586f05d7311cfb1a7ea65705d
 
-lua_cpp_bin=${conandata}/lua-cpp/5.3.4/jinq0123/testing/package/${lua_cpp_package}/bin
-lua_cpp_exe=${lua_cpp_bin}/lua-cpp
-lua_cpp_so=${lua_cpp_bin}/liblua-cpp.so
-luapbintf_so=${conandata}/luapbintf/0.1/jinq0123/testing/package/${luapbintf_package}/bin/libluapbintf.so
-grpc_lua_so=${conandata}/grpc-lua/0.1/jinq0123/testing/package/${grpc_lua_package}/bin/libgrpc_lua.so
+lua_cpp_exe=${conandata}/lua-cpp/5.3.4/jinq0123/testing/package/${lua_cpp_package}/bin/lua-cpp
+lua_cpp_so=${conandata}/lua-cpp/5.3.4/jinq0123/testing/package/${lua_cpp_package}/lib/liblua-cpp.so
+luapbintf_so=${conandata}/luapbintf/0.1/jinq0123/testing/package/${luapbintf_package}/lib/libluapbintf.so
+grpc_lua_so=${conandata}/grpc-lua/0.1/jinq0123/testing/package/${grpc_lua_package}/lib/libgrpc_lua.so
 
 cp "${lua_cpp_exe}" helloworld/
 cp "${lua_cpp_exe}" route_guide/
