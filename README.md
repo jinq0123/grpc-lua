@@ -330,3 +330,21 @@ The function parameters are different for different RPC method types.
 
 ## API doc
 See [doc/ldoc/html/index.html](http://htmlpreview.github.io/?https://github.com/jinq0123/grpc-lua/master/doc/ldoc/html/index.html)
+
+## TODO: Integrate into Unity
+
+I think it is easy to integrate grpc-lua into [Unity](https://unity3d.com/),
+but I have no time to do this. Work is:
+
+* Use C version of Lua
+* Support Lua5.1 and LuaJIT
+* Build for iOS and Android
+
+Unity uses Lua library compiled as C.
+If use lua.exe and lua.lib compiled as C,
+C++ objects on stack must be destructed correctly on error.
+See [LuaIntf error handling](https://github.com/SteveKChiu/lua-intf#lua-and-c-error-handling).
+
+Building with Lua51 or LuaJIT library should succeed.
+[LuaPbIntf](https://github.com/jinq0123/LuaPbIntf), which is used to encode and decode protobuf messages,
+need to be recompiled with Lua51 or LuaJIT.
