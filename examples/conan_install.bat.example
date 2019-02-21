@@ -6,7 +6,7 @@ conan remote add remote_bintray_inexorgame https://api.bintray.com/conan/inexorg
 conan remote add remote_bintray_bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 REM Using debug_x64
-set arg=--build missing --build outdated --update -s build_type=Debug -s arch=x86_64 -s compiler.runtime=MDd -o protobuf:static_rt=False
+set arg=--build missing --build outdated --update -s build_type=Debug -s arch=x86_64 -s compiler.runtime=MDd
 
 conan install lua-cpp/5.3.4@jinq0123/testing %arg%
 conan install luapbintf/0.1@jinq0123/testing %arg%

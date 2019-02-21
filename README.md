@@ -24,8 +24,6 @@ C/C++ package manager.
 	+ `conan remote add remote_bintray_jinq0123 https://api.bintray.com/conan/jinq0123/test`
 1. `conan create . user/channel --build missing`
     * The result `grpc_lua.dll`/`grpc_lua.so` is in `~/.conan/data/grpc-lua/0.1/user/channel/package/`...
-    * On Windows, add `-o protobuf:static_rt=False`
-        + `conan create . user/channel --build missing -o protobuf:static_rt=False`
 
 ### VS solution
 See [premake/README.md](premake/README.md) to use premake5 to generate VS solution.
