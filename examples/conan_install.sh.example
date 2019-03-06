@@ -4,6 +4,7 @@
 conan remote add remote_bintray_jinq0123 https://api.bintray.com/conan/jinq0123/test
 conan remote add remote_bintray_inexorgame https://api.bintray.com/conan/inexorgame/inexor-conan
 conan remote add remote_bintray_bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+conan remote add remote_bintray_conan https://api.bintray.com/conan/conan/conan-transit
 
 # Using debug
 arg="--build missing --build outdated --update -s build_type=Debug"
