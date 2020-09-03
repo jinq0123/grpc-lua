@@ -331,6 +331,9 @@ See [doc/ldoc/html/index.html](http://htmlpreview.github.io/?https://github.com/
 
 ## TODO: Integrate into Unity
 
+**Note**: If you are using grpc only as client, [grpc-tolua](https://github.com/jinq0123/grpc-tolua)
+is another option.
+
 I think it is easy to integrate grpc-lua into [Unity](https://unity3d.com/),
 but I have no time to do this. Work is:
 
@@ -347,5 +350,3 @@ Building with Lua51 or LuaJIT library should succeed.
 [LuaPbIntf](https://github.com/jinq0123/LuaPbIntf), which is used to encode and decode protobuf messages,
 need to be recompiled with Lua51 or LuaJIT.
 
-If you are using grpc only as client, [grpc-tolua](https://github.com/jinq0123/grpc-tolua)
-is another option.
