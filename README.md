@@ -346,3 +346,6 @@ See [LuaIntf error handling](https://github.com/SteveKChiu/lua-intf#lua-and-c-er
 Building with Lua51 or LuaJIT library should succeed.
 [LuaPbIntf](https://github.com/jinq0123/LuaPbIntf), which is used to encode and decode protobuf messages,
 need to be recompiled with Lua51 or LuaJIT.
+
+If you are using grpc only as client, [grpc-tolua](https://github.com/jinq0123/grpc-tolua)
+is another option.
